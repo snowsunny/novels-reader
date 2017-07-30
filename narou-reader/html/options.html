@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>narou-reader options</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.0/css/bulma.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+      section.section .title {
+        margin-top: 35px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">narou-reader</h1>
+          <h2 class="subtitle">web page reader for syosetu.com</h2>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">※設定後、ページを更新すると設定が反映されます。
+        <div class="title">音声設定</div>
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="label">速度</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="0.1 ~ 2">
+              </div>
+              <p class="help">初期値: 1, 最小値: 0.1, 最大値: 2</p>
+            </div>
+          </div>
+          <div class="column">
+            <div class="field">
+              <label class="label">ピッチ</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="0.1 ~ 2">
+              </div>
+              <p class="help">声の高さを設定出来ます。 初期値: 1, 最小値: 0, 最大値: 2</p>
+            </div>
+          </div>
+        </div>
+        <div class="title">ハイライトカラー設定</div>
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="label">テキストカラー</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="#fff">
+              </div>
+              <p class="help">初期値: #fff</p>
+            </div>
+          </div>
+          <div class="column">
+            <div class="field">
+              <label class="label">背景カラー</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="#498fd9">
+              </div>
+              <p class="help">初期値: #498fd9</p>
+            </div>
+          </div>
+        </div>
+        <div class="title">読み上げ文章設定</div>
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <div class="control">
+                <label class="checkbox">
+                  <input type="checkbox"> 前書き
+                </label><br>
+                <label class="checkbox">
+                  <input type="checkbox"> 本文
+                </label><br>
+                <label class="checkbox">
+                  <input type="checkbox"> 後書き
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="title">連続再生設定</div>
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="checkbox">
+                <input type="checkbox"> 連続再生する
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
