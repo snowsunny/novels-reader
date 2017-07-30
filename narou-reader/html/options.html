@@ -28,7 +28,7 @@
             <div class="field">
               <label class="label">速度</label>
               <div class="control">
-                <input class="input" type="number" placeholder="0.1 ~ 2">
+                <input class="input" type="number" placeholder="例: 1">
               </div>
               <p class="help">初期値: 1, 最小値: 0.1, 最大値: 2</p>
             </div>
@@ -37,19 +37,19 @@
             <div class="field">
               <label class="label">ピッチ</label>
               <div class="control">
-                <input class="input" type="number" placeholder="0.1 ~ 2">
+                <input class="input" type="number" placeholder="例: 1">
               </div>
               <p class="help">声の高さを設定出来ます。 初期値: 1, 最小値: 0, 最大値: 2</p>
             </div>
           </div>
         </div>
-        <div class="title">ハイライトカラー設定</div>
+        <div class="title">ハイライト設定</div>
         <div class="columns">
           <div class="column">
             <div class="field">
               <label class="label">テキストカラー</label>
               <div class="control">
-                <input class="input" type="number" placeholder="#fff">
+                <input class="input" type="text" placeholder="例: #fff">
               </div>
               <p class="help">初期値: #fff</p>
             </div>
@@ -58,9 +58,20 @@
             <div class="field">
               <label class="label">背景カラー</label>
               <div class="control">
-                <input class="input" type="number" placeholder="#498fd9">
+                <input class="input" type="text" placeholder="例: #498fd9">
               </div>
               <p class="help">初期値: #498fd9</p>
+            </div>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <div class="control">
+                <label class="checkbox">
+                  <input type="checkbox"> 自動スクロール
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -73,6 +84,9 @@
                   <input type="checkbox"> 前書き
                 </label><br>
                 <label class="checkbox">
+                  <input type="checkbox"> タイトル
+                </label><br>
+                <label class="checkbox">
                   <input type="checkbox"> 本文
                 </label><br>
                 <label class="checkbox">
@@ -82,12 +96,17 @@
             </div>
           </div>
         </div>
-        <div class="title">連続再生設定</div>
+        <div class="title">自動再生設定</div>
         <div class="columns">
           <div class="column">
             <div class="field">
               <label class="checkbox">
-                <input type="checkbox"> 連続再生する
+                <input type="checkbox"> 自動で再生する
+              </label>
+            </div>
+            <div class="field" style="margin-left: 30px;">
+              <label class="checkbox">
+                <input type="checkbox"> 「次の話」がある場合、自動で移動する
               </label>
             </div>
           </div>

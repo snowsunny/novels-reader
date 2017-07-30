@@ -27,29 +27,36 @@ html
             .field
               label.label 速度
               .control
-                input.input(type='number', placeholder='0.1 ~ 2')
+                input.input(type='number', placeholder='例: 1')
               p.help 初期値: 1, 最小値: 0.1, 最大値: 2
           .column
             .field
               label.label ピッチ
               .control
-                input.input(type='number', placeholder='0.1 ~ 2')
+                input.input(type='number', placeholder='例: 1')
               p.help 声の高さを設定出来ます。 初期値: 1, 最小値: 0, 最大値: 2
               
-        .title ハイライトカラー設定
+        .title ハイライト設定
         .columns
           .column
             .field
               label.label テキストカラー
               .control
-                input.input(type='number', placeholder='#fff')
+                input.input(type='text', placeholder='例: #fff')
               p.help 初期値: #fff
           .column
             .field
               label.label 背景カラー
               .control
-                input.input(type='number', placeholder='#498fd9')
+                input.input(type='text', placeholder='例: #498fd9')
               p.help 初期値: #498fd9
+        .columns
+          .column
+            .field
+              .control
+                label.checkbox
+                  input(type='checkbox')
+                  |  自動スクロール
               
         .title 読み上げ文章設定
         .columns
@@ -62,16 +69,24 @@ html
                 br
                 label.checkbox
                   input(type='checkbox')
+                  |  タイトル
+                br
+                label.checkbox
+                  input(type='checkbox')
                   |  本文
                 br
                 label.checkbox
                   input(type='checkbox')
                   |  後書き
         
-        .title 連続再生設定
+        .title 自動再生設定
         .columns
           .column
             .field
               label.checkbox
                 input(type='checkbox')
-                |  連続再生する
+                |  自動で再生する
+            .field(style='margin-left: 30px')
+              label.checkbox
+                input(type='checkbox')
+                |  「次の話」がある場合、自動で移動する
