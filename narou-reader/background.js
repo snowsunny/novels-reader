@@ -71,13 +71,13 @@
 "use strict";
 
 
-// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-//   if(tab.url != 'chrome://extensions/') {
-//     chrome.tabs.query({url: 'chrome://extensions/'}, (tabsInfo) => {
-//       chrome.tabs.reload(tabsInfo[0].id)
-//     })
-//   }
-// })
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (tab.url != 'chrome://extensions/') {
+    chrome.tabs.query({ url: 'chrome://extensions/' }, function (tabsInfo) {
+      chrome.tabs.reload(tabsInfo[0].id);
+    });
+  }
+});
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.method == "getOptions") {

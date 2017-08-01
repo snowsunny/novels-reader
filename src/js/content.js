@@ -2,11 +2,11 @@ import $ from 'jquery'
 import Roudokuka from 'roudokuka'
 
 const getLineElements = (element) => {
-  let splitTexts = element.text().split('\n')
+  let splitTexts = element.html().split('<br>\n')
 
   let blankLineCount = 0
   return splitTexts.map((text) => {
-    if(text == '') {
+    if(/\S/.test(text) == false) {
       blankLineCount++
     } else {
       let lineElement = $(`<p style='margin-top: ${blankLineCount * element.css('line-height').replace('px', '')}px'>${text}</p>`)
@@ -32,10 +32,11 @@ $('head').append(`<style id='narou-reader-style'>
     color: #fff;
     background-color: #498fd9;
   }
+
   .controll-button {
     color: ${$('#novel_color').css('color')};
     position: absolute;
-    margin-top: 4px;
+    margin-top: 1px;
     left: 50px;
     border: 1px solid;
     border-radius: 16px;
@@ -46,6 +47,7 @@ $('head').append(`<style id='narou-reader-style'>
   .controll-button:hover {
     background-color: #18b7cd;
   }
+
   .controll-button.play:before {
     content: '▶';
     line-height: 16px;
@@ -98,7 +100,7 @@ window.roudokuka = new Roudokuka(linesInfo, {
     if(linesInfo[lineInfo.index + 1]) {
       let nextLineElement = linesInfo[lineInfo.index + 1].element
       lineHighlight(nextLineElement)
-      $('body').scrollTop(nextLineElement.offset().top - $(window).height() + nextLineElement.height() + 30)
+      // $('body').scrollTop(nextLineElement.offset().top - $(window).height() + nextLineElement.height() + 30)
     }
   },
   rate: 1.5
