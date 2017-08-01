@@ -1,4 +1,5 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import UglifyJSWebpackPlugin from 'uglifyjs-webpack-plugin'
 
 import path from 'path'
 import webpack from 'webpack'
@@ -35,7 +36,7 @@ module.exports = {
     ]
   },
   plugins: [
-    // new webpack.optimize.UglifyJsPlugin(),
+    new UglifyJSWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'html/options.html',
       template: 'src/pug/options.pug',
