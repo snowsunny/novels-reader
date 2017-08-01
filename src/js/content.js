@@ -46,6 +46,8 @@ const lineUnHighlight = () => {
 }
 
 // start main --------
+if($('#novel_honbun').length) {
+
 $('head').append(`<style id='narou-reader-style'>
   .highlight {
     color: #fff;
@@ -140,3 +142,5 @@ window.roudokuka.onReady().then(() => {
 // $('body').append($(`<div class='controll-button conifg'></div>`).click((e) => {
 //   window.roudokuka.stop()
 // }))
+
+}

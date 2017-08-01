@@ -36,7 +36,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new UglifyJSWebpackPlugin(),
+    // new UglifyJSWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'html/options.html',
       template: 'src/pug/options.pug',
