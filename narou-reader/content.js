@@ -955,6 +955,26 @@ var _roudokuka2 = _interopRequireDefault(_roudokuka);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var checkIncludeRuby = function checkIncludeRuby(text) {
+  return (/<ruby><rb>/gi.test(text)
+  );
+};
+
+var getLineElement = function getLineElement(text, blankLineCount, element) {
+  var lineElement = (0, _jquery2.default)('<p style=\'margin-top: ' + blankLineCount * element.css('line-height').replace('px', '') + 'px\'>' + text + '</p>');
+  if (checkIncludeRuby(text)) {
+    lineElement.addClass('include-ruby');
+
+    var divider = '__|narou|reader|ruby|tag|divider|__';
+    var splitRubyTagTexts = text.replace(/<ruby><rb>/gi, divider + '<ruby><rb>').replace(/<\/rp><\/ruby>/gi, '</rp></ruby>' + divider).split(divider);
+    var readText = splitRubyTagTexts.map(function (splitRubyTagText) {
+      return checkIncludeRuby(splitRubyTagText) ? (0, _jquery2.default)(splitRubyTagText).find('rt').text() : splitRubyTagText;
+    }).join('');
+    lineElement.data({ readText: readText });
+  }
+  return lineElement;
+};
+
 var getLineElements = function getLineElements(element) {
   var splitTexts = element.html().split('<br>\n');
 
@@ -963,7 +983,7 @@ var getLineElements = function getLineElements(element) {
     if (/\S/gi.test(text) == false) {
       blankLineCount++;
     } else {
-      var lineElement = (0, _jquery2.default)('<p class=\'' + (/<ruby><rb>/.test(text) ? 'include-ruby' : '') + '\' style=\'margin-top: ' + blankLineCount * element.css('line-height').replace('px', '') + 'px\'>' + text + '</p>');
+      var lineElement = getLineElement(text, blankLineCount, element);
       blankLineCount = 0;
       return lineElement;
     }
@@ -989,7 +1009,7 @@ var afterword = (0, _jquery2.default)('#node_a');
 
 var lineElements = getLineElements(body);
 var linesInfo = lineElements.map(function (lineElement) {
-  return { text: lineElement.text(), element: lineElement };
+  return { text: checkIncludeRuby(lineElement.html()) ? lineElement.data().readText : lineElement.text(), element: lineElement };
 });
 
 lineElements.forEach(function (lineElement, index) {

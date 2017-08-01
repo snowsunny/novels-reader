@@ -1,6 +1,25 @@
 import $ from 'jquery'
 import Roudokuka from 'roudokuka'
 
+const checkIncludeRuby = (text) => {
+  return /<ruby><rb>/gi.test(text)
+}
+
+const getLineElement = (text, blankLineCount, element) => {
+  let lineElement = $(`<p style='margin-top: ${blankLineCount * element.css('line-height').replace('px', '')}px'>${text}</p>`)
+  if(checkIncludeRuby(text)) {
+    lineElement.addClass('include-ruby')
+
+    const divider = '__|narou|reader|ruby|tag|divider|__'
+    const splitRubyTagTexts = text.replace(/<ruby><rb>/gi, `${divider}<ruby><rb>`).replace(/<\/rp><\/ruby>/gi, `</rp></ruby>${divider}`).split(divider)
+    const readText = splitRubyTagTexts.map((splitRubyTagText) => {
+      return checkIncludeRuby(splitRubyTagText) ? $(splitRubyTagText).find('rt').text() : splitRubyTagText
+    }).join('')
+    lineElement.data({readText: readText})
+  }
+  return lineElement
+}
+
 const getLineElements = (element) => {
   let splitTexts = element.html().split('<br>\n')
 
@@ -9,7 +28,7 @@ const getLineElements = (element) => {
     if(/\S/gi.test(text) == false) {
       blankLineCount++
     } else {
-      let lineElement = $(`<p class='${/<ruby><rb>/.test(text) ? 'include-ruby' : ''}' style='margin-top: ${blankLineCount * element.css('line-height').replace('px', '')}px'>${text}</p>`)
+      let lineElement = getLineElement(text, blankLineCount, element)
       blankLineCount = 0
       return lineElement
     }
@@ -78,7 +97,7 @@ const afterword = $('#node_a')
 
 let lineElements = getLineElements(body)
 let linesInfo = lineElements.map((lineElement) => {
-  return {text: lineElement.text(), element: lineElement}
+  return {text: checkIncludeRuby(lineElement.html()) ? lineElement.data().readText : lineElement.text(), element: lineElement}
 })
 
 lineElements.forEach((lineElement, index) => {
