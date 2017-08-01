@@ -6,10 +6,10 @@ const getLineElements = (element) => {
 
   let blankLineCount = 0
   return splitTexts.map((text) => {
-    if(/\S/.test(text) == false) {
+    if(/\S/gi.test(text) == false) {
       blankLineCount++
     } else {
-      let lineElement = $(`<p style='margin-top: ${blankLineCount * element.css('line-height').replace('px', '')}px'>${text}</p>`)
+      let lineElement = $(`<p class='${/<ruby><rb>/.test(text) ? 'include-ruby' : ''}' style='margin-top: ${blankLineCount * element.css('line-height').replace('px', '')}px'>${text}</p>`)
       blankLineCount = 0
       return lineElement
     }
@@ -46,6 +46,9 @@ $('head').append(`<style id='narou-reader-style'>
   }
   .controll-button:hover {
     background-color: #18b7cd;
+  }
+  p.include-ruby .controll-button {
+    margin-top: 8px;
   }
 
   .controll-button.play:before {

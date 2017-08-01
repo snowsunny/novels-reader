@@ -960,10 +960,10 @@ var getLineElements = function getLineElements(element) {
 
   var blankLineCount = 0;
   return splitTexts.map(function (text) {
-    if (/\S/.test(text) == false) {
+    if (/\S/gi.test(text) == false) {
       blankLineCount++;
     } else {
-      var lineElement = (0, _jquery2.default)('<p style=\'margin-top: ' + blankLineCount * element.css('line-height').replace('px', '') + 'px\'>' + text + '</p>');
+      var lineElement = (0, _jquery2.default)('<p class=\'' + (/<ruby><rb>/.test(text) ? 'include-ruby' : '') + '\' style=\'margin-top: ' + blankLineCount * element.css('line-height').replace('px', '') + 'px\'>' + text + '</p>');
       blankLineCount = 0;
       return lineElement;
     }
@@ -981,7 +981,7 @@ var lineUnHighlight = function lineUnHighlight() {
 };
 
 // start main --------
-(0, _jquery2.default)('head').append('<style id=\'narou-reader-style\'>\n  .highlight {\n    color: #fff;\n    background-color: #498fd9;\n  }\n\n  .controll-button {\n    color: ' + (0, _jquery2.default)('#novel_color').css('color') + ';\n    position: absolute;\n    margin-top: 1px;\n    left: 50px;\n    border: 1px solid;\n    border-radius: 16px;\n    width: 16px;\n    height: 16px;\n    cursor: pointer;\n  }\n  .controll-button:hover {\n    background-color: #18b7cd;\n  }\n\n  .controll-button.play:before {\n    content: \'\u25B6\';\n    line-height: 16px;\n    margin-left: 5px;\n  }\n\n  .controll-button.stop {\n    position: fixed;\n    top: ' + ((0, _jquery2.default)('#novel_header').height() + 15) + 'px;\n    left: 15px;\n    width: 32px;\n    height: 32px;\n  }\n  .controll-button.stop:before {\n    content: \'\u25A0\';\n    font-size: 19px;\n    line-height: 31px;\n    margin-left: 7px;\n  }\n</style>');
+(0, _jquery2.default)('head').append('<style id=\'narou-reader-style\'>\n  .highlight {\n    color: #fff;\n    background-color: #498fd9;\n  }\n\n  .controll-button {\n    color: ' + (0, _jquery2.default)('#novel_color').css('color') + ';\n    position: absolute;\n    margin-top: 1px;\n    left: 50px;\n    border: 1px solid;\n    border-radius: 16px;\n    width: 16px;\n    height: 16px;\n    cursor: pointer;\n  }\n  .controll-button:hover {\n    background-color: #18b7cd;\n  }\n  p.include-ruby .controll-button {\n    margin-top: 8px;\n  }\n\n  .controll-button.play:before {\n    content: \'\u25B6\';\n    line-height: 16px;\n    margin-left: 5px;\n  }\n\n  .controll-button.stop {\n    position: fixed;\n    top: ' + ((0, _jquery2.default)('#novel_header').height() + 15) + 'px;\n    left: 15px;\n    width: 32px;\n    height: 32px;\n  }\n  .controll-button.stop:before {\n    content: \'\u25A0\';\n    font-size: 19px;\n    line-height: 31px;\n    margin-left: 7px;\n  }\n</style>');
 
 var foreword = (0, _jquery2.default)('#node_p');
 var body = (0, _jquery2.default)('#novel_honbun');
