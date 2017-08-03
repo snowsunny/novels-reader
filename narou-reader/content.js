@@ -11235,6 +11235,7 @@ var getLineElement = function getLineElement(text, blankLineCount, element) {
   return lineElement;
 };
 
+var lineIndex = 0;
 var getLineElements = function getLineElements(element) {
   var splitTexts = element.html().split('<br>\n');
 
@@ -11245,10 +11246,16 @@ var getLineElements = function getLineElements(element) {
     } else {
       var lineElement = getLineElement(text, blankLineCount, element);
       blankLineCount = 0;
-      return lineElement;
+      return lineElement.prepend('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'></div>');
     }
   }).filter(function (lineElement) {
     return lineElement != undefined;
+  });
+};
+
+var getLinesInfo = function getLinesInfo(lineElements) {
+  return lineElements.map(function (lineElement) {
+    return { text: checkIncludeRuby(lineElement.html()) ? lineElement.data().readText : lineElement.text(), element: lineElement };
   });
 };
 
@@ -11257,30 +11264,44 @@ var lineHighlight = function lineHighlight(lineElement) {
 };
 
 var lineUnHighlight = function lineUnHighlight() {
-  $('#node_p p, #novel_honbun p, #node_a p').removeClass('highlight');
+  $('.novel_subtitle, #novel_p p, #novel_honbun p, #novel_a p').removeClass('highlight');
 };
 
 if ($('#novel_honbun').length) {
   chrome.runtime.sendMessage({ method: 'getOptions', key: 'options' }, function (response) {
-    console.log(response);
+    // console.log(response)
     // start main --------
 
     var options = response;
-    $('head').append('<style id=\'narou-reader-style\'>\n  .highlight {\n    color: ' + (options.textColor == '' ? '#fff' : options.textColor) + ';\n    background-color: ' + (options.backgroundColor == '' ? '#498fd9' : options.backgroundColor) + ';\n  }\n\n  .controll-button {\n    color: ' + $('#novel_color').css('color') + ';\n    position: absolute;\n    margin-top: 1px;\n    left: 50px;\n    border: 1px solid;\n    border-radius: 16px;\n    width: 16px;\n    height: 16px;\n    cursor: pointer;\n  }\n  .controll-button:hover {\n    background-color: #18b7cd;\n  }\n  p.include-ruby .controll-button {\n    margin-top: 8px;\n  }\n\n  .controll-button.play:before {\n    content: \'\u25B6\';\n    line-height: 16px;\n    margin-left: 5px;\n  }\n\n  .controll-button.stop {\n    position: fixed;\n    top: ' + ($('#novel_header').height() + 15) + 'px;\n    left: 15px;\n    width: 32px;\n    height: 32px;\n  }\n  .controll-button.stop:before {\n    content: \'\u25A0\';\n    font-size: 19px;\n    line-height: 31px;\n    margin-left: 7px;\n  }\n</style>');
+    $('head').append('<style id=\'narou-reader-style\'>\n  .highlight {\n    color: ' + (options.textColor == '' ? '#fff' : options.textColor) + ';\n    background-color: ' + (options.backgroundColor == '' ? '#498fd9' : options.backgroundColor) + ';\n  }\n\n  .controll-button {\n    color: ' + $('#novel_color').css('color') + ';\n    position: absolute;\n    margin-top: ' + ($('#novel_honbun').css('line-height').replace('px', '') - $('#novel_honbun').css('font-size').replace('px', '')) / 2 + 'px;\n    left: 50px;\n    border: 1px solid;\n    border-radius: 16px;\n    width: 16px;\n    height: 16px;\n    cursor: pointer;\n  }\n  .controll-button:hover {\n    background-color: #18b7cd;\n  }\n  p.include-ruby .controll-button {\n    margin-top: 8px;\n  }\n\n  .controll-button.play:before {\n    content: \'\u25B6\';\n    line-height: 16px;\n    margin-left: 5px;\n  }\n\n  .controll-button.stop {\n    position: fixed;\n    top: ' + ($('#novel_header').height() + 15) + 'px;\n    left: 15px;\n    width: 32px;\n    height: 32px;\n  }\n  .controll-button.stop:before {\n    content: \'\u25A0\';\n    font-size: 19px;\n    line-height: 31px;\n    margin-left: 7px;\n  }\n</style>');
 
-    var foreword = $('#node_p');
+    var title = $('.novel_subtitle');
+    var foreword = $('#novel_p');
     var body = $('#novel_honbun');
-    var afterword = $('#node_a');
+    var afterword = $('#novel_a');
 
-    var lineElements = getLineElements(body);
-    var linesInfo = lineElements.map(function (lineElement) {
-      return { text: checkIncludeRuby(lineElement.html()) ? lineElement.data().readText : lineElement.text(), element: lineElement };
-    });
+    var lineElements = {};
+    var linesInfo = [];
 
-    lineElements.forEach(function (lineElement, index) {
-      lineElement.prepend('<div class=\'controll-button play\' data-index=\'' + index + '\'></div>');
-    });
-    body.html(lineElements);
+    if (options.title == 'on' && title.length) {
+      lineElements.title = [title.prepend('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'></div>')];
+      linesInfo = linesInfo.concat(getLinesInfo(lineElements.title));
+    }
+    if (options.foreword == 'on' && foreword.length) {
+      lineElements.foreword = getLineElements(foreword);
+      linesInfo = linesInfo.concat(getLinesInfo(lineElements.foreword));
+      foreword.html(lineElements.foreword);
+    }
+    if (options.body == 'on' && body.length) {
+      lineElements.body = getLineElements(body);
+      linesInfo = linesInfo.concat(getLinesInfo(lineElements.body));
+      body.html(lineElements.body);
+    }
+    if (options.afterword == 'on' && afterword.length) {
+      lineElements.afterword = getLineElements(afterword);
+      linesInfo = linesInfo.concat(getLinesInfo(lineElements.afterword));
+      afterword.html(lineElements.afterword);
+    }
 
     $('.controll-button.play').on('click', function (e) {
       var targetPlayButton = $(e.currentTarget);

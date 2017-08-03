@@ -20,6 +20,7 @@ const getLineElement = (text, blankLineCount, element) => {
   return lineElement
 }
 
+let lineIndex = 0
 const getLineElements = (element) => {
   let splitTexts = element.html().split('<br>\n')
 
@@ -30,10 +31,16 @@ const getLineElements = (element) => {
     } else {
       let lineElement = getLineElement(text, blankLineCount, element)
       blankLineCount = 0
-      return lineElement
+      return lineElement.prepend(`<div class='controll-button play' data-index='${lineIndex++}'></div>`)
     }
   }).filter((lineElement) => {
     return lineElement != undefined
+  })
+}
+
+const getLinesInfo = (lineElements) => {
+  return lineElements.map((lineElement) => {
+    return {text: checkIncludeRuby(lineElement.html()) ? lineElement.data().readText : lineElement.text(), element: lineElement}
   })
 }
 
@@ -42,13 +49,12 @@ const lineHighlight = (lineElement) => {
 }
 
 const lineUnHighlight = () => {
-  $('#node_p p, #novel_honbun p, #node_a p').removeClass('highlight')
+  $('.novel_subtitle, #novel_p p, #novel_honbun p, #novel_a p').removeClass('highlight')
 }
-
 
 if($('#novel_honbun').length) {
 chrome.runtime.sendMessage({method: 'getOptions', key: 'options'}, (response) => {
-console.log(response)
+// console.log(response)
 // start main --------
 
 const options = response
@@ -61,7 +67,7 @@ $('head').append(`<style id='narou-reader-style'>
   .controll-button {
     color: ${$('#novel_color').css('color')};
     position: absolute;
-    margin-top: 1px;
+    margin-top: ${($('#novel_honbun').css('line-height').replace('px', '') - $('#novel_honbun').css('font-size').replace('px', '')) / 2 }px;
     left: 50px;
     border: 1px solid;
     border-radius: 16px;
@@ -97,19 +103,33 @@ $('head').append(`<style id='narou-reader-style'>
   }
 </style>`)
 
-const foreword = $('#node_p')
+const title = $('.novel_subtitle')
+const foreword = $('#novel_p')
 const body = $('#novel_honbun')
-const afterword = $('#node_a')
+const afterword = $('#novel_a')
 
-let lineElements = getLineElements(body)
-let linesInfo = lineElements.map((lineElement) => {
-  return {text: checkIncludeRuby(lineElement.html()) ? lineElement.data().readText : lineElement.text(), element: lineElement}
-})
+let lineElements = {}
+let linesInfo = []
 
-lineElements.forEach((lineElement, index) => {
-  lineElement.prepend(`<div class='controll-button play' data-index='${index}'></div>`)
-})
-body.html(lineElements)
+if(options.title == 'on' && title.length) {
+  lineElements.title = [title.prepend(`<div class='controll-button play' data-index='${lineIndex++}'></div>`)]
+  linesInfo = linesInfo.concat(getLinesInfo(lineElements.title))
+}
+if(options.foreword == 'on' && foreword.length) {
+  lineElements.foreword = getLineElements(foreword)
+  linesInfo = linesInfo.concat(getLinesInfo(lineElements.foreword))
+  foreword.html(lineElements.foreword)
+}
+if(options.body == 'on' && body.length) {
+  lineElements.body = getLineElements(body)
+  linesInfo = linesInfo.concat(getLinesInfo(lineElements.body))
+  body.html(lineElements.body)
+}
+if(options.afterword == 'on' && afterword.length) {
+  lineElements.afterword = getLineElements(afterword)
+  linesInfo = linesInfo.concat(getLinesInfo(lineElements.afterword))
+  afterword.html(lineElements.afterword)
+}
 
 $('.controll-button.play').on('click', (e) => {
   let targetPlayButton = $(e.currentTarget)
