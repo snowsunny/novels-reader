@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 31);
+/******/ 	return __webpack_require__(__webpack_require__.s = 102);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -11199,322 +11199,9 @@ module.exports = identity;
 
 
 /***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-var _merge2 = __webpack_require__(15);
-
-var _merge3 = _interopRequireDefault(_merge2);
-
-var _roudokuka = __webpack_require__(32);
-
-var _roudokuka2 = _interopRequireDefault(_roudokuka);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var checkIncludeRuby = function checkIncludeRuby(text) {
-  return (/<ruby><rb>/gi.test(text)
-  );
-};
-
-var getLineElement = function getLineElement(text, blankLineCount, element) {
-  var lineElement = $('<p style=\'margin-top: ' + blankLineCount * element.css('line-height').replace('px', '') + 'px\'>' + text + '</p>');
-  if (checkIncludeRuby(text)) {
-    lineElement.addClass('include-ruby');
-
-    var divider = '__|narou|reader|ruby|tag|divider|__';
-    var splitRubyTagTexts = text.replace(/<ruby><rb>/gi, divider + '<ruby><rb>').replace(/<\/rp><\/ruby>/gi, '</rp></ruby>' + divider).split(divider);
-    var readText = splitRubyTagTexts.map(function (splitRubyTagText) {
-      return checkIncludeRuby(splitRubyTagText) ? $(splitRubyTagText).find('rt').text() : splitRubyTagText;
-    }).join('');
-    lineElement.data({ readText: readText });
-  }
-  return lineElement;
-};
-
-var getLineElements = function getLineElements(element) {
-  var splitTexts = element.html().split('<br>\n');
-
-  var blankLineCount = 0;
-  return splitTexts.map(function (text) {
-    if (/\S/gi.test(text) == false) {
-      blankLineCount++;
-    } else {
-      var lineElement = getLineElement(text, blankLineCount, element);
-      blankLineCount = 0;
-      return lineElement;
-    }
-  }).filter(function (lineElement) {
-    return lineElement != undefined;
-  });
-};
-
-var lineHighlight = function lineHighlight(lineElement) {
-  lineElement.addClass('highlight');
-};
-
-var lineUnHighlight = function lineUnHighlight() {
-  $('#node_p p, #novel_honbun p, #node_a p').removeClass('highlight');
-};
-
-if ($('#novel_honbun').length) {
-  chrome.runtime.sendMessage({ method: 'getOptions', key: 'options' }, function (response) {
-    console.log(response);
-    // start main --------
-
-    var options = response;
-    $('head').append('<style id=\'narou-reader-style\'>\n  .highlight {\n    color: ' + (options.textColor == '' ? '#fff' : options.textColor) + ';\n    background-color: ' + (options.backgroundColor == '' ? '#498fd9' : options.backgroundColor) + ';\n  }\n\n  .controll-button {\n    color: ' + $('#novel_color').css('color') + ';\n    position: absolute;\n    margin-top: 1px;\n    left: 50px;\n    border: 1px solid;\n    border-radius: 16px;\n    width: 16px;\n    height: 16px;\n    cursor: pointer;\n  }\n  .controll-button:hover {\n    background-color: #18b7cd;\n  }\n  p.include-ruby .controll-button {\n    margin-top: 8px;\n  }\n\n  .controll-button.play:before {\n    content: \'\u25B6\';\n    line-height: 16px;\n    margin-left: 5px;\n  }\n\n  .controll-button.stop {\n    position: fixed;\n    top: ' + ($('#novel_header').height() + 15) + 'px;\n    left: 15px;\n    width: 32px;\n    height: 32px;\n  }\n  .controll-button.stop:before {\n    content: \'\u25A0\';\n    font-size: 19px;\n    line-height: 31px;\n    margin-left: 7px;\n  }\n</style>');
-
-    var foreword = $('#node_p');
-    var body = $('#novel_honbun');
-    var afterword = $('#node_a');
-
-    var lineElements = getLineElements(body);
-    var linesInfo = lineElements.map(function (lineElement) {
-      return { text: checkIncludeRuby(lineElement.html()) ? lineElement.data().readText : lineElement.text(), element: lineElement };
-    });
-
-    lineElements.forEach(function (lineElement, index) {
-      lineElement.prepend('<div class=\'controll-button play\' data-index=\'' + index + '\'></div>');
-    });
-    body.html(lineElements);
-
-    $('.controll-button.play').on('click', function (e) {
-      var targetPlayButton = $(e.currentTarget);
-      lineUnHighlight();
-      lineHighlight(targetPlayButton.parent());
-      window.roudokuka.start(targetPlayButton.data().index);
-    });
-
-    $('body').append($('<div class=\'controll-button stop\'></div>').click(function (e) {
-      window.roudokuka.stop();
-    }));
-
-    var roudokukaOptions = {};
-    if (options.rate != '') {
-      roudokukaOptions.rate = Number(options.rate);
-    }
-    if (options.pitch != '') {
-      roudokukaOptions.pitch = Number(options.pitch);
-    }
-    roudokukaOptions.onend = function (e, lineInfo) {
-      lineUnHighlight();
-      if (linesInfo[lineInfo.index + 1]) {
-        var nextLineElement = linesInfo[lineInfo.index + 1].element;
-        lineHighlight(nextLineElement);
-        if (options.autoScroll == 'on') {
-          $('body').scrollTop(nextLineElement.offset().top - $(window).height() + nextLineElement.height() + 30);
-        }
-      }
-    };
-    window.roudokuka = new _roudokuka2.default(linesInfo, roudokukaOptions);
-
-    window.roudokuka.onReady().then(function () {
-      lineHighlight(linesInfo[0].element);
-      window.roudokuka.start();
-    });
-
-    // end main --------
-  });
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
-
-/***/ }),
-/* 32 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Libretto__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_merge__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_merge___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash_merge__);
-
-
-
-class Roudokuka {
-  constructor(lines, options) {
-    this.libretto = new __WEBPACK_IMPORTED_MODULE_0__Libretto__["a" /* default */](lines)
-    this.voices = []
-    this.currentLine = undefined
-    this.interrupted = false
-
-    this.defaultOptions = {
-      lang: "",
-      onboundary: null,
-      onend: null,
-      onerror: null,
-      onmark: null,
-      onpause: null, // stil buggy
-      onresume: null, // stil buggy
-      onstart: null,
-      pitch: 1,
-      rate: 1,
-      voice: null,
-      volume: 1,
-      onLibrettoEnd: undefined
-    }
-    this.options = __WEBPACK_IMPORTED_MODULE_1_lodash_merge___default()(this.defaultOptions, options)
-
-    // fix for chrome
-    this.utterance = undefined // continuous play
-    this.resumer = [] // speak with long text
-  }
-
-  _startResumer() {
-    this.resumer.push(setInterval(() => {
-      speechSynthesis.resume()
-    }, 5000))
-  }
-
-  _stopResumer() {
-    if(this.resumer.length) {
-      this.resumer.forEach((id) => {
-        clearInterval(id)
-      })
-      this.resumer = []
-    }
-  }
-
-  onReady() {
-    speechSynthesis.cancel()
-    return new Promise((resolve, reject) => {
-      const tryInterval = setInterval(() => {
-        if(this.voices.length === 0) {
-          this.voices = speechSynthesis.getVoices()
-        } else {
-          clearInterval(tryInterval)
-          resolve()
-        }
-      }, 0)
-    })
-  }
-
-  getUtterance(line) {
-    this.utterance = new SpeechSynthesisUtterance()
-    __WEBPACK_IMPORTED_MODULE_1_lodash_merge___default()(this.utterance, this.options, line)
-
-    // fix rate for desktop chrome
-    // if(this.utterance.rate > 2) {
-    //   this.utterance.rate = 2
-    // }
-
-    let advancedCallbacks = {list: ['onend', 'onpause', 'onresume']}
-    advancedCallbacks.list.forEach((name) => {
-      if(Object.prototype.toString.call(this.utterance[name]) == '[object Function]') {
-        advancedCallbacks[name] = this.utterance[name]
-      }
-    })
-
-    this.utterance.onend = (e) => {
-      if(this.interrupted) {
-        this.interrupted = false
-      } else {
-        if(advancedCallbacks.onend) {
-          advancedCallbacks.onend(e, this.currentLine)
-        }
-        this.start()
-      }
-    }
-    this.utterance.onpause = (e) => {
-      this._stopResumer()
-      if(advancedCallbacks.onpause) {
-        advancedCallbacks.onpause(e, this.currentLine)
-      }
-    }
-    this.utterance.onresume = (e) => {
-      if(this.resumer.length == 0 && advancedCallbacks.onresume) {
-        advancedCallbacks.onresume(e, this.currentLine)
-        this._startResumer()
-      }
-    }
-
-    return this.utterance
-  }
-
-  start(lineIndex) {
-    if(speechSynthesis.speaking) {
-      this.interrupted = true
-    }
-    if(lineIndex >= 0) {
-      this.libretto.curentLineIndex = lineIndex
-    }
-
-    this._stopResumer()
-    this._startResumer()
-    speechSynthesis.cancel()
-
-    if(this.libretto.isEnd()) {
-      this.libretto.curentLineIndex = 0
-      this._stopResumer()
-      if(Object.prototype.toString.call(this.options.onLibrettoEnd) == '[object Function]') {
-        this.options.onLibrettoEnd()
-      }
-    } else {
-      this.currentLine = this.libretto.getNextLine()
-      speechSynthesis.speak(this.getUtterance(this.currentLine))
-    }
-  }
-
-  stop() {
-    if(speechSynthesis.speaking) {
-      this.interrupted = true
-    }
-    speechSynthesis.cancel()
-    this._stopResumer()
-  }
-}
-/* harmony export (immutable) */ __webpack_exports__["default"] = Roudokuka;
-
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_merge__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_merge___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_merge__);
-
-
-class Libretto {
-  constructor(linesInfo) {
-    this.curentLineIndex = 0
-    this.lines = this._createLines(linesInfo)
-  }
-
-  _createLines(linesInfo) {
-    return linesInfo.map((lineInfo, index) => {
-      if(Object.prototype.toString.call(lineInfo) == '[object String]') {
-        return {index: index, text: lineInfo}
-      } else {
-        return __WEBPACK_IMPORTED_MODULE_0_lodash_merge___default()(lineInfo, {index: index})
-      }
-    })
-  }
-
-  getNextLine() {
-    if(this.curentLineIndex < this.lines.length) {
-      if(this.curentLineIndex == this.lines.length - 1) {
-        this.curentLineIndex = -1
-        return this.lines[this.lines.length - 1]
-      } else {
-        return this.lines[this.curentLineIndex++]
-      }
-    }
-  }
-
-  isEnd() {
-    return this.curentLineIndex == -1
-  }
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Libretto;
-
-
-
-/***/ }),
+/* 31 */,
+/* 32 */,
+/* 33 */,
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13648,6 +13335,354 @@ function isIterateeCall(value, index, object) {
 }
 
 module.exports = isIterateeCall;
+
+
+/***/ }),
+/* 101 */,
+/* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+var _merge2 = __webpack_require__(15);
+
+var _merge3 = _interopRequireDefault(_merge2);
+
+var _each2 = __webpack_require__(103);
+
+var _each3 = _interopRequireDefault(_each2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var storageOptions = JSON.parse(localStorage.getItem('options'));
+var defaultOptions = {
+  version: chrome.app.getDetails().version,
+  autoScroll: "on",
+  title: "on",
+  body: "on",
+  autoPlay: "on",
+  autoMoveNext: "on"
+};
+
+var saveOptions = function saveOptions(options) {
+  localStorage.setItem('options', JSON.stringify(options));
+};
+
+var getInitOptions = function getInitOptions() {
+  var checkStorageOptionsIsLatestVersion = function checkStorageOptionsIsLatestVersion() {
+    return storageOptions ? defaultOptions.version == storageOptions.version : false;
+  };
+  if (checkStorageOptionsIsLatestVersion()) {
+    return storageOptions;
+  } else {
+    var mergedOptions = (0, _merge3.default)({}, defaultOptions, storageOptions);
+    saveOptions(mergedOptions);
+    return mergedOptions;
+  }
+};
+
+$(function () {
+  var initOptions = getInitOptions();
+  (0, _each3.default)(initOptions, function (value, key) {
+    var targetInput = $("#options input[name=" + key + "]");
+    if (targetInput.attr('type') == 'checkbox') {
+      if (value == 'on') {
+        targetInput.prop('checked', true);
+      }
+    } else {
+      targetInput.val(value);
+    }
+  });
+  $('#options input').on('change', function (e) {
+    var changedOptions = {};
+    $('#options').serializeArray().forEach(function (option) {
+      changedOptions[option.name] = option.value;
+    });
+    saveOptions((0, _merge3.default)(changedOptions, { version: initOptions.version }));
+  });
+});
+
+// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//   if (request.method == "getOptions") {
+//     sendResponse(getInitOptions())
+//   } else {
+//     sendResponse(false)
+//   }
+// });
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+
+/***/ }),
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(104);
+
+
+/***/ }),
+/* 104 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayEach = __webpack_require__(105),
+    baseEach = __webpack_require__(106),
+    castFunction = __webpack_require__(112),
+    isArray = __webpack_require__(24);
+
+/**
+ * Iterates over elements of `collection` and invokes `iteratee` for each element.
+ * The iteratee is invoked with three arguments: (value, index|key, collection).
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
+ *
+ * **Note:** As with other "Collections" methods, objects with a "length"
+ * property are iterated like arrays. To avoid this behavior use `_.forIn`
+ * or `_.forOwn` for object iteration.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @alias each
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} [iteratee=_.identity] The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ * @see _.forEachRight
+ * @example
+ *
+ * _.forEach([1, 2], function(value) {
+ *   console.log(value);
+ * });
+ * // => Logs `1` then `2`.
+ *
+ * _.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
+ *   console.log(key);
+ * });
+ * // => Logs 'a' then 'b' (iteration order is not guaranteed).
+ */
+function forEach(collection, iteratee) {
+  var func = isArray(collection) ? arrayEach : baseEach;
+  return func(collection, castFunction(iteratee));
+}
+
+module.exports = forEach;
+
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports) {
+
+/**
+ * A specialized version of `_.forEach` for arrays without support for
+ * iteratee shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns `array`.
+ */
+function arrayEach(array, iteratee) {
+  var index = -1,
+      length = array == null ? 0 : array.length;
+
+  while (++index < length) {
+    if (iteratee(array[index], index, array) === false) {
+      break;
+    }
+  }
+  return array;
+}
+
+module.exports = arrayEach;
+
+
+/***/ }),
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseForOwn = __webpack_require__(107),
+    createBaseEach = __webpack_require__(111);
+
+/**
+ * The base implementation of `_.forEach` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ */
+var baseEach = createBaseEach(baseForOwn);
+
+module.exports = baseEach;
+
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseFor = __webpack_require__(67),
+    keys = __webpack_require__(108);
+
+/**
+ * The base implementation of `_.forOwn` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Object} Returns `object`.
+ */
+function baseForOwn(object, iteratee) {
+  return object && baseFor(object, iteratee, keys);
+}
+
+module.exports = baseForOwn;
+
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayLikeKeys = __webpack_require__(88),
+    baseKeys = __webpack_require__(109),
+    isArrayLike = __webpack_require__(14);
+
+/**
+ * Creates an array of the own enumerable property names of `object`.
+ *
+ * **Note:** Non-object values are coerced to objects. See the
+ * [ES spec](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
+ * for more details.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Object
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ *   this.b = 2;
+ * }
+ *
+ * Foo.prototype.c = 3;
+ *
+ * _.keys(new Foo);
+ * // => ['a', 'b'] (iteration order is not guaranteed)
+ *
+ * _.keys('hi');
+ * // => ['0', '1']
+ */
+function keys(object) {
+  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+}
+
+module.exports = keys;
+
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isPrototype = __webpack_require__(22),
+    nativeKeys = __webpack_require__(110);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ */
+function baseKeys(object) {
+  if (!isPrototype(object)) {
+    return nativeKeys(object);
+  }
+  var result = [];
+  for (var key in Object(object)) {
+    if (hasOwnProperty.call(object, key) && key != 'constructor') {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+module.exports = baseKeys;
+
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var overArg = __webpack_require__(77);
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeKeys = overArg(Object.keys, Object);
+
+module.exports = nativeKeys;
+
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isArrayLike = __webpack_require__(14);
+
+/**
+ * Creates a `baseEach` or `baseEachRight` function.
+ *
+ * @private
+ * @param {Function} eachFunc The function to iterate over a collection.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new base function.
+ */
+function createBaseEach(eachFunc, fromRight) {
+  return function(collection, iteratee) {
+    if (collection == null) {
+      return collection;
+    }
+    if (!isArrayLike(collection)) {
+      return eachFunc(collection, iteratee);
+    }
+    var length = collection.length,
+        index = fromRight ? length : -1,
+        iterable = Object(collection);
+
+    while ((fromRight ? index-- : ++index < length)) {
+      if (iteratee(iterable[index], index, iterable) === false) {
+        break;
+      }
+    }
+    return collection;
+  };
+}
+
+module.exports = createBaseEach;
+
+
+/***/ }),
+/* 112 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var identity = __webpack_require__(30);
+
+/**
+ * Casts `value` to `identity` if it's not a function.
+ *
+ * @private
+ * @param {*} value The value to inspect.
+ * @returns {Function} Returns cast function.
+ */
+function castFunction(value) {
+  return typeof value == 'function' ? value : identity;
+}
+
+module.exports = castFunction;
 
 
 /***/ })

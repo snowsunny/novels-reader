@@ -9,6 +9,7 @@ html
       section.section .title {
         margin-top: 35px;
       }
+    script(src='../options.js')
   body
     section.hero.is-primary
       .hero-body
@@ -19,22 +20,23 @@ html
             | web page reader for syosetu.com
     
     section.section
-      .container
+      form#options.container
         | ※設定後、ページを更新すると設定が反映されます。
         .title 音声設定
+        .subtitle(style='font-size: 1rem') ※最小値、最大値についてですがOS毎に挙動が違います…音声が正しく再生されない場合はより初期値に近い値を設定してみて下さい。
         .columns
           .column
             .field
               label.label 速度
               .control
-                input.input(type='number', placeholder='例: 1')
-              p.help 初期値: 1, 最小値: 0.1, 最大値: 2
+                input.input(name='rate' type='number', placeholder='例: 1')
+              p.help 初期値: 1.0, 最小値: 0.1, 最大値: 10.0
           .column
             .field
               label.label ピッチ
               .control
-                input.input(type='number', placeholder='例: 1')
-              p.help 声の高さを設定出来ます。 初期値: 1, 最小値: 0, 最大値: 2
+                input.input(name='pitch' type='number', placeholder='例: 1')
+              p.help 声の高さを設定出来ます。 初期値: 1.0, 最小値: 0, 最大値: 2.0
               
         .title ハイライト設定
         .columns
@@ -42,20 +44,20 @@ html
             .field
               label.label テキストカラー
               .control
-                input.input(type='text', placeholder='例: #fff')
+                input.input(name='textColor' type='text', placeholder='例: #fff')
               p.help 初期値: #fff
           .column
             .field
               label.label 背景カラー
               .control
-                input.input(type='text', placeholder='例: #498fd9')
+                input.input(name='backgroundColor' type='text', placeholder='例: #498fd9')
               p.help 初期値: #498fd9
         .columns
           .column
             .field
               .control
                 label.checkbox
-                  input(type='checkbox')
+                  input(name='autoScroll' type='checkbox')
                   |  自動スクロール
               
         .title 読み上げ文章設定
@@ -64,19 +66,19 @@ html
             .field
               .control
                 label.checkbox
-                  input(type='checkbox')
+                  input(name='title' type='checkbox')
+                  |  題名
+                br
+                label.checkbox
+                  input(name='foreword' type='checkbox')
                   |  前書き
                 br
                 label.checkbox
-                  input(type='checkbox')
-                  |  タイトル
-                br
-                label.checkbox
-                  input(type='checkbox')
+                  input(name='body' type='checkbox')
                   |  本文
                 br
                 label.checkbox
-                  input(type='checkbox')
+                  input(name='afterword' type='checkbox')
                   |  後書き
         
         .title 自動再生設定
@@ -84,9 +86,9 @@ html
           .column
             .field
               label.checkbox
-                input(type='checkbox')
+                input(name='autoPlay' type='checkbox')
                 |  自動で再生する
             .field(style='margin-left: 30px')
               label.checkbox
-                input(type='checkbox')
+                input(name='autoMoveNext' type='checkbox')
                 |  「次の話」がある場合、自動で移動する

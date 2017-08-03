@@ -1,4 +1,4 @@
-import $ from 'jquery'
+import _merge from 'lodash/merge'
 import Roudokuka from 'roudokuka'
 
 const checkIncludeRuby = (text) => {
@@ -45,13 +45,17 @@ const lineUnHighlight = () => {
   $('#node_p p, #novel_honbun p, #node_a p').removeClass('highlight')
 }
 
-// start main --------
-if($('#novel_honbun').length) {
 
+if($('#novel_honbun').length) {
+chrome.runtime.sendMessage({method: 'getOptions', key: 'options'}, (response) => {
+console.log(response)
+// start main --------
+
+const options = response
 $('head').append(`<style id='narou-reader-style'>
   .highlight {
-    color: #fff;
-    background-color: #498fd9;
+    color: ${options.textColor == '' ? '#fff' : options.textColor};
+    background-color: ${options.backgroundColor == '' ? '#498fd9' : options.backgroundColor};
   }
 
   .controll-button {
@@ -118,29 +122,31 @@ $('body').append($(`<div class='controll-button stop'></div>`).click((e) => {
   window.roudokuka.stop()
 }))
 
-window.roudokuka = new Roudokuka(linesInfo, {
-  onend: (e, lineInfo) => {
-    lineUnHighlight()
-    if(linesInfo[lineInfo.index + 1]) {
-      let nextLineElement = linesInfo[lineInfo.index + 1].element
-      lineHighlight(nextLineElement)
-      // $('body').scrollTop(nextLineElement.offset().top - $(window).height() + nextLineElement.height() + 30)
+let roudokukaOptions = {}
+if(options.rate != '') {
+  roudokukaOptions.rate = Number(options.rate)
+}
+if(options.pitch != '') {
+  roudokukaOptions.pitch = Number(options.pitch)
+}
+roudokukaOptions.onend = (e, lineInfo) => {
+  lineUnHighlight()
+  if(linesInfo[lineInfo.index + 1]) {
+    let nextLineElement = linesInfo[lineInfo.index + 1].element
+    lineHighlight(nextLineElement)
+    if(options.autoScroll == 'on') {
+      $('body').scrollTop(nextLineElement.offset().top - $(window).height() + nextLineElement.height() + 30)
     }
-  },
-  rate: 1.5
-})
+  }
+}
+window.roudokuka = new Roudokuka(linesInfo, roudokukaOptions)
 
 window.roudokuka.onReady().then(() => {
   lineHighlight(linesInfo[0].element)
   window.roudokuka.start()
 })
 
-// chrome.runtime.sendMessage({method: 'getOptions', key: 'options'}, (response) => {
-//   console.log('sendMessage', response)
-// })
+// end main --------
 
-// $('body').append($(`<div class='controll-button conifg'></div>`).click((e) => {
-//   window.roudokuka.stop()
-// }))
-
+})
 }

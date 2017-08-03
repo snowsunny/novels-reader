@@ -10,6 +10,7 @@
         margin-top: 35px;
       }
     </style>
+    <script src="../options.js"></script>
   </head>
   <body>
     <section class="hero is-primary">
@@ -21,25 +22,26 @@
       </div>
     </section>
     <section class="section">
-      <div class="container">※設定後、ページを更新すると設定が反映されます。
+      <form class="container" id="options">※設定後、ページを更新すると設定が反映されます。
         <div class="title">音声設定</div>
+        <div class="subtitle" style="font-size: 1rem;">※最小値、最大値についてですがOS毎に挙動が違います…音声が正しく再生されない場合はより初期値に近い値を設定してみて下さい。</div>
         <div class="columns">
           <div class="column">
             <div class="field">
               <label class="label">速度</label>
               <div class="control">
-                <input class="input" type="number" placeholder="例: 1">
+                <input class="input" name="rate" type="number" placeholder="例: 1">
               </div>
-              <p class="help">初期値: 1, 最小値: 0.1, 最大値: 2</p>
+              <p class="help">初期値: 1.0, 最小値: 0.1, 最大値: 10.0</p>
             </div>
           </div>
           <div class="column">
             <div class="field">
               <label class="label">ピッチ</label>
               <div class="control">
-                <input class="input" type="number" placeholder="例: 1">
+                <input class="input" name="pitch" type="number" placeholder="例: 1">
               </div>
-              <p class="help">声の高さを設定出来ます。 初期値: 1, 最小値: 0, 最大値: 2</p>
+              <p class="help">声の高さを設定出来ます。 初期値: 1.0, 最小値: 0, 最大値: 2.0</p>
             </div>
           </div>
         </div>
@@ -49,7 +51,7 @@
             <div class="field">
               <label class="label">テキストカラー</label>
               <div class="control">
-                <input class="input" type="text" placeholder="例: #fff">
+                <input class="input" name="textColor" type="text" placeholder="例: #fff">
               </div>
               <p class="help">初期値: #fff</p>
             </div>
@@ -58,7 +60,7 @@
             <div class="field">
               <label class="label">背景カラー</label>
               <div class="control">
-                <input class="input" type="text" placeholder="例: #498fd9">
+                <input class="input" name="backgroundColor" type="text" placeholder="例: #498fd9">
               </div>
               <p class="help">初期値: #498fd9</p>
             </div>
@@ -69,7 +71,7 @@
             <div class="field">
               <div class="control">
                 <label class="checkbox">
-                  <input type="checkbox"> 自動スクロール
+                  <input name="autoScroll" type="checkbox"> 自動スクロール
                 </label>
               </div>
             </div>
@@ -81,16 +83,16 @@
             <div class="field">
               <div class="control">
                 <label class="checkbox">
-                  <input type="checkbox"> 前書き
+                  <input name="title" type="checkbox"> 題名
                 </label><br>
                 <label class="checkbox">
-                  <input type="checkbox"> タイトル
+                  <input name="foreword" type="checkbox"> 前書き
                 </label><br>
                 <label class="checkbox">
-                  <input type="checkbox"> 本文
+                  <input name="body" type="checkbox"> 本文
                 </label><br>
                 <label class="checkbox">
-                  <input type="checkbox"> 後書き
+                  <input name="afterword" type="checkbox"> 後書き
                 </label>
               </div>
             </div>
@@ -101,17 +103,17 @@
           <div class="column">
             <div class="field">
               <label class="checkbox">
-                <input type="checkbox"> 自動で再生する
+                <input name="autoPlay" type="checkbox"> 自動で再生する
               </label>
             </div>
             <div class="field" style="margin-left: 30px;">
               <label class="checkbox">
-                <input type="checkbox"> 「次の話」がある場合、自動で移動する
+                <input name="autoMoveNext" type="checkbox"> 「次の話」がある場合、自動で移動する
               </label>
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </section>
   </body>
 </html>

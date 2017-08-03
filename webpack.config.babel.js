@@ -8,6 +8,7 @@ module.exports = {
   entry: {
     'content': './src/js/content.js',
     'background': './src/js/background.js',
+    'options': './src/js/options.js'
   },
   resolve: {
     modules: [
@@ -37,6 +38,10 @@ module.exports = {
   },
   plugins: [
     // new UglifyJSWebpackPlugin(),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    }),
     new HtmlWebpackPlugin({
       filename: 'html/options.html',
       template: 'src/pug/options.pug',
