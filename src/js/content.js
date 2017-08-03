@@ -159,11 +159,23 @@ roudokukaOptions.onend = (e, lineInfo) => {
     }
   }
 }
+roudokukaOptions.onLibrettoEnd = () => {
+  if(options.autoMoveNext == 'on') {
+    $($('.novel_bn')[0]).children().each((index, element) => {
+      element = $(element)
+      if(/>>/.test(element.text())) {
+        window.location.href = element.prop('href')
+      }
+    })
+  }
+}
 window.roudokuka = new Roudokuka(linesInfo, roudokukaOptions)
 
 window.roudokuka.onReady().then(() => {
-  lineHighlight(linesInfo[0].element)
-  window.roudokuka.start()
+  if(options.autoPlay == 'on') {
+    lineHighlight(linesInfo[0].element)
+    window.roudokuka.start()
+  }
 })
 
 // end main --------

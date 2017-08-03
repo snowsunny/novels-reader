@@ -11331,11 +11331,23 @@ if ($('#novel_honbun').length) {
         }
       }
     };
+    roudokukaOptions.onLibrettoEnd = function () {
+      if (options.autoMoveNext == 'on') {
+        $($('.novel_bn')[0]).children().each(function (index, element) {
+          element = $(element);
+          if (/>>/.test(element.text())) {
+            window.location.href = element.prop('href');
+          }
+        });
+      }
+    };
     window.roudokuka = new _roudokuka2.default(linesInfo, roudokukaOptions);
 
     window.roudokuka.onReady().then(function () {
-      lineHighlight(linesInfo[0].element);
-      window.roudokuka.start();
+      if (options.autoPlay == 'on') {
+        lineHighlight(linesInfo[0].element);
+        window.roudokuka.start();
+      }
     });
 
     // end main --------
