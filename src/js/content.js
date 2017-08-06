@@ -60,8 +60,8 @@ chrome.runtime.sendMessage({method: 'getOptions', key: 'options'}, (response) =>
 const options = response
 $('head').append(`<style id='narou-reader-style'>
   .highlight {
-    color: ${options.textColor == '' ? '#fff' : options.textColor};
-    background-color: ${options.backgroundColor == '' ? '#498fd9' : options.backgroundColor};
+    color: ${options.textColor == undefined ? '#fff' : options.textColor};
+    background-color: ${options.backgroundColor == undefined ? '#498fd9' : options.backgroundColor};
   }
 
   .controll-button {
@@ -143,10 +143,10 @@ $('body').append($(`<div class='controll-button stop'></div>`).click((e) => {
 }))
 
 let roudokukaOptions = {}
-if(options.rate != '') {
+if(options.rate != undefined) {
   roudokukaOptions.rate = Number(options.rate)
 }
-if(options.pitch != '') {
+if(options.pitch != undefined) {
   roudokukaOptions.pitch = Number(options.pitch)
 }
 roudokukaOptions.onend = (e, lineInfo) => {
