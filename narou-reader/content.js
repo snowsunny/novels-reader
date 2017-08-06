@@ -13382,7 +13382,7 @@ var getLineElements = function getLineElements(element) {
     } else {
       var lineElement = getLineElement(text, blankLineCount, element);
       blankLineCount = 0;
-      return lineElement.prepend('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'></div>');
+      return lineElement.prepend('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'><i class=\'fa fa-play-circle\' aria-hidden=\'true\'></div>');
     }
   }).filter(function (lineElement) {
     return lineElement != undefined;
@@ -13406,10 +13406,12 @@ var lineUnHighlight = function lineUnHighlight() {
 if ($('#novel_honbun').length) {
   chrome.runtime.sendMessage({ method: 'getOptions', key: 'options' }, function (response) {
     // console.log(response)
+
     // start main --------
 
     var options = response;
-    $('head').append('<style id=\'narou-reader-style\'>\n  .highlight {\n    color: ' + (options.textColor == undefined ? '#fff' : options.textColor) + ';\n    background-color: ' + (options.backgroundColor == undefined ? '#498fd9' : options.backgroundColor) + ';\n  }\n\n  .controll-button {\n    color: ' + $('#novel_color').css('color') + ';\n    position: absolute;\n    margin-top: ' + ($('#novel_honbun').css('line-height').replace('px', '') - $('#novel_honbun').css('font-size').replace('px', '')) / 2 + 'px;\n    left: 50px;\n    border: 1px solid;\n    border-radius: 16px;\n    width: 16px;\n    height: 16px;\n    cursor: pointer;\n  }\n  .controll-button:hover {\n    background-color: #18b7cd;\n  }\n  p.include-ruby .controll-button {\n    margin-top: 8px;\n  }\n\n  .controll-button.play:before {\n    content: \'\u25B6\';\n    line-height: 16px;\n    margin-left: 5px;\n  }\n\n  .controll-button.stop {\n    position: fixed;\n    top: ' + ($('#novel_header').height() + 15) + 'px;\n    left: 15px;\n    width: 32px;\n    height: 32px;\n  }\n  .controll-button.stop:before {\n    content: \'\u25A0\';\n    font-size: 19px;\n    line-height: 31px;\n    margin-left: 7px;\n  }\n</style>');
+    $('head').append('<link href=\'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\' rel=\'stylesheet\' integrity=\'sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\' crossorigin=\'anonymous\'>');
+    $('head').append('<style id=\'narou-reader-style\'>\n  .highlight {\n    color: ' + (options.textColor == undefined ? '#fff' : options.textColor) + ';\n    background-color: ' + (options.backgroundColor == undefined ? '#498fd9' : options.backgroundColor) + ';\n  }\n\n  .controll-button {\n    color: ' + $('#novel_color').css('color') + ';\n    position: absolute;\n    left: 50px;\n    cursor: pointer;\n  }\n  .controll-button:hover {\n    color: #18b7cd;\n  }\n\n  .controll-button .fa {\n    line-height: inherit;\n    font-size: 120%;\n  }\n\n  p.include-ruby .controll-button .fa {\n    margin-top: ' + $('ruby rt').height() + 'px;\n    line-height: ' + $('ruby rb').height() + 'px;\n  }\n\n  .controll-button.stop {\n    position: fixed;\n    top: ' + ($('#novel_header').height() + 15) + 'px;\n    left: 15px;\n    font-size: 30px;\n  }\n</style>');
 
     var title = $('.novel_subtitle');
     var foreword = $('#novel_p');
@@ -13420,7 +13422,7 @@ if ($('#novel_honbun').length) {
     var linesInfo = [];
 
     if (options.title == 'on' && title.length) {
-      lineElements.title = [title.prepend('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'></div>')];
+      lineElements.title = [title.prepend('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'><i class=\'fa fa-play-circle\' aria-hidden=\'true\'></i></div>')];
       linesInfo = linesInfo.concat(getLinesInfo(lineElements.title));
     }
     if (options.foreword == 'on' && foreword.length) {
@@ -13446,7 +13448,7 @@ if ($('#novel_honbun').length) {
       window.roudokuka.start(targetPlayButton.data().index);
     });
 
-    $('body').append($('<div class=\'controll-button stop\'></div>').click(function (e) {
+    $('body').append($('<div class=\'controll-button stop\'><i class=\'fa fa-stop-circle\' aria-hidden=\'true\'></div>').click(function (e) {
       window.roudokuka.stop();
     }));
 

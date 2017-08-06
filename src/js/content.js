@@ -31,7 +31,7 @@ const getLineElements = (element) => {
     } else {
       let lineElement = getLineElement(text, blankLineCount, element)
       blankLineCount = 0
-      return lineElement.prepend(`<div class='controll-button play' data-index='${lineIndex++}'></div>`)
+      return lineElement.prepend(`<div class='controll-button play' data-index='${lineIndex++}'><i class='fa fa-play-circle' aria-hidden='true'></div>`)
     }
   }).filter((lineElement) => {
     return lineElement != undefined
@@ -52,12 +52,15 @@ const lineUnHighlight = () => {
   $('.novel_subtitle, #novel_p p, #novel_honbun p, #novel_a p').removeClass('highlight')
 }
 
+
 if($('#novel_honbun').length) {
 chrome.runtime.sendMessage({method: 'getOptions', key: 'options'}, (response) => {
 // console.log(response)
+
 // start main --------
 
 const options = response
+$('head').append(`<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN' crossorigin='anonymous'>`)
 $('head').append(`<style id='narou-reader-style'>
   .highlight {
     color: ${options.textColor == undefined ? '#fff' : options.textColor};
@@ -67,39 +70,28 @@ $('head').append(`<style id='narou-reader-style'>
   .controll-button {
     color: ${$('#novel_color').css('color')};
     position: absolute;
-    margin-top: ${($('#novel_honbun').css('line-height').replace('px', '') - $('#novel_honbun').css('font-size').replace('px', '')) / 2 }px;
     left: 50px;
-    border: 1px solid;
-    border-radius: 16px;
-    width: 16px;
-    height: 16px;
     cursor: pointer;
   }
   .controll-button:hover {
-    background-color: #18b7cd;
-  }
-  p.include-ruby .controll-button {
-    margin-top: 8px;
+    color: #18b7cd;
   }
 
-  .controll-button.play:before {
-    content: '▶';
-    line-height: 16px;
-    margin-left: 5px;
+  .controll-button .fa {
+    line-height: inherit;
+    font-size: 120%;
+  }
+
+  p.include-ruby .controll-button .fa {
+    margin-top: ${$('ruby rt').height()}px;
+    line-height: ${$('ruby rb').height()}px;
   }
 
   .controll-button.stop {
     position: fixed;
     top: ${$('#novel_header').height() + 15}px;
     left: 15px;
-    width: 32px;
-    height: 32px;
-  }
-  .controll-button.stop:before {
-    content: '■';
-    font-size: 19px;
-    line-height: 31px;
-    margin-left: 7px;
+    font-size: 30px;
   }
 </style>`)
 
@@ -112,7 +104,7 @@ let lineElements = {}
 let linesInfo = []
 
 if(options.title == 'on' && title.length) {
-  lineElements.title = [title.prepend(`<div class='controll-button play' data-index='${lineIndex++}'></div>`)]
+  lineElements.title = [title.prepend(`<div class='controll-button play' data-index='${lineIndex++}'><i class='fa fa-play-circle' aria-hidden='true'></i></div>`)]
   linesInfo = linesInfo.concat(getLinesInfo(lineElements.title))
 }
 if(options.foreword == 'on' && foreword.length) {
@@ -138,7 +130,7 @@ $('.controll-button.play').on('click', (e) => {
   window.roudokuka.start(targetPlayButton.data().index)
 })
 
-$('body').append($(`<div class='controll-button stop'></div>`).click((e) => {
+$('body').append($(`<div class='controll-button stop'><i class='fa fa-stop-circle' aria-hidden='true'></div>`).click((e) => {
   window.roudokuka.stop()
 }))
 

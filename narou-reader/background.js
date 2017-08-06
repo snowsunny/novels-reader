@@ -3098,7 +3098,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   } else {
     sendResponse(false);
   }
-}); // chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+}); // for dev
+// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 //   if(tab.url != 'chrome://extensions/') {
 //     chrome.tabs.query({url: 'chrome://extensions/'}, (tabsInfo) => {
 //       chrome.tabs.reload(tabsInfo[0].id)

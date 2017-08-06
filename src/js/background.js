@@ -1,3 +1,4 @@
+// for dev
 // chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 //   if(tab.url != 'chrome://extensions/') {
 //     chrome.tabs.query({url: 'chrome://extensions/'}, (tabsInfo) => {
