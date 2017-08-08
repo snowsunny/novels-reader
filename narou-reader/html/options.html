@@ -9,6 +9,12 @@
       section.section .title {
         margin-top: 35px;
       }
+      p.mb {
+        margin-bottom: 15px;
+      }
+      .novels-dictionary .button {
+        margin: 5px;
+      }
     </style>
     <script src="../options.js"></script>
   </head>
@@ -22,98 +28,117 @@
       </div>
     </section>
     <section class="section">
-      <form class="container" id="options">※設定後、ページを更新すると設定が反映されます。
-        <div class="title">音声設定</div>
-        <div class="subtitle" style="font-size: 1rem;">※最小値、最大値についてですがOS毎に挙動が違います…音声が正しく再生されない場合はより初期値に近い値を設定してみて下さい。</div>
+      <div class="container">※設定後、ページを更新すると設定が反映されます。
         <div class="columns">
-          <div class="column">
-            <div class="field">
-              <label class="label">速度</label>
-              <div class="control">
-                <input class="input" name="rate" type="number" step="0.1" min="0.1" max="10" placeholder="例: 1">
+          <div class="column is-half">
+            <form id="options">
+              <div class="title">音声設定</div>
+              <div class="subtitle" style="font-size: 1rem;">※最小値、最大値についてですがOS毎に挙動が違います…音声が正しく再生されない場合はより初期値に近い値を設定してみて下さい。</div>
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <label class="label">速度</label>
+                    <div class="control">
+                      <input class="input" name="rate" type="number" step="0.1" min="0.1" max="10" placeholder="例: 1">
+                    </div>
+                    <p class="help">初期値: 1.0, 最小値: 0.1, 最大値: 10.0</p>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="field">
+                    <label class="label">ピッチ</label>
+                    <div class="control">
+                      <input class="input" name="pitch" type="number" step="0.1" min="0" max="2" placeholder="例: 1">
+                    </div>
+                    <p class="help">声の高さを設定出来ます。 初期値: 1.0, 最小値: 0, 最大値: 2.0</p>
+                  </div>
+                </div>
               </div>
-              <p class="help">初期値: 1.0, 最小値: 0.1, 最大値: 10.0</p>
-            </div>
+              <div class="title">ハイライト設定</div>
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <label class="label">テキストカラー</label>
+                    <div class="control">
+                      <input class="input" name="textColor" type="text" placeholder="例: #fff">
+                    </div>
+                    <p class="help">初期値: #fff</p>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="field">
+                    <label class="label">背景カラー</label>
+                    <div class="control">
+                      <input class="input" name="backgroundColor" type="text" placeholder="例: #498fd9">
+                    </div>
+                    <p class="help">初期値: #498fd9</p>
+                  </div>
+                </div>
+              </div>
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                        <input name="autoScroll" type="checkbox"> 自動スクロール
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="title">読み上げ文章設定</div>
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                        <input name="title" type="checkbox"> 題名
+                      </label><br>
+                      <label class="checkbox">
+                        <input name="foreword" type="checkbox"> 前書き
+                      </label><br>
+                      <label class="checkbox">
+                        <input name="body" type="checkbox"> 本文
+                      </label><br>
+                      <label class="checkbox">
+                        <input name="afterword" type="checkbox"> 後書き
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="title">自動再生設定</div>
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <label class="checkbox">
+                      <input name="autoPlay" type="checkbox"> 自動で再生する
+                    </label>
+                  </div>
+                  <div class="field">
+                    <label class="checkbox">
+                      <input name="autoMoveNext" type="checkbox"> 「次の話」がある場合、自動で移動する
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="column">
-            <div class="field">
-              <label class="label">ピッチ</label>
-              <div class="control">
-                <input class="input" name="pitch" type="number" step="0.1" min="0" max="2" placeholder="例: 1">
-              </div>
-              <p class="help">声の高さを設定出来ます。 初期値: 1.0, 最小値: 0, 最大値: 2.0</p>
+          <div class="column is-half">
+            <div class="title">読み替え辞書設定</div>
+            <div class="content">
+              <p>設定された文字を読み替える辞書を設定出来ます。「読み替え対象文字|読み替え文字」のフォーマットで設定して下さい。複数設定する場合は下記の様に「,」を挟んで区切って下さい。</p>
+              <pre>読み替え対象文字１|読み替え文字１, 読み替え対象文字２|読み替え文字２, 読み替え対象文字３|読み替え文字３</pre>
+              <p>※「,」の後の半角スペースは無くても動きます、見難い場合に付けてみて下さい。正規表現だと/,\s*/giで区切る様になっているので、他の空白文字を使ってもOKです。<br>※同様の読み替え対象文字が設定されている場合、辞書の優先度は「ユーザー辞書 ＞ 小説別辞書」となっています。</p>
             </div>
+            <div class="title">ユーザー辞書（使用不可）</div>
+            <textarea class="textarea" name="userDictionary"></textarea>
+            <div class="title">小説別辞書（使用不可）</div>
+            <p class="mb">小説別の辞書を編集出来ます。この拡張機能を入れて小説ページを開くと辞書が自動で作成されます。また、ルビが振られた文章を自動で辞書に登録します。</p>
+            <div class="novels-dictionary"></div>
           </div>
         </div>
-        <div class="title">ハイライト設定</div>
-        <div class="columns">
-          <div class="column">
-            <div class="field">
-              <label class="label">テキストカラー</label>
-              <div class="control">
-                <input class="input" name="textColor" type="text" placeholder="例: #fff">
-              </div>
-              <p class="help">初期値: #fff</p>
-            </div>
-          </div>
-          <div class="column">
-            <div class="field">
-              <label class="label">背景カラー</label>
-              <div class="control">
-                <input class="input" name="backgroundColor" type="text" placeholder="例: #498fd9">
-              </div>
-              <p class="help">初期値: #498fd9</p>
-            </div>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column">
-            <div class="field">
-              <div class="control">
-                <label class="checkbox">
-                  <input name="autoScroll" type="checkbox"> 自動スクロール
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="title">読み上げ文章設定</div>
-        <div class="columns">
-          <div class="column">
-            <div class="field">
-              <div class="control">
-                <label class="checkbox">
-                  <input name="title" type="checkbox"> 題名
-                </label><br>
-                <label class="checkbox">
-                  <input name="foreword" type="checkbox"> 前書き
-                </label><br>
-                <label class="checkbox">
-                  <input name="body" type="checkbox"> 本文
-                </label><br>
-                <label class="checkbox">
-                  <input name="afterword" type="checkbox"> 後書き
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="title">自動再生設定</div>
-        <div class="columns">
-          <div class="column">
-            <div class="field">
-              <label class="checkbox">
-                <input name="autoPlay" type="checkbox"> 自動で再生する
-              </label>
-            </div>
-            <div class="field">
-              <label class="checkbox">
-                <input name="autoMoveNext" type="checkbox"> 「次の話」がある場合、自動で移動する
-              </label>
-            </div>
-          </div>
-        </div>
-      </form>
+      </div>
     </section>
   </body>
 </html>
