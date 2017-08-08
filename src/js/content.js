@@ -1,5 +1,12 @@
 import _merge from 'lodash/merge'
+import _each from 'lodash/each'
 import Roudokuka from 'roudokuka'
+
+// global variables
+let options = undefined
+let dictionary = undefined
+let rubies = {}
+let lineIndex = 0
 
 const checkIncludeRuby = (text) => {
   return /<ruby><rb>/gi.test(text)
@@ -13,14 +20,22 @@ const getLineElement = (text, blankLineCount, element) => {
     const divider = '__|narou|reader|ruby|tag|divider|__'
     const splitRubyTagTexts = text.replace(/<ruby><rb>/gi, `${divider}<ruby><rb>`).replace(/<\/rp><\/ruby>/gi, `</rp></ruby>${divider}`).split(divider)
     const readText = splitRubyTagTexts.map((splitRubyTagText) => {
-      return checkIncludeRuby(splitRubyTagText) ? $(splitRubyTagText).find('rt').text() : splitRubyTagText
+      if(checkIncludeRuby(splitRubyTagText)) {
+        let rb = $(splitRubyTagText).find('rb').text()
+        let rt = $(splitRubyTagText).find('rt').text()
+        let ruby = {}
+        ruby[rb] = rt
+        _merge(rubies, ruby)
+        return rb
+      } else {
+        return splitRubyTagText
+      }
     }).join('')
     lineElement.data({readText: readText})
   }
   return lineElement
 }
 
-let lineIndex = 0
 const getLineElements = (element) => {
   let splitTexts = element.html().split('<br>\n')
 
@@ -54,12 +69,18 @@ const lineUnHighlight = () => {
 
 
 if($('#novel_honbun').length) {
-chrome.runtime.sendMessage({method: 'getOptions', key: 'options'}, (response) => {
-// console.log(response)
+  const novelId = $('.contents1 .margin_r20').attr('href').replace(/\//g, '')
+  chrome.runtime.sendMessage({method: 'getOptions', key: 'options'}, (responseOptions) => {
+    chrome.runtime.sendMessage({method: 'saveDictionary', dictionary: {
+      id: novelId,
+      name: $('.contents1 .margin_r20').text()
+    }}, (responseDictionary) => {
 
 // start main --------
 
-const options = response
+options = responseOptions
+dictionary = responseDictionary
+
 $('head').append(`<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN' crossorigin='anonymous'>`)
 $('head').append(`<style id='narou-reader-style'>
   .highlight {
@@ -123,6 +144,29 @@ if(options.afterword == 'on' && afterword.length) {
   afterword.html(lineElements.afterword)
 }
 
+chrome.runtime.sendMessage({method: 'saveDictionary', dictionary: {
+  id: novelId,
+  rubies: rubies
+}})
+
+let sortedRubies = []
+_each(_merge(dictionary.rubies, rubies), (rt, rb) => {
+  if(!/^・+$/gi.test(rt)) {
+    sortedRubies.push({rt: rt, rb: rb})
+  }
+})
+sortedRubies.sort((a, b) => {
+  return b.rb.length - a.rb.length
+})
+
+console.log(sortedRubies)
+
+linesInfo.forEach((lineInfo) => {
+  sortedRubies.forEach((ruby) => {
+    lineInfo.text = lineInfo.text.replace(RegExp(ruby.rb, 'gi'), ruby.rt)
+  })
+})
+
 $('.controll-button.play').on('click', (e) => {
   let targetPlayButton = $(e.currentTarget)
   lineUnHighlight()
@@ -172,5 +216,6 @@ window.roudokuka.onReady().then(() => {
 
 // end main --------
 
-})
+    })
+  })
 }

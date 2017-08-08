@@ -8,12 +8,22 @@
 // })
 
 import OptionsManager from 'OptionsManager'
+import DictionariesManager from 'DictionariesManager'
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let om = new OptionsManager()
-  if (request.method == "getOptions") {
-    sendResponse(om.getInitOptions())
-  } else {
-    sendResponse(false)
+  let dm = new DictionariesManager()
+
+  switch(request.method) {
+    case 'getOptions':
+      sendResponse(om.getInitOptions())
+      break
+
+    case 'saveDictionary':
+      sendResponse(dm.saveDictionary(request.dictionary))
+      break
+
+    default:
+      sendResponse(false)
   }
 });
