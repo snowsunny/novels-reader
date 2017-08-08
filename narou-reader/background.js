@@ -3338,6 +3338,19 @@ var DictionariesManager = function () {
     value: function getDictionaries() {
       return JSON.parse(localStorage.getItem('dictionaries'));
     }
+  }, {
+    key: 'getRubiesObject',
+    value: function getRubiesObject(dictionaryText) {
+      var lines = dictionaryText.split('\n').filter(function (ruby) {
+        return !/^\/\//.test(ruby) && ruby != '';
+      });
+      var rubyObject = {};
+      lines.forEach(function (line) {
+        var splited = line.split('::');
+        rubyObject[splited[0]] = splited[1];
+      });
+      return rubyObject;
+    }
   }]);
 
   return DictionariesManager;

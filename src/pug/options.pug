@@ -9,10 +9,14 @@ html
       section.section .title {
         margin-top: 35px;
       }
+      section.section .title.sub {
+        font-size: 1.3rem;
+        font-weight: bold;
+      }
       p.mb {
         margin-bottom: 15px;
       }
-      .novels-dictionary .button {
+      #novels-dictionary .button {
         margin: 5px;
       }
     script(src='../options.js')
@@ -102,16 +106,25 @@ html
                       input(name='autoMoveNext' type='checkbox')
                       |  「次の話」がある場合、自動で移動する
           .column.is-half
-            .title 読み替え辞書設定
+            .title ルビ辞書設定
             .content
-              p 設定された文字を読み替える辞書を設定出来ます。「読み替え対象文字|読み替え文字」のフォーマットで設定して下さい。複数設定する場合は下記の様に「,」を挟んで区切って下さい。
-              pre 読み替え対象文字１|読み替え文字１, 読み替え対象文字２|読み替え文字２, 読み替え対象文字３|読み替え文字３
-              p
-                | ※「,」の後の半角スペースは無くても動きます、見難い場合に付けてみて下さい。正規表現だと/,\s*/giで区切る様になっているので、他の空白文字を使ってもOKです。
+              p 対象文字を設定されたルビで読み替える辞書を設定出来ます。「ルビ対象文字::ルビ」のフォーマットで設定して下さい。複数設定する場合は下記の様に改行で区切って下さい。
+              pre
+                | ルビ対象文字::ルビ
                 br
-                | ※同様の読み替え対象文字が設定されている場合、辞書の優先度は「ユーザー辞書 ＞ 小説別辞書」となっています。
-            .title ユーザー辞書（使用不可）
+                | 本気::マジ
+                br
+                | 強敵::友
+                br
+                br
+                | // コメントの例: 先頭に「//」でその行全てをコメントにします。
+                | // 正規表現の例: 「*」のみの文を空白で読み替えます。
+                br
+                | ^\*+$::
+              p
+                | ※ルビの優先度は「ページのルビ ＞ ユーザー辞書 ＞ 小説別辞書」となっています。
+            .title.sub ユーザー辞書（使用不可）
             textarea.textarea(name='userDictionary')
-            .title 小説別辞書（使用不可）
+            .title.sub 小説別辞書（使用不可）
             p.mb 小説別の辞書を編集出来ます。この拡張機能を入れて小説ページを開くと辞書が自動で作成されます。また、ルビが振られた文章を自動で辞書に登録します。
-            .novels-dictionary
+            #novels-dictionary

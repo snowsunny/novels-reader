@@ -21,4 +21,16 @@ export default class DictionariesManager {
   getDictionaries() {
     return JSON.parse(localStorage.getItem('dictionaries'))
   }
+
+  getRubiesObject(dictionaryText) {
+    let lines = dictionaryText.split('\n').filter((ruby) => {
+      return !/^\/\//.test(ruby) && ruby != ''
+    })
+    let rubyObject = {}
+    lines.forEach((line) => {
+      let splited = line.split('::')
+      rubyObject[splited[0]] = splited[1]
+    })
+    return rubyObject
+  }
 }
