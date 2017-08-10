@@ -13359,10 +13359,19 @@ var _DictionariesManager2 = _interopRequireDefault(_DictionariesManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-$(function () {
-  var om = new _OptionsManager2.default();
-  var dm = new _DictionariesManager2.default();
+var om = new _OptionsManager2.default();
+var dm = new _DictionariesManager2.default();
 
+var saveDictionary = function saveDictionary(element) {
+  var target = $(element);
+  dm.saveDictionary({
+    id: 'user',
+    raw: target.val(),
+    rubies: dm.getRubiesObject(target.val())
+  });
+};
+
+$(function () {
   var initOptions = om.getInitOptions();
   (0, _each3.default)(initOptions, function (value, key) {
     var targetInput = $('#options input[name=' + key + ']');
@@ -13378,11 +13387,27 @@ $(function () {
   var novelsDictionary = $('#novels-dictionary');
   (0, _each3.default)(dm.dictionaries, function (dictionary) {
     if (dictionary.id == 'user') {
-      console.log(dictionary);
       $('.textarea[name=userDictionary]').val(dictionary.raw);
     } else {
-      novelsDictionary.append('<div class=\'button is-primary\'>' + dictionary.name + '\uFF08' + dictionary.id + '\uFF09</div>');
+      var novelButton = $('<div class=\'novels-button button is-primary\'>' + dictionary.name + '\uFF08' + dictionary.id + '\uFF09</div>').data('id', dictionary.id).click(function (e) {
+        var dictionary = dm.getDictionary($(e.currentTarget).data().id);
+        $('#dictionary-modal-label').text(dictionary.name + '\uFF08' + dictionary.id + '\uFF09');
+        $('#dictionary-modal-textarea').val(dictionary.raw);
+        $('#dictionary-modal').addClass('is-active').attr('data-id', dictionary.id);
+      });
+      novelsDictionary.append(novelButton);
     }
+  });
+
+  $('#dictionary-modal .modal-background, #dictionary-modal button.delete, #dictionary-modal button.modal-close').on('click', function () {
+    $('#dictionary-modal').removeClass('is-active');
+  });
+
+  $('.textarea[name=userDictionary]').on('change', function (e) {
+    saveDictionary(e.currentTarget);
+  });
+  $('#dictionary-modal-textarea').on('change', function (e) {
+    saveDictionary(e.currentTarget);
   });
 
   $('#options input').on('change', function (e) {
@@ -13393,14 +13418,6 @@ $(function () {
       changedOptions[option.name] = option.value;
     });
     om.saveOptions(changedOptions);
-  });
-
-  $('.textarea[name=userDictionary]').on('change', function (e) {
-    dm.saveDictionary({
-      id: 'user',
-      raw: $(e.target).val(),
-      rubies: dm.getRubiesObject($(e.target).val())
-    });
   });
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(97)))
@@ -13767,6 +13784,10 @@ var _findIndex2 = __webpack_require__(165);
 
 var _findIndex3 = _interopRequireDefault(_findIndex2);
 
+var _each2 = __webpack_require__(103);
+
+var _each3 = _interopRequireDefault(_each2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13783,6 +13804,7 @@ var DictionariesManager = function () {
     value: function saveDictionary(dictionary) {
       var index = (0, _findIndex3.default)(this.dictionaries, { id: dictionary.id });
       if (index == -1) {
+        dictionary.raw = getDictionaryText(dictionary.rubies);
         this.dictionaries.push(dictionary);
       } else {
         (0, _merge3.default)(this.dictionaries[index], dictionary);
@@ -13791,9 +13813,23 @@ var DictionariesManager = function () {
       return (0, _find3.default)(this.dictionaries, { id: dictionary.id });
     }
   }, {
+    key: 'getDictionary',
+    value: function getDictionary(id) {
+      return (0, _find3.default)(this.dictionaries, { id: id });
+    }
+  }, {
     key: 'getDictionaries',
     value: function getDictionaries() {
       return JSON.parse(localStorage.getItem('dictionaries'));
+    }
+  }, {
+    key: 'getDictionaryText',
+    value: function getDictionaryText(rubiesObject) {
+      var dictionaryText = '';
+      (0, _each3.default)(rubiesObject, function (rt, rb) {
+        dictionaryText += rb + '::' + rt + '\n';
+      });
+      return dictionaryText.trim();
     }
   }, {
     key: 'getRubiesObject',
@@ -13801,12 +13837,12 @@ var DictionariesManager = function () {
       var lines = dictionaryText.split('\n').filter(function (ruby) {
         return !/^\/\//.test(ruby) && ruby != '';
       });
-      var rubyObject = {};
+      var rubiesObject = {};
       lines.forEach(function (line) {
         var splited = line.split('::');
-        rubyObject[splited[0]] = splited[1];
+        rubiesObject[splited[0]] = splited[1];
       });
-      return rubyObject;
+      return rubiesObject;
     }
   }]);
 

@@ -23,6 +23,21 @@
     <script src="../options.js"></script>
   </head>
   <body>
+    <div class="modal" id="dictionary-modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="message is-primary">
+          <div class="message-header">
+            <p id="dictionary-modal-label"></p>
+            <button class="delete" aria-label="delete"></button>
+          </div>
+          <div class="message-body">
+            <textarea class="textarea" id="dictionary-modal-textarea" rows="10"></textarea>
+          </div>
+        </div>
+      </div>
+      <button class="modal-close is-large"></button>
+    </div>
     <section class="hero is-primary">
       <div class="hero-body">
         <div class="container">
@@ -132,8 +147,8 @@
             <div class="title">ルビ辞書設定</div>
             <div class="content">
               <p>対象文字を設定されたルビで読み替える辞書を設定出来ます。「ルビ対象文字::ルビ」のフォーマットで設定して下さい。複数設定する場合は下記の様に改行で区切って下さい。</p>
-              <pre>ルビ対象文字::ルビ<br>本気::マジ<br>強敵::友<br><br>// コメントの例: 先頭に「//」でその行全てをコメントにします。
-// 正規表現の例: 「*」のみの文を空白で読み替えます。<br>^\*+$::</pre>
+              <pre>ルビ対象文字::ルビ<br>本気::マジ<br>強敵::友<br><br>// コメントの例: 先頭に「//」を付ける事で、その行全てをコメントにします。
+// ルビ対象文字には正規表現を使う事が出来ます。<br>// 下記の例は「*」のみの文を空白で読み替えます。<br>^\*+$::</pre>
               <p>※ルビの優先度は「ページのルビ ＞ ユーザー辞書 ＞ 小説別辞書」となっています。</p>
             </div>
             <div class="title sub">ユーザー辞書（使用不可）</div>

@@ -3124,11 +3124,130 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 /***/ }),
 /* 102 */,
-/* 103 */,
-/* 104 */,
-/* 105 */,
-/* 106 */,
-/* 107 */,
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(104);
+
+
+/***/ }),
+/* 104 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayEach = __webpack_require__(105),
+    baseEach = __webpack_require__(106),
+    castFunction = __webpack_require__(112),
+    isArray = __webpack_require__(15);
+
+/**
+ * Iterates over elements of `collection` and invokes `iteratee` for each element.
+ * The iteratee is invoked with three arguments: (value, index|key, collection).
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
+ *
+ * **Note:** As with other "Collections" methods, objects with a "length"
+ * property are iterated like arrays. To avoid this behavior use `_.forIn`
+ * or `_.forOwn` for object iteration.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @alias each
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} [iteratee=_.identity] The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ * @see _.forEachRight
+ * @example
+ *
+ * _.forEach([1, 2], function(value) {
+ *   console.log(value);
+ * });
+ * // => Logs `1` then `2`.
+ *
+ * _.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
+ *   console.log(key);
+ * });
+ * // => Logs 'a' then 'b' (iteration order is not guaranteed).
+ */
+function forEach(collection, iteratee) {
+  var func = isArray(collection) ? arrayEach : baseEach;
+  return func(collection, castFunction(iteratee));
+}
+
+module.exports = forEach;
+
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports) {
+
+/**
+ * A specialized version of `_.forEach` for arrays without support for
+ * iteratee shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns `array`.
+ */
+function arrayEach(array, iteratee) {
+  var index = -1,
+      length = array == null ? 0 : array.length;
+
+  while (++index < length) {
+    if (iteratee(array[index], index, array) === false) {
+      break;
+    }
+  }
+  return array;
+}
+
+module.exports = arrayEach;
+
+
+/***/ }),
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseForOwn = __webpack_require__(107),
+    createBaseEach = __webpack_require__(111);
+
+/**
+ * The base implementation of `_.forEach` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ */
+var baseEach = createBaseEach(baseForOwn);
+
+module.exports = baseEach;
+
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseFor = __webpack_require__(30),
+    keys = __webpack_require__(108);
+
+/**
+ * The base implementation of `_.forOwn` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Object} Returns `object`.
+ */
+function baseForOwn(object, iteratee) {
+  return object && baseFor(object, iteratee, keys);
+}
+
+module.exports = baseForOwn;
+
+
+/***/ }),
 /* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3220,8 +3339,64 @@ module.exports = nativeKeys;
 
 
 /***/ }),
-/* 111 */,
-/* 112 */,
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isArrayLike = __webpack_require__(9);
+
+/**
+ * Creates a `baseEach` or `baseEachRight` function.
+ *
+ * @private
+ * @param {Function} eachFunc The function to iterate over a collection.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new base function.
+ */
+function createBaseEach(eachFunc, fromRight) {
+  return function(collection, iteratee) {
+    if (collection == null) {
+      return collection;
+    }
+    if (!isArrayLike(collection)) {
+      return eachFunc(collection, iteratee);
+    }
+    var length = collection.length,
+        index = fromRight ? length : -1,
+        iterable = Object(collection);
+
+    while ((fromRight ? index-- : ++index < length)) {
+      if (iteratee(iterable[index], index, iterable) === false) {
+        break;
+      }
+    }
+    return collection;
+  };
+}
+
+module.exports = createBaseEach;
+
+
+/***/ }),
+/* 112 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var identity = __webpack_require__(16);
+
+/**
+ * Casts `value` to `identity` if it's not a function.
+ *
+ * @private
+ * @param {*} value The value to inspect.
+ * @returns {Function} Returns cast function.
+ */
+function castFunction(value) {
+  return typeof value == 'function' ? value : identity;
+}
+
+module.exports = castFunction;
+
+
+/***/ }),
 /* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3310,6 +3485,10 @@ var _findIndex2 = __webpack_require__(165);
 
 var _findIndex3 = _interopRequireDefault(_findIndex2);
 
+var _each2 = __webpack_require__(103);
+
+var _each3 = _interopRequireDefault(_each2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3326,6 +3505,7 @@ var DictionariesManager = function () {
     value: function saveDictionary(dictionary) {
       var index = (0, _findIndex3.default)(this.dictionaries, { id: dictionary.id });
       if (index == -1) {
+        dictionary.raw = getDictionaryText(dictionary.rubies);
         this.dictionaries.push(dictionary);
       } else {
         (0, _merge3.default)(this.dictionaries[index], dictionary);
@@ -3334,9 +3514,23 @@ var DictionariesManager = function () {
       return (0, _find3.default)(this.dictionaries, { id: dictionary.id });
     }
   }, {
+    key: 'getDictionary',
+    value: function getDictionary(id) {
+      return (0, _find3.default)(this.dictionaries, { id: id });
+    }
+  }, {
     key: 'getDictionaries',
     value: function getDictionaries() {
       return JSON.parse(localStorage.getItem('dictionaries'));
+    }
+  }, {
+    key: 'getDictionaryText',
+    value: function getDictionaryText(rubiesObject) {
+      var dictionaryText = '';
+      (0, _each3.default)(rubiesObject, function (rt, rb) {
+        dictionaryText += rb + '::' + rt + '\n';
+      });
+      return dictionaryText.trim();
     }
   }, {
     key: 'getRubiesObject',
@@ -3344,12 +3538,12 @@ var DictionariesManager = function () {
       var lines = dictionaryText.split('\n').filter(function (ruby) {
         return !/^\/\//.test(ruby) && ruby != '';
       });
-      var rubyObject = {};
+      var rubiesObject = {};
       lines.forEach(function (line) {
         var splited = line.split('::');
-        rubyObject[splited[0]] = splited[1];
+        rubiesObject[splited[0]] = splited[1];
       });
-      return rubyObject;
+      return rubiesObject;
     }
   }]);
 

@@ -21,6 +21,17 @@ html
       }
     script(src='../options.js')
   body
+    #dictionary-modal.modal
+      .modal-background
+      .modal-content
+        .message.is-primary
+          .message-header
+            p#dictionary-modal-label
+            button.delete(aria-label='delete')
+          .message-body
+            textarea#dictionary-modal-textarea.textarea(rows='10')
+      button.modal-close.is-large
+
     section.hero.is-primary
       .hero-body
         .container
@@ -117,8 +128,10 @@ html
                 | 強敵::友
                 br
                 br
-                | // コメントの例: 先頭に「//」でその行全てをコメントにします。
-                | // 正規表現の例: 「*」のみの文を空白で読み替えます。
+                | // コメントの例: 先頭に「//」を付ける事で、その行全てをコメントにします。
+                | // ルビ対象文字には正規表現を使う事が出来ます。
+                br
+                | // 下記の例は「*」のみの文を空白で読み替えます。
                 br
                 | ^\*+$::
               p
