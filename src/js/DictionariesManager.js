@@ -11,7 +11,7 @@ export default class DictionariesManager {
   saveDictionary(dictionary) {
     let index = _findIndex(this.dictionaries, {id: dictionary.id})
     if(index == -1) {
-      dictionary.raw = getDictionaryText(dictionary.rubies)
+      dictionary.raw = this.getDictionaryText(dictionary.rubies)
       this.dictionaries.push(dictionary)
     } else {
       _merge(this.dictionaries[index], dictionary)

@@ -159,8 +159,6 @@ sortedRubies.sort((a, b) => {
   return b.rb.length - a.rb.length
 })
 
-console.log(sortedRubies)
-
 linesInfo.forEach((lineInfo) => {
   sortedRubies.forEach((ruby) => {
     lineInfo.text = lineInfo.text.replace(RegExp(ruby.rb, 'gi'), ruby.rt)
@@ -191,7 +189,7 @@ roudokukaOptions.onend = (e, lineInfo) => {
     let nextLineElement = linesInfo[lineInfo.index + 1].element
     lineHighlight(nextLineElement)
     if(options.autoScroll == 'on') {
-      $('body').scrollTop(nextLineElement.offset().top - $(window).height() + nextLineElement.height() + 30)
+      $('body').scrollTop(nextLineElement.offset().top - $(window).height() / 2 + nextLineElement.height() / 2)
     }
   }
 }
