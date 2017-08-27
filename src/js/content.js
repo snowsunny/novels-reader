@@ -1,12 +1,22 @@
-import _merge from 'lodash/merge'
 import _each from 'lodash/each'
+import _find from 'lodash/find'
+import _merge from 'lodash/merge'
+import _orderBy from 'lodash/orderBy'
 import Roudokuka from 'roudokuka'
 
 // global variables
 let options = undefined
-let dictionary = undefined
-let rubies = {}
+let dictionaries = undefined
+let rubies = []
 let lineIndex = 0
+
+const getDictionaryText = (rubies) => {
+  let dictionaryText = ''
+  rubies.forEach((ruby) => {
+    dictionaryText += `${ruby.rb}::${ruby.rt}\n`
+  })
+  return dictionaryText.trim()
+}
 
 const checkIncludeRuby = (text) => {
   return /<ruby><rb>/gi.test(text)
@@ -21,12 +31,12 @@ const getLineElement = (text, blankLineCount, element) => {
     const splitRubyTagTexts = text.replace(/<ruby><rb>/gi, `${divider}<ruby><rb>`).replace(/<\/rp><\/ruby>/gi, `</rp></ruby>${divider}`).split(divider)
     const readText = splitRubyTagTexts.map((splitRubyTagText) => {
       if(checkIncludeRuby(splitRubyTagText)) {
-        let rb = $(splitRubyTagText).find('rb').text()
-        let rt = $(splitRubyTagText).find('rt').text()
-        let ruby = {}
-        ruby[rb] = rt
-        _merge(rubies, ruby)
-        return rb
+        const ruby = {rb: $(splitRubyTagText).find('rb').text(), rt: $(splitRubyTagText).find('rt').text()}
+        if(!_find(rubies, ruby)) {
+          rubies.push(ruby)
+        }
+        // TODO: ここに無視する読みの処理を入れる
+        return ruby.rb
       } else {
         return splitRubyTagText
       }
@@ -74,12 +84,12 @@ if($('#novel_honbun').length) {
     chrome.runtime.sendMessage({method: 'saveDictionary', dictionary: {
       id: novelId,
       name: $('.contents1 .margin_r20').text()
-    }}, (responseDictionary) => {
+    }}, (responseDictionaries) => {
 
 // start main --------
 
 options = responseOptions
-dictionary = responseDictionary
+dictionaries = responseDictionaries
 
 $('head').append(`<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN' crossorigin='anonymous'>`)
 $('head').append(`<style id='narou-reader-style'>
@@ -91,23 +101,25 @@ $('head').append(`<style id='narou-reader-style'>
   .controll-button {
     color: ${$('#novel_color').css('color')};
     position: absolute;
-    left: 50px;
     cursor: pointer;
   }
   .controll-button:hover {
     color: #18b7cd;
   }
-
+  
   .controll-button .fa {
     line-height: inherit;
     font-size: 120%;
   }
-
+  
   p.include-ruby .controll-button .fa {
     margin-top: ${$('ruby rt').height()}px;
     line-height: ${$('ruby rb').height()}px;
   }
-
+  
+  .controll-button.play {
+    margin-left: -25px;
+  }
   .controll-button.stop {
     position: fixed;
     top: ${$('#novel_header').height() + 15}px;
@@ -144,26 +156,29 @@ if(options.afterword == 'on' && afterword.length) {
   afterword.html(lineElements.afterword)
 }
 
+
 chrome.runtime.sendMessage({method: 'saveDictionary', dictionary: {
   id: novelId,
-  rubies: rubies
-}})
+  raw: getDictionaryText(rubies)
+}}, (savedDictionary) => {
+dictionaries = savedDictionary
 
-let sortedRubies = []
-_each(_merge(dictionary.rubies, rubies), (rt, rb) => {
-  if(!/^・+$/gi.test(rt)) {
-    sortedRubies.push({rt: rt, rb: rb})
-  }
-})
-sortedRubies.sort((a, b) => {
-  return b.rb.length - a.rb.length
-})
-
-linesInfo.forEach((lineInfo) => {
-  sortedRubies.forEach((ruby) => {
-    lineInfo.text = lineInfo.text.replace(RegExp(ruby.rb, 'gi'), ruby.rt)
+let userRubies = dictionaries.user ? _orderBy(dictionaries.user.rubies, [function(r) { return r.rb.length; }], ['desc']) : false
+let novelRubies = dictionaries.novel.rubies.length ? _orderBy(dictionaries.novel.rubies, [function(r) { return r.rb.length; }], ['desc']) : false
+if(userRubies) {
+  linesInfo.forEach((lineInfo) => {
+    userRubies.forEach((ruby) => {
+      lineInfo.text = lineInfo.text.replace(RegExp(ruby.rb, 'gi'), ruby.rt)
+    })
   })
-})
+}
+if(novelRubies) {
+  linesInfo.forEach((lineInfo) => {
+    novelRubies.forEach((ruby) => {
+      lineInfo.text = lineInfo.text.replace(RegExp(ruby.rb, 'gi'), ruby.rt)
+    })
+  })
+}
 
 $('.controll-button.play').on('click', (e) => {
   let targetPlayButton = $(e.currentTarget)
@@ -212,6 +227,7 @@ window.roudokuka.onReady().then(() => {
   }
 })
 
+})
 // end main --------
 
     })

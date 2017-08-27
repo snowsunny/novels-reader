@@ -1,3 +1,5 @@
+import _assign from 'lodash/assign'
+import _mergeWith from 'lodash/mergeWith'
 import _merge from 'lodash/merge'
 import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
@@ -7,17 +9,27 @@ export default class DictionariesManager {
   constructor() {
     this.dictionaries = this.getDictionaries() || []
   }
-
-  saveDictionary(dictionary) {
-    let index = _findIndex(this.dictionaries, {id: dictionary.id})
-    if(index == -1) {
-      dictionary.raw = this.getDictionaryText(dictionary.rubies)
-      this.dictionaries.push(dictionary)
+  
+  saveDictionary(newDictionary, forceFlag) {
+    let storageDictionary = _find(this.dictionaries, {id: newDictionary.id})
+    if(storageDictionary) {
+      if(!forceFlag && storageDictionary.raw && newDictionary.raw) {
+        let newRubies = this.getNewRubiesOnly(newDictionary, storageDictionary)
+        newDictionary.raw = newRubies.length
+          ? storageDictionary.raw + `\n${this.getDictionaryText(newRubies)}`
+          : storageDictionary.raw
+      }
+      newDictionary.rubies = newDictionary.raw
+        ? this.getRubies(newDictionary.raw)
+        : this.getRubies(storageDictionary.raw)
     } else {
-      _merge(this.dictionaries[index], dictionary)
+      newDictionary.raw = newDictionary.raw || ''
+      newDictionary.rubies = this.getRubies(newDictionary.raw)
+      this.dictionaries.push(newDictionary)
     }
+    _assign(storageDictionary, newDictionary)
     localStorage.setItem('dictionaries', JSON.stringify(this.dictionaries))
-    return _find(this.dictionaries, {id: dictionary.id})
+    return storageDictionary
   }
 
   getDictionary(id) {
@@ -28,23 +40,29 @@ export default class DictionariesManager {
     return JSON.parse(localStorage.getItem('dictionaries'))
   }
 
-  getDictionaryText(rubiesObject) {
+  getNewRubiesOnly(newDictionary, oldDictionary) {
+    return this.getRubies(newDictionary.raw).filter((ruby) => {
+      return _find(this.getRubies(oldDictionary.raw), ruby) == undefined
+    })
+  }
+
+  getDictionaryText(rubies) {
     let dictionaryText = ''
-    _each(rubiesObject, (rt, rb) => {
-      dictionaryText += `${rb}::${rt}\n`
+    rubies.forEach((ruby) => {
+      dictionaryText += `${ruby.rb}::${ruby.rt}\n`
     })
     return dictionaryText.trim()
   }
 
-  getRubiesObject(dictionaryText) {
+  getRubies(dictionaryText) {
     let lines = dictionaryText.split('\n').filter((ruby) => {
       return !/^\/\//.test(ruby) && ruby != ''
     })
-    let rubiesObject = {}
+    let rubies = []
     lines.forEach((line) => {
       let splited = line.split('::')
-      rubiesObject[splited[0]] = splited[1]
+      rubies.push({rb: splited[0], rt: splited[1]})
     })
-    return rubiesObject
+    return rubies
   }
 }

@@ -9,6 +9,7 @@
 
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
+import _find from 'lodash/find'
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let om = new OptionsManager()
@@ -20,7 +21,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break
 
     case 'saveDictionary':
-      sendResponse(dm.saveDictionary(request.dictionary))
+      sendResponse({
+        user: _find(dm.dictionaries, {id: 'user'}),
+        novel: dm.saveDictionary(request.dictionary)
+      })
       break
 
     default:

@@ -29,7 +29,7 @@ html
             p#dictionary-modal-label
             button.delete(aria-label='delete')
           .message-body
-            textarea#dictionary-modal-textarea.textarea(rows='10')
+            textarea#dictionary-modal-textarea.textarea.dictionary(rows='20')
       button.modal-close.is-large
 
     section.hero.is-primary
@@ -128,7 +128,7 @@ html
                 | 強敵::友
                 br
                 br
-                | // コメントの例: 先頭に「//」を付ける事で、その行全てをコメントにします。
+                | // 先頭に「//」を付ける事で、その行全てをコメントにします。
                 | // ルビ対象文字には正規表現を使う事が出来ます。
                 br
                 | // 下記の例は「*」のみの文を空白で読み替えます。
@@ -137,7 +137,7 @@ html
               p
                 | ※ルビの優先度は「ページのルビ ＞ ユーザー辞書 ＞ 小説別辞書」となっています。
             .title.sub ユーザー辞書（使用不可）
-            textarea.textarea(name='userDictionary')
+            textarea.textarea.dictionary(data-id='user')
             .title.sub 小説別辞書（使用不可）
             p.mb 小説別の辞書を編集出来ます。この拡張機能を入れて小説ページを開くと辞書が自動で作成されます。また、ルビが振られた文章を自動で辞書に登録します。
             #novels-dictionary

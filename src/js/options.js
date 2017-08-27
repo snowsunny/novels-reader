@@ -2,16 +2,16 @@ import _each from 'lodash/each'
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
 
-let om = new OptionsManager()
-let dm = new DictionariesManager()
+
+const om = new OptionsManager()
+const dm = new DictionariesManager()
 
 const saveDictionary = (element) => {
   let target = $(element)
   dm.saveDictionary({
-    id: 'user',
-    raw: target.val(),
-    rubies: dm.getRubiesObject(target.val())
-  })
+    id: target.data().id,
+    raw: target.val()
+  }, true)
 }
 
 $(() => {
@@ -30,13 +30,13 @@ $(() => {
   let novelsDictionary = $('#novels-dictionary')
   _each(dm.dictionaries, (dictionary) => {
     if(dictionary.id == 'user') {
-      $('.textarea[name=userDictionary]').val(dictionary.raw)
+      $('.textarea[data-id=user').val(dictionary.raw)
     } else {
       let novelButton = $(`<div class='novels-button button is-primary'>${dictionary.name}（${dictionary.id}）</div>`).data('id', dictionary.id).click((e) => {
         let dictionary = dm.getDictionary($(e.currentTarget).data().id)
         $('#dictionary-modal-label').text(`${dictionary.name}（${dictionary.id}）`)
-        $('#dictionary-modal-textarea').val(dictionary.raw)
-        $('#dictionary-modal').addClass('is-active').attr('data-id', dictionary.id)
+        $('#dictionary-modal-textarea').attr('data-id', dictionary.id).val(dictionary.raw)
+        $('#dictionary-modal').addClass('is-active')
       })
       novelsDictionary.append(novelButton)
     }
@@ -46,10 +46,7 @@ $(() => {
     $('#dictionary-modal').removeClass('is-active')
   })
 
-  $('.textarea[name=userDictionary]').on('change', (e) => {
-    saveDictionary(e.currentTarget)
-  })
-  $('#dictionary-modal-textarea').on('change', (e) => {
+  $('.textarea.dictionary').on('change', (e) => {
     saveDictionary(e.currentTarget)
   })
 
