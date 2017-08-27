@@ -1,9 +1,5 @@
 import _assign from 'lodash/assign'
-import _mergeWith from 'lodash/mergeWith'
-import _merge from 'lodash/merge'
 import _find from 'lodash/find'
-import _findIndex from 'lodash/findIndex'
-import _each from 'lodash/each'
 
 export default class DictionariesManager {
   constructor() {

@@ -2,7 +2,6 @@ import _each from 'lodash/each'
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
 
-
 const om = new OptionsManager()
 const dm = new DictionariesManager()
 

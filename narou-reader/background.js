@@ -1617,33 +1617,8 @@ module.exports = findIndex;
 
 
 /***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(53);
-
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseForOwn = __webpack_require__(55),
-    createBaseEach = __webpack_require__(67);
-
-/**
- * The base implementation of `_.forEach` without support for iteratee shorthands.
- *
- * @private
- * @param {Array|Object} collection The collection to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array|Object} Returns `collection`.
- */
-var baseEach = createBaseEach(baseForOwn);
-
-module.exports = baseEach;
-
-
-/***/ }),
+/* 49 */,
+/* 50 */,
 /* 51 */
 /***/ (function(module, exports) {
 
@@ -1691,103 +1666,9 @@ module.exports = arrayMap;
 
 
 /***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayEach = __webpack_require__(54),
-    baseEach = __webpack_require__(50),
-    castFunction = __webpack_require__(68),
-    isArray = __webpack_require__(0);
-
-/**
- * Iterates over elements of `collection` and invokes `iteratee` for each element.
- * The iteratee is invoked with three arguments: (value, index|key, collection).
- * Iteratee functions may exit iteration early by explicitly returning `false`.
- *
- * **Note:** As with other "Collections" methods, objects with a "length"
- * property are iterated like arrays. To avoid this behavior use `_.forIn`
- * or `_.forOwn` for object iteration.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @alias each
- * @category Collection
- * @param {Array|Object} collection The collection to iterate over.
- * @param {Function} [iteratee=_.identity] The function invoked per iteration.
- * @returns {Array|Object} Returns `collection`.
- * @see _.forEachRight
- * @example
- *
- * _.forEach([1, 2], function(value) {
- *   console.log(value);
- * });
- * // => Logs `1` then `2`.
- *
- * _.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
- *   console.log(key);
- * });
- * // => Logs 'a' then 'b' (iteration order is not guaranteed).
- */
-function forEach(collection, iteratee) {
-  var func = isArray(collection) ? arrayEach : baseEach;
-  return func(collection, castFunction(iteratee));
-}
-
-module.exports = forEach;
-
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports) {
-
-/**
- * A specialized version of `_.forEach` for arrays without support for
- * iteratee shorthands.
- *
- * @private
- * @param {Array} [array] The array to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns `array`.
- */
-function arrayEach(array, iteratee) {
-  var index = -1,
-      length = array == null ? 0 : array.length;
-
-  while (++index < length) {
-    if (iteratee(array[index], index, array) === false) {
-      break;
-    }
-  }
-  return array;
-}
-
-module.exports = arrayEach;
-
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseFor = __webpack_require__(32),
-    keys = __webpack_require__(10);
-
-/**
- * The base implementation of `_.forOwn` without support for iteratee shorthands.
- *
- * @private
- * @param {Object} object The object to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Object} Returns `object`.
- */
-function baseForOwn(object, iteratee) {
-  return object && baseFor(object, iteratee, keys);
-}
-
-module.exports = baseForOwn;
-
-
-/***/ }),
+/* 53 */,
+/* 54 */,
+/* 55 */,
 /* 56 */
 /***/ (function(module, exports) {
 
@@ -2143,64 +2024,8 @@ module.exports = nativeKeys;
 
 
 /***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isArrayLike = __webpack_require__(5);
-
-/**
- * Creates a `baseEach` or `baseEachRight` function.
- *
- * @private
- * @param {Function} eachFunc The function to iterate over a collection.
- * @param {boolean} [fromRight] Specify iterating from right to left.
- * @returns {Function} Returns the new base function.
- */
-function createBaseEach(eachFunc, fromRight) {
-  return function(collection, iteratee) {
-    if (collection == null) {
-      return collection;
-    }
-    if (!isArrayLike(collection)) {
-      return eachFunc(collection, iteratee);
-    }
-    var length = collection.length,
-        index = fromRight ? length : -1,
-        iterable = Object(collection);
-
-    while ((fromRight ? index-- : ++index < length)) {
-      if (iteratee(iterable[index], index, iterable) === false) {
-        break;
-      }
-    }
-    return collection;
-  };
-}
-
-module.exports = createBaseEach;
-
-
-/***/ }),
-/* 68 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var identity = __webpack_require__(8);
-
-/**
- * Casts `value` to `identity` if it's not a function.
- *
- * @private
- * @param {*} value The value to inspect.
- * @returns {Function} Returns cast function.
- */
-function castFunction(value) {
-  return typeof value == 'function' ? value : identity;
-}
-
-module.exports = castFunction;
-
-
-/***/ }),
+/* 67 */,
+/* 68 */,
 /* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5521,25 +5346,9 @@ var _assign2 = __webpack_require__(177);
 
 var _assign3 = _interopRequireDefault(_assign2);
 
-var _mergeWith2 = __webpack_require__(176);
-
-var _mergeWith3 = _interopRequireDefault(_mergeWith2);
-
-var _merge2 = __webpack_require__(31);
-
-var _merge3 = _interopRequireDefault(_merge2);
-
 var _find2 = __webpack_require__(69);
 
 var _find3 = _interopRequireDefault(_find2);
-
-var _findIndex2 = __webpack_require__(48);
-
-var _findIndex3 = _interopRequireDefault(_findIndex2);
-
-var _each2 = __webpack_require__(49);
-
-var _each3 = _interopRequireDefault(_each2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5679,51 +5488,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 /***/ }),
 /* 175 */,
-/* 176 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseMerge = __webpack_require__(138),
-    createAssigner = __webpack_require__(153);
-
-/**
- * This method is like `_.merge` except that it accepts `customizer` which
- * is invoked to produce the merged values of the destination and source
- * properties. If `customizer` returns `undefined`, merging is handled by the
- * method instead. The `customizer` is invoked with six arguments:
- * (objValue, srcValue, key, object, source, stack).
- *
- * **Note:** This method mutates `object`.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Object
- * @param {Object} object The destination object.
- * @param {...Object} sources The source objects.
- * @param {Function} customizer The function to customize assigned values.
- * @returns {Object} Returns `object`.
- * @example
- *
- * function customizer(objValue, srcValue) {
- *   if (_.isArray(objValue)) {
- *     return objValue.concat(srcValue);
- *   }
- * }
- *
- * var object = { 'a': [1], 'b': [2] };
- * var other = { 'a': [3], 'b': [4] };
- *
- * _.mergeWith(object, other, customizer);
- * // => { 'a': [1, 3], 'b': [2, 4] }
- */
-var mergeWith = createAssigner(function(object, source, srcIndex, customizer) {
-  baseMerge(object, source, srcIndex, customizer);
-});
-
-module.exports = mergeWith;
-
-
-/***/ }),
+/* 176 */,
 /* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 

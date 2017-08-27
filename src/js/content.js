@@ -1,6 +1,4 @@
-import _each from 'lodash/each'
 import _find from 'lodash/find'
-import _merge from 'lodash/merge'
 import _orderBy from 'lodash/orderBy'
 import Roudokuka from 'roudokuka'
 
