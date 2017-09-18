@@ -9,7 +9,8 @@ export default class OptionsManager {
       title: "on",
       body: "on",
       autoPlay: "on",
-      autoMoveNext: "on"
+      autoMoveNext: "on",
+      autoSaveDictionary: "on"
     }
   }
 

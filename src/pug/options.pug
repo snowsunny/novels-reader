@@ -45,7 +45,7 @@ html
         | ※設定後、ページを更新すると設定が反映されます。
         .columns
           .column.is-half
-            form#options
+            form.options
               .title 音声設定
               .subtitle(style='font-size: 1rem') ※最小値、最大値についてですがOS毎に挙動が違います…音声が正しく再生されない場合はより初期値に近い値を設定してみて下さい。
               .columns
@@ -142,5 +142,16 @@ html
               b 無視するルビ（正規表現）
             input.input.dictionary(data-id='user-ignore_rubies')
             .title.sub 小説別辞書
-            p.mb 小説別の辞書を編集出来ます。この拡張機能を入れて小説ページを開くと辞書が自動で作成されます。また、ルビが振られた文章を自動で辞書に登録します。
+            form.options
+              .columns
+                .column
+                  .field
+                    .control
+                      label.checkbox
+                        input(name='autoSaveDictionary' type='checkbox')
+                        |  小説のルビを自動で辞書に登録する
+            .columns
+              .column
+                p 小説別の辞書を編集出来ます。この拡張機能を入れて小説ページを開くと辞書が自動で作成されます。また、ルビが振られた文章を自動で辞書に登録します。
+
             #novels-dictionary

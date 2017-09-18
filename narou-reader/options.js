@@ -15629,7 +15629,8 @@ var OptionsManager = function () {
       title: "on",
       body: "on",
       autoPlay: "on",
-      autoMoveNext: "on"
+      autoMoveNext: "on",
+      autoSaveDictionary: "on"
     };
   }
 
@@ -15869,7 +15870,7 @@ var saveDictionary = function saveDictionary(element) {
 $(function () {
   var initOptions = om.getInitOptions();
   (0, _each3.default)(initOptions, function (value, key) {
-    var targetInput = $('#options input[name=' + key + ']');
+    var targetInput = $('.options input[name=' + key + ']');
     if (targetInput.attr('type') == 'checkbox') {
       if (value == 'on') {
         targetInput.prop('checked', true);
@@ -15904,9 +15905,9 @@ $(function () {
     saveDictionary(e.currentTarget);
   });
 
-  $('#options input').on('change', function (e) {
+  $('.options input').on('change', function (e) {
     var changedOptions = {};
-    $('#options').serializeArray().filter(function (option) {
+    $('.options').serializeArray().filter(function (option) {
       return option.value != '';
     }).forEach(function (option) {
       changedOptions[option.name] = option.value;

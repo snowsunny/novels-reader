@@ -5293,7 +5293,8 @@ var OptionsManager = function () {
       title: "on",
       body: "on",
       autoPlay: "on",
-      autoMoveNext: "on"
+      autoMoveNext: "on",
+      autoSaveDictionary: "on"
     };
   }
 

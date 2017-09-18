@@ -50,7 +50,7 @@
       <div class="container">※設定後、ページを更新すると設定が反映されます。
         <div class="columns">
           <div class="column is-half">
-            <form id="options">
+            <form class="options">
               <div class="title">音声設定</div>
               <div class="subtitle" style="font-size: 1rem;">※最小値、最大値についてですがOS毎に挙動が違います…音声が正しく再生されない場合はより初期値に近い値を設定してみて下さい。</div>
               <div class="columns">
@@ -156,7 +156,24 @@
             <p style="margin:10px 0px 5px;"><b>無視するルビ（正規表現）</b></p>
             <input class="input dictionary" data-id="user-ignore_rubies">
             <div class="title sub">小説別辞書</div>
-            <p class="mb">小説別の辞書を編集出来ます。この拡張機能を入れて小説ページを開くと辞書が自動で作成されます。また、ルビが振られた文章を自動で辞書に登録します。</p>
+            <form class="options">
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                        <input name="autoSaveDictionary" type="checkbox"> 小説のルビを自動で辞書に登録する
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="columns">
+              <div class="column">
+                <p>小説別の辞書を編集出来ます。この拡張機能を入れて小説ページを開くと辞書が自動で作成されます。また、ルビが振られた文章を自動で辞書に登録します。</p>
+              </div>
+            </div>
             <div id="novels-dictionary"></div>
           </div>
         </div>

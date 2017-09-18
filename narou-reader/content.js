@@ -15740,7 +15740,7 @@ if ($('#novel_honbun').length) {
 
       chrome.runtime.sendMessage({ method: 'saveDictionary', dictionary: {
           id: novelId,
-          raw: getDictionaryText(rubies)
+          raw: options.autoSaveDictionary == 'on' ? getDictionaryText(rubies) : ''
         } }, function (savedDictionary) {
         dictionaries = savedDictionary;
 

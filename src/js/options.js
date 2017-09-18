@@ -16,7 +16,7 @@ const saveDictionary = (element) => {
 $(() => {
   let initOptions = om.getInitOptions()
   _each(initOptions, (value, key) => {
-    let targetInput = $(`#options input[name=${key}]`)
+    let targetInput = $(`.options input[name=${key}]`)
     if(targetInput.attr('type') == 'checkbox') {
       if(value == 'on') {
         targetInput.prop('checked', true)
@@ -51,9 +51,9 @@ $(() => {
     saveDictionary(e.currentTarget)
   })
 
-  $('#options input').on('change', (e) => {
+  $('.options input').on('change', (e) => {
     let changedOptions = {}
-    $('#options').serializeArray().filter((option) => {
+    $('.options').serializeArray().filter((option) => {
       return option.value != ''
     }).forEach((option) => {
       changedOptions[option.name] = option.value

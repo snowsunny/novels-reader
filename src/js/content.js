@@ -158,7 +158,7 @@ if(options.afterword == 'on' && afterword.length) {
 
 chrome.runtime.sendMessage({method: 'saveDictionary', dictionary: {
   id: novelId,
-  raw: getDictionaryText(rubies)
+  raw: options.autoSaveDictionary == 'on' ? getDictionaryText(rubies) : ''
 }}, (savedDictionary) => {
 dictionaries = savedDictionary
 
