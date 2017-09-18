@@ -166,14 +166,14 @@ let novelRubies = dictionaries.novel.rubies.length ? _orderBy(dictionaries.novel
 if(userRubies) {
   linesInfo.forEach((lineInfo) => {
     userRubies.forEach((ruby) => {
-      lineInfo.text = lineInfo.text.replace(RegExp(ruby.rb, 'gi'), ruby.rt)
+      lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
     })
   })
 }
 if(novelRubies) {
   linesInfo.forEach((lineInfo) => {
     novelRubies.forEach((ruby) => {
-      lineInfo.text = lineInfo.text.replace(RegExp(ruby.rb, 'gi'), ruby.rt)
+      lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
     })
   })
 }

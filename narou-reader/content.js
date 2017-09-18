@@ -15757,14 +15757,14 @@ if ($('#novel_honbun').length) {
         if (userRubies) {
           linesInfo.forEach(function (lineInfo) {
             userRubies.forEach(function (ruby) {
-              lineInfo.text = lineInfo.text.replace(RegExp(ruby.rb, 'gi'), ruby.rt);
+              lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt);
             });
           });
         }
         if (novelRubies) {
           linesInfo.forEach(function (lineInfo) {
             novelRubies.forEach(function (ruby) {
-              lineInfo.text = lineInfo.text.replace(RegExp(ruby.rb, 'gi'), ruby.rt);
+              lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt);
             });
           });
         }
