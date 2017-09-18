@@ -30,6 +30,8 @@ $(() => {
   _each(dm.dictionaries, (dictionary) => {
     if(dictionary.id == 'user') {
       $('.textarea[data-id=user').val(dictionary.raw)
+    } else if(dictionary.id == 'user-ignore_rubies') {
+      $('.input[data-id=user-ignore_rubies').val(dictionary.raw)
     } else {
       let novelButton = $(`<div class='novels-button button is-primary'>${dictionary.name}（${dictionary.id}）</div>`).data('id', dictionary.id).click((e) => {
         let dictionary = dm.getDictionary($(e.currentTarget).data().id)
@@ -45,7 +47,7 @@ $(() => {
     $('#dictionary-modal').removeClass('is-active')
   })
 
-  $('.textarea.dictionary').on('change', (e) => {
+  $('.textarea.dictionary, .input.dictionary').on('change', (e) => {
     saveDictionary(e.currentTarget)
   })
 

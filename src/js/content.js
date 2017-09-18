@@ -30,11 +30,12 @@ const getLineElement = (text, blankLineCount, element) => {
     const readText = splitRubyTagTexts.map((splitRubyTagText) => {
       if(checkIncludeRuby(splitRubyTagText)) {
         const ruby = {rb: $(splitRubyTagText).find('rb').text(), rt: $(splitRubyTagText).find('rt').text()}
-        if(!_find(rubies, ruby)) {
+        if(!_find(rubies, ruby) && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
           rubies.push(ruby)
         }
-        // TODO: ここに無視する読みの処理を入れる
-        return ruby.rb
+        return RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)
+          ? ruby.rb
+          : ruby.rt
       } else {
         return splitRubyTagText
       }
@@ -166,14 +167,18 @@ let novelRubies = dictionaries.novel.rubies.length ? _orderBy(dictionaries.novel
 if(userRubies) {
   linesInfo.forEach((lineInfo) => {
     userRubies.forEach((ruby) => {
-      lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
+      if(!RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+        lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
+      }
     })
   })
 }
 if(novelRubies) {
   linesInfo.forEach((lineInfo) => {
     novelRubies.forEach((ruby) => {
-      lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
+      if(!RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+        lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
+      }
     })
   })
 }

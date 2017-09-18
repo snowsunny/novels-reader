@@ -136,8 +136,11 @@ html
                 | ^\*+$::
               p
                 | ※ルビの優先度は「ページのルビ ＞ ユーザー辞書 ＞ 小説別辞書」となっています。
-            .title.sub ユーザー辞書（使用不可）
+            .title.sub ユーザー辞書
             textarea.textarea.dictionary(data-id='user')
-            .title.sub 小説別辞書（使用不可）
+            p(style='margin:10px 0px 5px')
+              b 無視するルビ（正規表現）
+            input.input.dictionary(data-id='user-ignore_rubies')
+            .title.sub 小説別辞書
             p.mb 小説別の辞書を編集出来ます。この拡張機能を入れて小説ページを開くと辞書が自動で作成されます。また、ルビが振られた文章を自動で辞書に登録します。
             #novels-dictionary
