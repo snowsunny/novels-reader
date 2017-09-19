@@ -30,10 +30,10 @@ const getLineElement = (text, blankLineCount, element) => {
     const readText = splitRubyTagTexts.map((splitRubyTagText) => {
       if(checkIncludeRuby(splitRubyTagText)) {
         const ruby = {rb: $(splitRubyTagText).find('rb').text(), rt: $(splitRubyTagText).find('rt').text()}
-        if(!_find(rubies, ruby) && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+        if(!_find(rubies, ruby) && dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
           rubies.push(ruby)
         }
-        return RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)
+        return dictionaries.ignoreRubies && RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)
           ? ruby.rb
           : ruby.rt
       } else {
@@ -167,7 +167,7 @@ let novelRubies = dictionaries.novel.rubies.length ? _orderBy(dictionaries.novel
 if(userRubies) {
   linesInfo.forEach((lineInfo) => {
     userRubies.forEach((ruby) => {
-      if(!RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+      if(dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
         lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
       }
     })
@@ -176,7 +176,7 @@ if(userRubies) {
 if(novelRubies) {
   linesInfo.forEach((lineInfo) => {
     novelRubies.forEach((ruby) => {
-      if(!RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+      if(dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
         lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
       }
     })

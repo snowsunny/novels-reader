@@ -15884,8 +15884,8 @@ $(function () {
   (0, _each3.default)(dm.dictionaries, function (dictionary) {
     if (dictionary.id == 'user') {
       $('.textarea[data-id=user').val(dictionary.raw);
-    } else if (dictionary.id == 'user-ignore_rubies') {
-      $('.input[data-id=user-ignore_rubies').val(dictionary.raw);
+    } else if (dictionary.id == 'userIgnoreRubies') {
+      $('.input[data-id=userIgnoreRubies').val(dictionary.raw);
     } else {
       var novelButton = $('<div class=\'novels-button button is-primary\'>' + dictionary.name + '\uFF08' + dictionary.id + '\uFF09</div>').data('id', dictionary.id).click(function (e) {
         var dictionary = dm.getDictionary($(e.currentTarget).data().id);

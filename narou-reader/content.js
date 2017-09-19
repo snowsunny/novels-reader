@@ -15650,10 +15650,10 @@ var getLineElement = function getLineElement(text, blankLineCount, element) {
     var readText = splitRubyTagTexts.map(function (splitRubyTagText) {
       if (checkIncludeRuby(splitRubyTagText)) {
         var ruby = { rb: $(splitRubyTagText).find('rb').text(), rt: $(splitRubyTagText).find('rt').text() };
-        if (!(0, _find3.default)(rubies, ruby) && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+        if (!(0, _find3.default)(rubies, ruby) && dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
           rubies.push(ruby);
         }
-        return RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt) ? ruby.rb : ruby.rt;
+        return dictionaries.ignoreRubies && RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt) ? ruby.rb : ruby.rt;
       } else {
         return splitRubyTagText;
       }
@@ -15753,7 +15753,7 @@ if ($('#novel_honbun').length) {
         if (userRubies) {
           linesInfo.forEach(function (lineInfo) {
             userRubies.forEach(function (ruby) {
-              if (!RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+              if (dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
                 lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt);
               }
             });
@@ -15762,7 +15762,7 @@ if ($('#novel_honbun').length) {
         if (novelRubies) {
           linesInfo.forEach(function (lineInfo) {
             novelRubies.forEach(function (ruby) {
-              if (!RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+              if (dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
                 lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt);
               }
             });

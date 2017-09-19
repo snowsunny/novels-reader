@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     case 'saveDictionary':
       sendResponse({
         user: _find(dm.dictionaries, {id: 'user'}),
-        ignoreRubies: _find(dm.dictionaries, {id: 'user-ignore_rubies'}),
+        ignoreRubies: _find(dm.dictionaries, {id: 'userIgnoreRubies'}),
         novel: dm.saveDictionary(request.dictionary)
       })
       break

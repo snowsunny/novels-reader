@@ -5531,7 +5531,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     case 'saveDictionary':
       sendResponse({
         user: (0, _find3.default)(dm.dictionaries, { id: 'user' }),
-        ignoreRubies: (0, _find3.default)(dm.dictionaries, { id: 'user-ignore_rubies' }),
+        ignoreRubies: (0, _find3.default)(dm.dictionaries, { id: 'userIgnoreRubies' }),
         novel: dm.saveDictionary(request.dictionary)
       });
       break;
