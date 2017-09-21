@@ -82,7 +82,7 @@ html
                     .control
                       label.checkbox
                         input(name='autoScroll' type='checkbox')
-                        |  自動スクロール
+                        |  再生箇所に自動でスクロールする
                     
               .title 読み上げ文章設定
               .columns
@@ -112,7 +112,7 @@ html
                     label.checkbox
                       input(name='autoPlay' type='checkbox')
                       |  自動で再生する
-                  .field
+                    br
                     label.checkbox
                       input(name='autoMoveNext' type='checkbox')
                       |  「次の話」がある場合、自動で移動する
@@ -120,8 +120,10 @@ html
             .title ルビ辞書設定
             .content
               p 対象文字を設定されたルビで読み替える辞書を設定出来ます。「ルビ対象文字::ルビ」のフォーマットで設定して下さい。複数設定する場合は下記の様に改行で区切って下さい。
+              p
+                b ※ルビの優先度は「無視するルビ ＞ 小説ページのルビ ＞ ユーザー辞書 ＞ 小説別辞書」となっています。
               pre
-                | ルビ対象文字::ルビ
+                | // ルビ対象文字::ルビ
                 br
                 | 本気::マジ
                 br
@@ -134,13 +136,16 @@ html
                 | // 下記の例は「*」のみの文を空白で読み替えます。
                 br
                 | ^\*+$::
-              p
-                | ※ルビの優先度は「ページのルビ ＞ ユーザー辞書 ＞ 小説別辞書」となっています。
             .title.sub ユーザー辞書
             textarea.textarea.dictionary(data-id='user')
-            p(style='margin:10px 0px 5px')
+            p(style='margin:10px 0px 10px')
               b 無視するルビ（正規表現）
-            input.input.dictionary(data-id='userIgnoreRubies')
+            .content
+              pre
+                | 強調表現等で使わるルビを無視する為の設定を、正規表現で記述出来ます。
+                br
+                | 例：「^・+$」を設定すると「・」のみのルビを無視します。
+              input.input.dictionary(data-id='userIgnoreRubies')
             .title.sub 小説別辞書
             form.options
               .columns
@@ -152,6 +157,6 @@ html
                         |  小説のルビを自動で辞書に登録する
             .columns
               .column
-                p 小説別の辞書を編集出来ます。この拡張機能を入れて小説ページを開くと辞書が自動で作成されます。また、ルビが振られた文章を自動で辞書に登録します。
+                p 下記のボタンをクリックする事で、小説別辞書を編集する事が出来ます。小説別辞書は、この拡張機能を有効にした状態で、各小説ページを開くと自動で作成されます。
 
             #novels-dictionary

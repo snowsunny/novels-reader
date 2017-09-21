@@ -99,7 +99,7 @@
                   <div class="field">
                     <div class="control">
                       <label class="checkbox">
-                        <input name="autoScroll" type="checkbox"> 自動スクロール
+                        <input name="autoScroll" type="checkbox"> 再生箇所に自動でスクロールする
                       </label>
                     </div>
                   </div>
@@ -132,9 +132,7 @@
                   <div class="field">
                     <label class="checkbox">
                       <input name="autoPlay" type="checkbox"> 自動で再生する
-                    </label>
-                  </div>
-                  <div class="field">
+                    </label><br>
                     <label class="checkbox">
                       <input name="autoMoveNext" type="checkbox"> 「次の話」がある場合、自動で移動する
                     </label>
@@ -147,14 +145,17 @@
             <div class="title">ルビ辞書設定</div>
             <div class="content">
               <p>対象文字を設定されたルビで読み替える辞書を設定出来ます。「ルビ対象文字::ルビ」のフォーマットで設定して下さい。複数設定する場合は下記の様に改行で区切って下さい。</p>
-              <pre>ルビ対象文字::ルビ<br>本気::マジ<br>強敵::友<br><br>// 先頭に「//」を付ける事で、その行全てをコメントにします。
+              <p><b>※ルビの優先度は「無視するルビ ＞ 小説ページのルビ ＞ ユーザー辞書 ＞ 小説別辞書」となっています。</b></p>
+              <pre>// ルビ対象文字::ルビ<br>本気::マジ<br>強敵::友<br><br>// 先頭に「//」を付ける事で、その行全てをコメントにします。
 // ルビ対象文字には正規表現を使う事が出来ます。<br>// 下記の例は「*」のみの文を空白で読み替えます。<br>^\*+$::</pre>
-              <p>※ルビの優先度は「ページのルビ ＞ ユーザー辞書 ＞ 小説別辞書」となっています。</p>
             </div>
             <div class="title sub">ユーザー辞書</div>
             <textarea class="textarea dictionary" data-id="user"></textarea>
-            <p style="margin:10px 0px 5px;"><b>無視するルビ（正規表現）</b></p>
-            <input class="input dictionary" data-id="userIgnoreRubies">
+            <p style="margin:10px 0px 10px;"><b>無視するルビ（正規表現）</b></p>
+            <div class="content">
+              <pre>強調表現等で使わるルビを無視する為の設定を、正規表現で記述出来ます。<br>例：「^・+$」を設定すると「・」のみのルビを無視します。</pre>
+              <input class="input dictionary" data-id="userIgnoreRubies">
+            </div>
             <div class="title sub">小説別辞書</div>
             <form class="options">
               <div class="columns">
@@ -171,7 +172,7 @@
             </form>
             <div class="columns">
               <div class="column">
-                <p>小説別の辞書を編集出来ます。この拡張機能を入れて小説ページを開くと辞書が自動で作成されます。また、ルビが振られた文章を自動で辞書に登録します。</p>
+                <p>下記のボタンをクリックする事で、小説別辞書を編集する事が出来ます。小説別辞書は、この拡張機能を有効にした状態で、各小説ページを開くと自動で作成されます。</p>
               </div>
             </div>
             <div id="novels-dictionary"></div>
