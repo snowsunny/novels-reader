@@ -15793,7 +15793,7 @@ if ($('#novel_honbun').length) {
             var nextLineElement = linesInfo[lineInfo.index + 1].element;
             lineHighlight(nextLineElement);
             if (options.autoScroll == 'on') {
-              $('body').scrollTop(nextLineElement.offset().top - $(window).height() / 2 + nextLineElement.height() / 2);
+              $('html').scrollTop(nextLineElement.offset().top - $(window).height() / 2 + nextLineElement.height() / 2);
             }
           }
         };
