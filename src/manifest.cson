@@ -5,7 +5,7 @@ version: '1.0.0'
 description: 'Webpage reader for http://syosetu.com'
 
 content_scripts: [
-  matches: ['http://ncode.syosetu.com/*']
+  matches: ['http://ncode.syosetu.com/*', 'https://ncode.syosetu.com/*']
   run_at: 'document_end'
   js: ['content.js']
 ]

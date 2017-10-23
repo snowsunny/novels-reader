@@ -6,7 +6,8 @@
   "content_scripts": [
     {
       "matches": [
-        "http://ncode.syosetu.com/*"
+        "http://ncode.syosetu.com/*",
+        "https://ncode.syosetu.com/*"
       ],
       "run_at": "document_end",
       "js": [
