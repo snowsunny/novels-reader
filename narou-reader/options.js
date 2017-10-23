@@ -15703,7 +15703,12 @@ var DictionariesManager = function () {
           var newRubies = this.getNewRubiesOnly(newDictionary, storageDictionary);
           newDictionary.raw = newRubies.length ? storageDictionary.raw + ('\n' + this.getDictionaryText(newRubies)) : storageDictionary.raw;
         }
-        newDictionary.rubies = newDictionary.raw ? this.getRubies(newDictionary.raw) : this.getRubies(storageDictionary.raw);
+        if (newDictionary.raw) {
+          newDictionary.rubies = this.getRubies(newDictionary.raw);
+        } else {
+          delete newDictionary.raw;
+          newDictionary.rubies = this.getRubies(storageDictionary.raw);
+        }
       } else {
         newDictionary.raw = newDictionary.raw || '';
         newDictionary.rubies = this.getRubies(newDictionary.raw);
