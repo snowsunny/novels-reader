@@ -18,8 +18,12 @@ export default class DictionariesManager {
       if(newDictionary.raw) {
         newDictionary.rubies = this.getRubies(newDictionary.raw)
       } else {
-        delete newDictionary.raw
-        newDictionary.rubies = this.getRubies(storageDictionary.raw)
+        if(forceFlag) {
+          newDictionary.rubies = []
+        } else {
+          newDictionary.rubies = this.getRubies(storageDictionary.raw)
+          delete newDictionary.raw
+        }
       }
     } else {
       newDictionary.raw = newDictionary.raw || ''
