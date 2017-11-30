@@ -5,7 +5,7 @@ export default class DictionariesManager {
   constructor() {
     this.dictionaries = this.getDictionaries() || []
   }
-  
+
   saveDictionary(newDictionary, forceFlag) {
     let storageDictionary = _find(this.dictionaries, {id: newDictionary.id})
     if(storageDictionary) {
