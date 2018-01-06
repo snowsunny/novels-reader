@@ -18,7 +18,7 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    path: path.join(__dirname, 'novels-reader'),
+    path: path.join(__dirname, 'novels-reader-crx'),
   },
   module: {
     loaders: [

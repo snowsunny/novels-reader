@@ -25,5 +25,5 @@ gulp.task('cson', () => {
       }
     }))
     .pipe(gulpCson())
-    .pipe(gulp.dest('./novels-reader/'))
+    .pipe(gulp.dest('./novels-reader-crx/'))
 })
