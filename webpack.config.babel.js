@@ -18,7 +18,7 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    path: path.join(__dirname, 'narou-reader'),
+    path: path.join(__dirname, 'novels-reader'),
   },
   module: {
     loaders: [

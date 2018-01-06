@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "narou-reader",
+  "name": "novels-reader",
   "version": "1.0.0",
   "description": "Webpage reader for http://syosetu.com",
   "content_scripts": [

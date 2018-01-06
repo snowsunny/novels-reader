@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 162);
+/******/ 	return __webpack_require__(__webpack_require__.s = 172);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -15474,9 +15474,9 @@ jQuery.nodeName = nodeName;
 // https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
 
 if ( true ) {
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
 		return jQuery;
-	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+	}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 }
 
@@ -15598,665 +15598,434 @@ module.exports = createBaseEach;
 
 
 /***/ }),
-/* 159 */,
-/* 160 */,
-/* 161 */,
-/* 162 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _merge2 = __webpack_require__(53);
+
+var _merge3 = _interopRequireDefault(_merge2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var OptionsManager = function () {
+  function OptionsManager() {
+    _classCallCheck(this, OptionsManager);
+
+    this.storageOptions = JSON.parse(localStorage.getItem('options'));
+    this.defaultOptions = {
+      version: chrome.app.getDetails().version,
+      autoScroll: "on",
+      title: "on",
+      body: "on",
+      autoPlay: "on",
+      autoMoveNext: "on",
+      autoSaveDictionary: "on"
+    };
+  }
+
+  _createClass(OptionsManager, [{
+    key: 'saveOptions',
+    value: function saveOptions(options) {
+      localStorage.setItem('options', JSON.stringify((0, _merge3.default)(options, { version: this.defaultOptions.version })));
+    }
+  }, {
+    key: 'getInitOptions',
+    value: function getInitOptions() {
+      var _this = this;
+
+      var checkStorageOptionsIsLatestVersion = function checkStorageOptionsIsLatestVersion() {
+        return _this.storageOptions ? _this.defaultOptions.version == _this.storageOptions.version : false;
+      };
+      if (checkStorageOptionsIsLatestVersion()) {
+        return this.storageOptions;
+      } else {
+        var mergedOptions = (0, _merge3.default)({}, this.defaultOptions, this.storageOptions);
+        this.saveOptions(mergedOptions);
+        return mergedOptions;
+      }
+    }
+  }]);
+
+  return OptionsManager;
+}();
+
+exports.default = OptionsManager;
+
+/***/ }),
+/* 160 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _assign2 = __webpack_require__(161);
+
+var _assign3 = _interopRequireDefault(_assign2);
 
 var _find2 = __webpack_require__(50);
 
 var _find3 = _interopRequireDefault(_find2);
 
-var _orderBy2 = __webpack_require__(163);
-
-var _orderBy3 = _interopRequireDefault(_orderBy2);
-
-var _roudokuka = __webpack_require__(169);
-
-var _roudokuka2 = _interopRequireDefault(_roudokuka);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// global variables
-var options = undefined;
-var dictionaries = undefined;
-var rubies = [];
-var lineIndex = 0;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var getDictionaryText = function getDictionaryText(rubies) {
-  var dictionaryText = '';
-  rubies.forEach(function (ruby) {
-    dictionaryText += ruby.rb + '::' + ruby.rt + '\n';
-  });
-  return dictionaryText.trim();
-};
+var DictionariesManager = function () {
+  function DictionariesManager() {
+    _classCallCheck(this, DictionariesManager);
 
-var checkIncludeRuby = function checkIncludeRuby(text) {
-  return (/<ruby><rb>/gi.test(text)
-  );
-};
-
-var getLineElement = function getLineElement(text, blankLineCount, element) {
-  var lineElement = $('<p style=\'margin-top: ' + blankLineCount * element.css('line-height').replace('px', '') + 'px\'>' + text + '</p>');
-  if (checkIncludeRuby(text)) {
-    lineElement.addClass('include-ruby');
-
-    var divider = '__|narou|reader|ruby|tag|divider|__';
-    var splitRubyTagTexts = text.replace(/<ruby><rb>/gi, divider + '<ruby><rb>').replace(/<\/rp><\/ruby>/gi, '</rp></ruby>' + divider).split(divider);
-    var readText = splitRubyTagTexts.map(function (splitRubyTagText) {
-      if (checkIncludeRuby(splitRubyTagText)) {
-        var ruby = { rb: $(splitRubyTagText).find('rb').text(), rt: $(splitRubyTagText).find('rt').text() };
-        if (!(0, _find3.default)(rubies, ruby) && dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
-          rubies.push(ruby);
-        }
-        return dictionaries.ignoreRubies && RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt) ? ruby.rb : ruby.rt;
-      } else {
-        return splitRubyTagText;
-      }
-    }).join('');
-    lineElement.data({ readText: readText });
+    this.dictionaries = this.getDictionaries() || [];
   }
-  return lineElement;
-};
 
-var getLineElements = function getLineElements(element) {
-  var splitTexts = element.html().split('<br>\n');
-
-  var blankLineCount = 0;
-  return splitTexts.map(function (text) {
-    if (/\S/gi.test(text) == false) {
-      blankLineCount++;
-    } else {
-      var lineElement = getLineElement(text, blankLineCount, element);
-      blankLineCount = 0;
-      return lineElement.prepend('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'><i class=\'fa fa-play-circle\' aria-hidden=\'true\'></div>');
+  _createClass(DictionariesManager, [{
+    key: 'saveDictionary',
+    value: function saveDictionary(newDictionary, forceFlag) {
+      var storageDictionary = (0, _find3.default)(this.dictionaries, { id: newDictionary.id });
+      if (storageDictionary) {
+        if (!forceFlag && storageDictionary.raw && newDictionary.raw) {
+          var newRubies = this.getNewRubiesOnly(newDictionary, storageDictionary);
+          newDictionary.raw = newRubies.length ? storageDictionary.raw + ('\n' + this.getDictionaryText(newRubies)) : storageDictionary.raw;
+        }
+        if (newDictionary.raw) {
+          newDictionary.rubies = this.getRubies(newDictionary.raw);
+        } else {
+          if (forceFlag) {
+            newDictionary.rubies = [];
+          } else {
+            newDictionary.rubies = this.getRubies(storageDictionary.raw);
+            delete newDictionary.raw;
+          }
+        }
+      } else {
+        newDictionary.raw = newDictionary.raw || '';
+        newDictionary.rubies = this.getRubies(newDictionary.raw);
+        this.dictionaries.push(newDictionary);
+      }
+      (0, _assign3.default)(storageDictionary, newDictionary);
+      localStorage.setItem('dictionaries', JSON.stringify(this.dictionaries));
+      return storageDictionary;
     }
-  }).filter(function (lineElement) {
-    return lineElement != undefined;
-  });
-};
+  }, {
+    key: 'getDictionary',
+    value: function getDictionary(id) {
+      return (0, _find3.default)(this.dictionaries, { id: id });
+    }
+  }, {
+    key: 'getDictionaries',
+    value: function getDictionaries() {
+      return JSON.parse(localStorage.getItem('dictionaries'));
+    }
+  }, {
+    key: 'getNewRubiesOnly',
+    value: function getNewRubiesOnly(newDictionary, oldDictionary) {
+      var _this = this;
 
-var getLinesInfo = function getLinesInfo(lineElements) {
-  return lineElements.map(function (lineElement) {
-    return { text: checkIncludeRuby(lineElement.html()) ? lineElement.data().readText : lineElement.text(), element: lineElement };
-  });
-};
-
-var lineHighlight = function lineHighlight(lineElement) {
-  lineElement.addClass('highlight');
-};
-
-var lineUnHighlight = function lineUnHighlight() {
-  $('.novel_subtitle, #novel_p p, #novel_honbun p, #novel_a p').removeClass('highlight');
-};
-
-if ($('#novel_honbun').length) {
-  var novelId = $('.contents1 .margin_r20').attr('href').replace(/\//g, '');
-  chrome.runtime.sendMessage({ method: 'getOptions', key: 'options' }, function (responseOptions) {
-    chrome.runtime.sendMessage({ method: 'saveDictionary', dictionary: {
-        id: novelId,
-        name: $('.contents1 .margin_r20').text()
-      } }, function (responseDictionaries) {
-
-      // start main --------
-
-      options = responseOptions;
-      dictionaries = responseDictionaries;
-
-      $('head').append('<link href=\'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\' rel=\'stylesheet\' integrity=\'sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\' crossorigin=\'anonymous\'>');
-      $('head').append('<style id=\'narou-reader-style\'>\n  .highlight {\n    color: ' + (options.textColor == undefined ? '#fff' : options.textColor) + ';\n    background-color: ' + (options.backgroundColor == undefined ? '#498fd9' : options.backgroundColor) + ';\n  }\n\n  .controll-button {\n    color: ' + $('#novel_color').css('color') + ';\n    position: absolute;\n    cursor: pointer;\n  }\n  .controll-button:hover {\n    color: #18b7cd;\n  }\n  \n  .controll-button .fa {\n    line-height: inherit;\n    font-size: 120%;\n  }\n  \n  p.include-ruby .controll-button .fa {\n    margin-top: ' + $('ruby rt').height() + 'px;\n    line-height: ' + $('ruby rb').height() + 'px;\n  }\n  \n  .controll-button.play {\n    margin-left: -25px;\n  }\n  .controll-button.stop {\n    position: fixed;\n    top: ' + ($('#novel_header').height() + 15) + 'px;\n    left: 15px;\n    font-size: 30px;\n  }\n</style>');
-
-      var title = $('.novel_subtitle');
-      var foreword = $('#novel_p');
-      var body = $('#novel_honbun');
-      var afterword = $('#novel_a');
-
-      var lineElements = {};
-      var linesInfo = [];
-
-      if (options.title == 'on' && title.length) {
-        lineElements.title = [title.prepend('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'><i class=\'fa fa-play-circle\' aria-hidden=\'true\'></i></div>')];
-        linesInfo = linesInfo.concat(getLinesInfo(lineElements.title));
-      }
-      if (options.foreword == 'on' && foreword.length) {
-        lineElements.foreword = getLineElements(foreword);
-        linesInfo = linesInfo.concat(getLinesInfo(lineElements.foreword));
-        foreword.html(lineElements.foreword);
-      }
-      if (options.body == 'on' && body.length) {
-        lineElements.body = getLineElements(body);
-        linesInfo = linesInfo.concat(getLinesInfo(lineElements.body));
-        body.html(lineElements.body);
-      }
-      if (options.afterword == 'on' && afterword.length) {
-        lineElements.afterword = getLineElements(afterword);
-        linesInfo = linesInfo.concat(getLinesInfo(lineElements.afterword));
-        afterword.html(lineElements.afterword);
-      }
-
-      chrome.runtime.sendMessage({ method: 'saveDictionary', dictionary: {
-          id: novelId,
-          raw: options.autoSaveDictionary == 'on' ? getDictionaryText(rubies) : ''
-        } }, function (savedDictionary) {
-        dictionaries = savedDictionary;
-
-        var userRubies = dictionaries.user ? (0, _orderBy3.default)(dictionaries.user.rubies, [function (r) {
-          return r.rb.length;
-        }], ['desc']) : false;
-        var novelRubies = dictionaries.novel.rubies.length ? (0, _orderBy3.default)(dictionaries.novel.rubies, [function (r) {
-          return r.rb.length;
-        }], ['desc']) : false;
-        if (userRubies) {
-          linesInfo.forEach(function (lineInfo) {
-            userRubies.forEach(function (ruby) {
-              if (dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
-                lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt);
-              }
-            });
-          });
-        }
-        if (novelRubies) {
-          linesInfo.forEach(function (lineInfo) {
-            novelRubies.forEach(function (ruby) {
-              if (dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
-                lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt);
-              }
-            });
-          });
-        }
-
-        $('.controll-button.play').on('click', function (e) {
-          var targetPlayButton = $(e.currentTarget);
-          lineUnHighlight();
-          lineHighlight(targetPlayButton.parent());
-          window.roudokuka.start(targetPlayButton.data().index);
-        });
-
-        $('body').append($('<div class=\'controll-button stop\'><i class=\'fa fa-stop-circle\' aria-hidden=\'true\'></div>').click(function (e) {
-          window.roudokuka.stop();
-        }));
-
-        var roudokukaOptions = {};
-        if (options.rate != undefined) {
-          roudokukaOptions.rate = Number(options.rate);
-        }
-        if (options.pitch != undefined) {
-          roudokukaOptions.pitch = Number(options.pitch);
-        }
-        roudokukaOptions.onend = function (e, lineInfo) {
-          lineUnHighlight();
-          if (linesInfo[lineInfo.index + 1]) {
-            var nextLineElement = linesInfo[lineInfo.index + 1].element;
-            lineHighlight(nextLineElement);
-            if (options.autoScroll == 'on') {
-              $('html').scrollTop(nextLineElement.offset().top - $(window).height() / 2 + nextLineElement.height() / 2);
-            }
-          }
-        };
-        roudokukaOptions.onLibrettoEnd = function () {
-          if (options.autoMoveNext == 'on') {
-            $($('.novel_bn')[0]).children().each(function (index, element) {
-              element = $(element);
-              if (/>>/.test(element.text())) {
-                window.location.href = element.prop('href');
-              }
-            });
-          }
-        };
-        window.roudokuka = new _roudokuka2.default(linesInfo, roudokukaOptions);
-
-        window.roudokuka.onReady().then(function () {
-          if (options.autoPlay == 'on') {
-            lineHighlight(linesInfo[0].element);
-            window.roudokuka.start();
-          }
-        });
+      return this.getRubies(newDictionary.raw).filter(function (ruby) {
+        return (0, _find3.default)(_this.getRubies(oldDictionary.raw), ruby) == undefined;
       });
-      // end main --------
-    });
-  });
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(155)))
+    }
+  }, {
+    key: 'getDictionaryText',
+    value: function getDictionaryText(rubies) {
+      var dictionaryText = '';
+      rubies.forEach(function (ruby) {
+        dictionaryText += ruby.rb + '::' + ruby.rt + '\n';
+      });
+      return dictionaryText.trim();
+    }
+  }, {
+    key: 'getRubies',
+    value: function getRubies(dictionaryText) {
+      var lines = dictionaryText.split('\n').filter(function (ruby) {
+        return !/^\/\//.test(ruby) && ruby != '';
+      });
+      var rubies = [];
+      lines.forEach(function (line) {
+        var splited = line.split('::');
+        rubies.push({ rb: splited[0], rt: splited[1] });
+      });
+      return rubies;
+    }
+  }]);
+
+  return DictionariesManager;
+}();
+
+exports.default = DictionariesManager;
 
 /***/ }),
-/* 163 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseOrderBy = __webpack_require__(164),
-    isArray = __webpack_require__(1);
+var assignValue = __webpack_require__(48),
+    copyObject = __webpack_require__(47),
+    createAssigner = __webpack_require__(49),
+    isArrayLike = __webpack_require__(5),
+    isPrototype = __webpack_require__(16),
+    keys = __webpack_require__(8);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
 
 /**
- * This method is like `_.sortBy` except that it allows specifying the sort
- * orders of the iteratees to sort by. If `orders` is unspecified, all values
- * are sorted in ascending order. Otherwise, specify an order of "desc" for
- * descending or "asc" for ascending sort order of corresponding values.
+ * Assigns own enumerable string keyed properties of source objects to the
+ * destination object. Source objects are applied from left to right.
+ * Subsequent sources overwrite property assignments of previous sources.
+ *
+ * **Note:** This method mutates `object` and is loosely based on
+ * [`Object.assign`](https://mdn.io/Object/assign).
  *
  * @static
  * @memberOf _
- * @since 4.0.0
- * @category Collection
- * @param {Array|Object} collection The collection to iterate over.
- * @param {Array[]|Function[]|Object[]|string[]} [iteratees=[_.identity]]
- *  The iteratees to sort by.
- * @param {string[]} [orders] The sort orders of `iteratees`.
- * @param- {Object} [guard] Enables use as an iteratee for methods like `_.reduce`.
- * @returns {Array} Returns the new sorted array.
+ * @since 0.10.0
+ * @category Object
+ * @param {Object} object The destination object.
+ * @param {...Object} [sources] The source objects.
+ * @returns {Object} Returns `object`.
+ * @see _.assignIn
  * @example
  *
- * var users = [
- *   { 'user': 'fred',   'age': 48 },
- *   { 'user': 'barney', 'age': 34 },
- *   { 'user': 'fred',   'age': 40 },
- *   { 'user': 'barney', 'age': 36 }
- * ];
+ * function Foo() {
+ *   this.a = 1;
+ * }
  *
- * // Sort by `user` in ascending order and by `age` in descending order.
- * _.orderBy(users, ['user', 'age'], ['asc', 'desc']);
- * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
+ * function Bar() {
+ *   this.c = 3;
+ * }
+ *
+ * Foo.prototype.b = 2;
+ * Bar.prototype.d = 4;
+ *
+ * _.assign({ 'a': 0 }, new Foo, new Bar);
+ * // => { 'a': 1, 'c': 3 }
  */
-function orderBy(collection, iteratees, orders, guard) {
-  if (collection == null) {
-    return [];
+var assign = createAssigner(function(object, source) {
+  if (isPrototype(source) || isArrayLike(source)) {
+    copyObject(source, keys(source), object);
+    return;
   }
-  if (!isArray(iteratees)) {
-    iteratees = iteratees == null ? [] : [iteratees];
+  for (var key in source) {
+    if (hasOwnProperty.call(source, key)) {
+      assignValue(object, key, source[key]);
+    }
   }
-  orders = guard ? undefined : orders;
-  if (!isArray(orders)) {
-    orders = orders == null ? [] : [orders];
-  }
-  return baseOrderBy(collection, iteratees, orders);
-}
+});
 
-module.exports = orderBy;
+module.exports = assign;
 
 
 /***/ }),
-/* 164 */
+/* 162 */,
+/* 163 */,
+/* 164 */,
+/* 165 */,
+/* 166 */,
+/* 167 */,
+/* 168 */,
+/* 169 */,
+/* 170 */,
+/* 171 */,
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayMap = __webpack_require__(52),
-    baseIteratee = __webpack_require__(30),
-    baseMap = __webpack_require__(165),
-    baseSortBy = __webpack_require__(166),
-    baseUnary = __webpack_require__(51),
-    compareMultiple = __webpack_require__(167),
-    identity = __webpack_require__(17);
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
 
-/**
- * The base implementation of `_.orderBy` without param guards.
- *
- * @private
- * @param {Array|Object} collection The collection to iterate over.
- * @param {Function[]|Object[]|string[]} iteratees The iteratees to sort by.
- * @param {string[]} orders The sort orders of `iteratees`.
- * @returns {Array} Returns the new sorted array.
- */
-function baseOrderBy(collection, iteratees, orders) {
-  var index = -1;
-  iteratees = arrayMap(iteratees.length ? iteratees : [identity], baseUnary(baseIteratee));
+var _each2 = __webpack_require__(173);
 
-  var result = baseMap(collection, function(value, key, collection) {
-    var criteria = arrayMap(iteratees, function(iteratee) {
-      return iteratee(value);
+var _each3 = _interopRequireDefault(_each2);
+
+var _OptionsManager = __webpack_require__(159);
+
+var _OptionsManager2 = _interopRequireDefault(_OptionsManager);
+
+var _DictionariesManager = __webpack_require__(160);
+
+var _DictionariesManager2 = _interopRequireDefault(_DictionariesManager);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var om = new _OptionsManager2.default();
+var dm = new _DictionariesManager2.default();
+
+var saveDictionary = function saveDictionary(element) {
+  var target = $(element);
+  dm.saveDictionary({
+    id: target.data().id,
+    raw: target.val()
+  }, true);
+};
+
+$(function () {
+  var initOptions = om.getInitOptions();
+  (0, _each3.default)(initOptions, function (value, key) {
+    var targetInput = $('.options input[name=' + key + ']');
+    if (targetInput.attr('type') == 'checkbox') {
+      if (value == 'on') {
+        targetInput.prop('checked', true);
+      }
+    } else {
+      targetInput.val(value);
+    }
+  });
+
+  var novelsDictionary = $('#novels-dictionary');
+  (0, _each3.default)(dm.dictionaries, function (dictionary) {
+    if (dictionary.id == 'user') {
+      $('.textarea[data-id=user').val(dictionary.raw);
+    } else if (dictionary.id == 'userIgnoreRubies') {
+      $('.input[data-id=userIgnoreRubies').val(dictionary.raw);
+    } else {
+      var novelButton = $('<div class=\'novels-button button is-primary\'>' + dictionary.name + '\uFF08' + dictionary.id + '\uFF09</div>').data('id', dictionary.id).click(function (e) {
+        var dictionary = dm.getDictionary($(e.currentTarget).data().id);
+        $('#dictionary-modal-label').text(dictionary.name + '\uFF08' + dictionary.id + '\uFF09');
+        $('#dictionary-modal-textarea').attr('data-id', dictionary.id).val(dictionary.raw);
+        $('#dictionary-modal').addClass('is-active');
+      });
+      novelsDictionary.append(novelButton);
+    }
+  });
+
+  $('#dictionary-modal .modal-background, #dictionary-modal button.delete, #dictionary-modal button.modal-close').on('click', function () {
+    $('#dictionary-modal').removeClass('is-active');
+  });
+
+  $('.textarea.dictionary, .input.dictionary').on('change', function (e) {
+    saveDictionary(e.currentTarget);
+  });
+
+  $('.options input').on('change', function (e) {
+    var changedOptions = {};
+    $('.options').serializeArray().filter(function (option) {
+      return option.value != '';
+    }).forEach(function (option) {
+      changedOptions[option.name] = option.value;
     });
-    return { 'criteria': criteria, 'index': ++index, 'value': value };
+    om.saveOptions(changedOptions);
   });
-
-  return baseSortBy(result, function(object, other) {
-    return compareMultiple(object, other, orders);
-  });
-}
-
-module.exports = baseOrderBy;
-
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(155)))
 
 /***/ }),
-/* 165 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseEach = __webpack_require__(156),
-    isArrayLike = __webpack_require__(5);
-
-/**
- * The base implementation of `_.map` without support for iteratee shorthands.
- *
- * @private
- * @param {Array|Object} collection The collection to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the new mapped array.
- */
-function baseMap(collection, iteratee) {
-  var index = -1,
-      result = isArrayLike(collection) ? Array(collection.length) : [];
-
-  baseEach(collection, function(value, key, collection) {
-    result[++index] = iteratee(value, key, collection);
-  });
-  return result;
-}
-
-module.exports = baseMap;
+module.exports = __webpack_require__(174);
 
 
 /***/ }),
-/* 166 */
+/* 174 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayEach = __webpack_require__(175),
+    baseEach = __webpack_require__(156),
+    castFunction = __webpack_require__(176),
+    isArray = __webpack_require__(1);
+
+/**
+ * Iterates over elements of `collection` and invokes `iteratee` for each element.
+ * The iteratee is invoked with three arguments: (value, index|key, collection).
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
+ *
+ * **Note:** As with other "Collections" methods, objects with a "length"
+ * property are iterated like arrays. To avoid this behavior use `_.forIn`
+ * or `_.forOwn` for object iteration.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @alias each
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} [iteratee=_.identity] The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ * @see _.forEachRight
+ * @example
+ *
+ * _.forEach([1, 2], function(value) {
+ *   console.log(value);
+ * });
+ * // => Logs `1` then `2`.
+ *
+ * _.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
+ *   console.log(key);
+ * });
+ * // => Logs 'a' then 'b' (iteration order is not guaranteed).
+ */
+function forEach(collection, iteratee) {
+  var func = isArray(collection) ? arrayEach : baseEach;
+  return func(collection, castFunction(iteratee));
+}
+
+module.exports = forEach;
+
+
+/***/ }),
+/* 175 */
 /***/ (function(module, exports) {
 
 /**
- * The base implementation of `_.sortBy` which uses `comparer` to define the
- * sort order of `array` and replaces criteria objects with their corresponding
- * values.
+ * A specialized version of `_.forEach` for arrays without support for
+ * iteratee shorthands.
  *
  * @private
- * @param {Array} array The array to sort.
- * @param {Function} comparer The function to define sort order.
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
  * @returns {Array} Returns `array`.
  */
-function baseSortBy(array, comparer) {
-  var length = array.length;
+function arrayEach(array, iteratee) {
+  var index = -1,
+      length = array == null ? 0 : array.length;
 
-  array.sort(comparer);
-  while (length--) {
-    array[length] = array[length].value;
+  while (++index < length) {
+    if (iteratee(array[index], index, array) === false) {
+      break;
+    }
   }
   return array;
 }
 
-module.exports = baseSortBy;
+module.exports = arrayEach;
 
 
 /***/ }),
-/* 167 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var compareAscending = __webpack_require__(168);
+var identity = __webpack_require__(17);
 
 /**
- * Used by `_.orderBy` to compare multiple properties of a value to another
- * and stable sort them.
- *
- * If `orders` is unspecified, all values are sorted in ascending order. Otherwise,
- * specify an order of "desc" for descending or "asc" for ascending sort order
- * of corresponding values.
+ * Casts `value` to `identity` if it's not a function.
  *
  * @private
- * @param {Object} object The object to compare.
- * @param {Object} other The other object to compare.
- * @param {boolean[]|string[]} orders The order to sort by for each property.
- * @returns {number} Returns the sort order indicator for `object`.
+ * @param {*} value The value to inspect.
+ * @returns {Function} Returns cast function.
  */
-function compareMultiple(object, other, orders) {
-  var index = -1,
-      objCriteria = object.criteria,
-      othCriteria = other.criteria,
-      length = objCriteria.length,
-      ordersLength = orders.length;
-
-  while (++index < length) {
-    var result = compareAscending(objCriteria[index], othCriteria[index]);
-    if (result) {
-      if (index >= ordersLength) {
-        return result;
-      }
-      var order = orders[index];
-      return result * (order == 'desc' ? -1 : 1);
-    }
-  }
-  // Fixes an `Array#sort` bug in the JS engine embedded in Adobe applications
-  // that causes it, under certain circumstances, to provide the same value for
-  // `object` and `other`. See https://github.com/jashkenas/underscore/pull/1247
-  // for more details.
-  //
-  // This also ensures a stable sort in V8 and other engines.
-  // See https://bugs.chromium.org/p/v8/issues/detail?id=90 for more details.
-  return object.index - other.index;
+function castFunction(value) {
+  return typeof value == 'function' ? value : identity;
 }
 
-module.exports = compareMultiple;
-
-
-/***/ }),
-/* 168 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isSymbol = __webpack_require__(9);
-
-/**
- * Compares values to sort them in ascending order.
- *
- * @private
- * @param {*} value The value to compare.
- * @param {*} other The other value to compare.
- * @returns {number} Returns the sort order indicator for `value`.
- */
-function compareAscending(value, other) {
-  if (value !== other) {
-    var valIsDefined = value !== undefined,
-        valIsNull = value === null,
-        valIsReflexive = value === value,
-        valIsSymbol = isSymbol(value);
-
-    var othIsDefined = other !== undefined,
-        othIsNull = other === null,
-        othIsReflexive = other === other,
-        othIsSymbol = isSymbol(other);
-
-    if ((!othIsNull && !othIsSymbol && !valIsSymbol && value > other) ||
-        (valIsSymbol && othIsDefined && othIsReflexive && !othIsNull && !othIsSymbol) ||
-        (valIsNull && othIsDefined && othIsReflexive) ||
-        (!valIsDefined && othIsReflexive) ||
-        !valIsReflexive) {
-      return 1;
-    }
-    if ((!valIsNull && !valIsSymbol && !othIsSymbol && value < other) ||
-        (othIsSymbol && valIsDefined && valIsReflexive && !valIsNull && !valIsSymbol) ||
-        (othIsNull && valIsDefined && valIsReflexive) ||
-        (!othIsDefined && valIsReflexive) ||
-        !othIsReflexive) {
-      return -1;
-    }
-  }
-  return 0;
-}
-
-module.exports = compareAscending;
-
-
-/***/ }),
-/* 169 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Libretto__ = __webpack_require__(170);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_merge__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_merge___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash_merge__);
-
-
-
-class Roudokuka {
-  constructor(lines, options) {
-    this.libretto = new __WEBPACK_IMPORTED_MODULE_0__Libretto__["a" /* default */](lines)
-    this.voices = []
-    this.currentLine = undefined
-    this.interrupted = false
-
-    this.defaultOptions = {
-      lang: "",
-      onboundary: null,
-      onend: null,
-      onerror: null,
-      onmark: null,
-      onpause: null, // stil buggy
-      onresume: null, // stil buggy
-      onstart: null,
-      pitch: 1,
-      rate: 1,
-      voice: null,
-      volume: 1,
-      onLibrettoEnd: undefined
-    }
-    this.options = __WEBPACK_IMPORTED_MODULE_1_lodash_merge___default()(this.defaultOptions, options)
-
-    // fix for chrome
-    this.utterance = undefined // continuous play
-    this.resumer = [] // speak with long text
-  }
-
-  _startResumer() {
-    this.resumer.push(setInterval(() => {
-      speechSynthesis.resume()
-    }, 5000))
-  }
-
-  _stopResumer() {
-    if(this.resumer.length) {
-      this.resumer.forEach((id) => {
-        clearInterval(id)
-      })
-      this.resumer = []
-    }
-  }
-
-  onReady() {
-    speechSynthesis.cancel()
-    return new Promise((resolve, reject) => {
-      const tryInterval = setInterval(() => {
-        if(this.voices.length === 0) {
-          this.voices = speechSynthesis.getVoices()
-        } else {
-          clearInterval(tryInterval)
-          resolve()
-        }
-      }, 0)
-    })
-  }
-
-  getUtterance(line) {
-    this.utterance = new SpeechSynthesisUtterance()
-    __WEBPACK_IMPORTED_MODULE_1_lodash_merge___default()(this.utterance, this.options, line)
-
-    // fix rate for desktop chrome
-    // if(this.utterance.rate > 2) {
-    //   this.utterance.rate = 2
-    // }
-
-    let advancedCallbacks = {list: ['onend', 'onpause', 'onresume']}
-    advancedCallbacks.list.forEach((name) => {
-      if(Object.prototype.toString.call(this.utterance[name]) == '[object Function]') {
-        advancedCallbacks[name] = this.utterance[name]
-      }
-    })
-
-    this.utterance.onend = (e) => {
-      if(this.interrupted) {
-        this.interrupted = false
-      } else {
-        if(advancedCallbacks.onend) {
-          advancedCallbacks.onend(e, this.currentLine)
-        }
-        this.start()
-      }
-    }
-    this.utterance.onpause = (e) => {
-      this._stopResumer()
-      if(advancedCallbacks.onpause) {
-        advancedCallbacks.onpause(e, this.currentLine)
-      }
-    }
-    this.utterance.onresume = (e) => {
-      if(this.resumer.length == 0 && advancedCallbacks.onresume) {
-        advancedCallbacks.onresume(e, this.currentLine)
-        this._startResumer()
-      }
-    }
-
-    return this.utterance
-  }
-
-  start(lineIndex) {
-    if(speechSynthesis.speaking) {
-      this.interrupted = true
-    }
-    if(lineIndex >= 0) {
-      this.libretto.curentLineIndex = lineIndex
-    }
-
-    this._stopResumer()
-    this._startResumer()
-    speechSynthesis.cancel()
-
-    if(this.libretto.isEnd()) {
-      this.libretto.curentLineIndex = 0
-      this._stopResumer()
-      if(Object.prototype.toString.call(this.options.onLibrettoEnd) == '[object Function]') {
-        this.options.onLibrettoEnd()
-      }
-    } else {
-      this.currentLine = this.libretto.getNextLine()
-      speechSynthesis.speak(this.getUtterance(this.currentLine))
-    }
-  }
-
-  stop() {
-    if(speechSynthesis.speaking) {
-      this.interrupted = true
-    }
-    speechSynthesis.cancel()
-    this._stopResumer()
-  }
-}
-/* harmony export (immutable) */ __webpack_exports__["default"] = Roudokuka;
-
-
-
-/***/ }),
-/* 170 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_merge__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_merge___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash_merge__);
-
-
-class Libretto {
-  constructor(linesInfo) {
-    this.curentLineIndex = 0
-    this.lines = this._createLines(linesInfo)
-  }
-
-  _createLines(linesInfo) {
-    return linesInfo.map((lineInfo, index) => {
-      if(Object.prototype.toString.call(lineInfo) == '[object String]') {
-        return {index: index, text: lineInfo}
-      } else {
-        return __WEBPACK_IMPORTED_MODULE_0_lodash_merge___default()(lineInfo, {index: index})
-      }
-    })
-  }
-
-  getNextLine() {
-    if(this.curentLineIndex < this.lines.length) {
-      if(this.curentLineIndex == this.lines.length - 1) {
-        this.curentLineIndex = -1
-        return this.lines[this.lines.length - 1]
-      } else {
-        return this.lines[this.curentLineIndex++]
-      }
-    }
-  }
-
-  isEnd() {
-    return this.curentLineIndex == -1
-  }
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Libretto;
-
+module.exports = castFunction;
 
 
 /***/ })
