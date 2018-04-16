@@ -30,6 +30,11 @@ Chromeの右上に表示されている拡張機能のアイコンを右クリ�
 右側に辞書機能と設定が表示されているので、こちらもお好みで設定してみて下さい。
 
 ## お願い
-何か不明点や、欲しい機能、問題の報告等があれば、IssueやPull Requestを作って貰うか、下記のフォームからよろしくお願いします！<br>
+何か不明点や、欲しい機能、問題の報告等があれば、IssueやPull Requestを作って貰うか、下記のGoogleフォームか、Googleグループからよろしくお願いします！<br>
 (｀･ω･´)b<br>
+
+### Googleフォーム
 https://goo.gl/forms/PUGoOemm3sEXe42f2<br>
+
+### Googleグループ
+https://groups.google.com/forum/#!forum/novels-reader
