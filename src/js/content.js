@@ -20,6 +20,10 @@ const checkIncludeRuby = (text) => {
   return /<ruby><rb>/gi.test(text)
 }
 
+const checkIgnoreRubiesTest = (ruby) => {
+  return dictionaries.ignoreRubies && dictionaries.ignoreRubies.raw && RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)
+}
+
 const getLineElement = (text, blankLineCount, element) => {
   let lineElement = $(`<p style='margin-top: ${blankLineCount * element.css('line-height').replace('px', '')}px'>${text}</p>`)
   if(checkIncludeRuby(text)) {
@@ -30,10 +34,10 @@ const getLineElement = (text, blankLineCount, element) => {
     const readText = splitRubyTagTexts.map((splitRubyTagText) => {
       if(checkIncludeRuby(splitRubyTagText)) {
         const ruby = {rb: $(splitRubyTagText).find('rb').text(), rt: $(splitRubyTagText).find('rt').text()}
-        if(!_find(rubies, ruby) && dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+        if(!_find(rubies, ruby) && !checkIgnoreRubiesTest(ruby)) {
           rubies.push(ruby)
         }
-        return dictionaries.ignoreRubies && RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)
+        return checkIgnoreRubiesTest(ruby)
           ? ruby.rb
           : ruby.rt
       } else {
@@ -75,7 +79,6 @@ const lineHighlight = (lineElement) => {
 const lineUnHighlight = () => {
   $('.novel_subtitle, #novel_p p, #novel_honbun p, #novel_a p').removeClass('highlight')
 }
-
 
 if($('#novel_honbun').length) {
   const novelId = $('.contents1 .margin_r20').attr('href').replace(/\//g, '')
@@ -155,7 +158,6 @@ if(options.afterword == 'on' && afterword.length) {
   afterword.html(lineElements.afterword)
 }
 
-
 chrome.runtime.sendMessage({method: 'saveDictionary', dictionary: {
   id: novelId,
   raw: options.autoSaveDictionary == 'on' ? getDictionaryText(rubies) : ''
@@ -167,7 +169,7 @@ let novelRubies = dictionaries.novel.rubies.length ? _orderBy(dictionaries.novel
 if(userRubies) {
   linesInfo.forEach((lineInfo) => {
     userRubies.forEach((ruby) => {
-      if(dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+      if(!checkIgnoreRubiesTest(ruby)) {
         lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
       }
     })
@@ -176,7 +178,7 @@ if(userRubies) {
 if(novelRubies) {
   linesInfo.forEach((lineInfo) => {
     novelRubies.forEach((ruby) => {
-      if(dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+      if(!checkIgnoreRubiesTest(ruby)) {
         lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
       }
     })

@@ -15640,6 +15640,10 @@ var checkIncludeRuby = function checkIncludeRuby(text) {
   );
 };
 
+var checkIgnoreRubiesTest = function checkIgnoreRubiesTest(ruby) {
+  return dictionaries.ignoreRubies && dictionaries.ignoreRubies.raw && RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt);
+};
+
 var getLineElement = function getLineElement(text, blankLineCount, element) {
   var lineElement = $('<p style=\'margin-top: ' + blankLineCount * element.css('line-height').replace('px', '') + 'px\'>' + text + '</p>');
   if (checkIncludeRuby(text)) {
@@ -15650,10 +15654,10 @@ var getLineElement = function getLineElement(text, blankLineCount, element) {
     var readText = splitRubyTagTexts.map(function (splitRubyTagText) {
       if (checkIncludeRuby(splitRubyTagText)) {
         var ruby = { rb: $(splitRubyTagText).find('rb').text(), rt: $(splitRubyTagText).find('rt').text() };
-        if (!(0, _find3.default)(rubies, ruby) && dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+        if (!(0, _find3.default)(rubies, ruby) && !checkIgnoreRubiesTest(ruby)) {
           rubies.push(ruby);
         }
-        return dictionaries.ignoreRubies && RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt) ? ruby.rb : ruby.rt;
+        return checkIgnoreRubiesTest(ruby) ? ruby.rb : ruby.rt;
       } else {
         return splitRubyTagText;
       }
@@ -15753,7 +15757,7 @@ if ($('#novel_honbun').length) {
         if (userRubies) {
           linesInfo.forEach(function (lineInfo) {
             userRubies.forEach(function (ruby) {
-              if (dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+              if (!checkIgnoreRubiesTest(ruby)) {
                 lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt);
               }
             });
@@ -15762,7 +15766,7 @@ if ($('#novel_honbun').length) {
         if (novelRubies) {
           linesInfo.forEach(function (lineInfo) {
             novelRubies.forEach(function (ruby) {
-              if (dictionaries.ignoreRubies && !RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)) {
+              if (!checkIgnoreRubiesTest(ruby)) {
                 lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt);
               }
             });
