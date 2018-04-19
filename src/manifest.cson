@@ -1,6 +1,6 @@
 manifest_version: 2
 name: 'novels-reader'
-version: '1.0.0'
+version: '1.0.1'
 
 description: 'Webpage reader for http://syosetu.com'
 
