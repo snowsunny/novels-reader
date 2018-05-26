@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "novels-reader",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Webpage reader for http://syosetu.com",
   "content_scripts": [
     {

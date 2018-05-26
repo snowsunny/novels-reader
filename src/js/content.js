@@ -24,13 +24,12 @@ const checkIgnoreRubiesTest = (ruby) => {
   return dictionaries.ignoreRubies && dictionaries.ignoreRubies.raw && RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)
 }
 
-const getLineElement = (text, blankLineCount, element) => {
-  let lineElement = $(`<p style='margin-top: ${blankLineCount * element.css('line-height').replace('px', '')}px'>${text}</p>`)
-  if(checkIncludeRuby(text)) {
-    lineElement.addClass('include-ruby')
+const setRubyData = ($lineElement) => {
+  if(checkIncludeRuby($lineElement.html())) {
+    $lineElement.addClass('include-ruby')
 
     const divider = '__|novels|reader|ruby|tag|divider|__'
-    const splitRubyTagTexts = text.replace(/<ruby><rb>/gi, `${divider}<ruby><rb>`).replace(/<\/rp><\/ruby>/gi, `</rp></ruby>${divider}`).split(divider)
+    const splitRubyTagTexts = $lineElement.html().replace(/<ruby><rb>/gi, `${divider}<ruby><rb>`).replace(/<\/rp><\/ruby>/gi, `</rp></ruby>${divider}`).split(divider)
     const readText = splitRubyTagTexts.map((splitRubyTagText) => {
       if(checkIncludeRuby(splitRubyTagText)) {
         const ruby = {rb: $(splitRubyTagText).find('rb').text(), rt: $(splitRubyTagText).find('rt').text()}
@@ -44,32 +43,28 @@ const getLineElement = (text, blankLineCount, element) => {
         return splitRubyTagText
       }
     }).join('')
-    lineElement.data({readText: readText})
+    $lineElement.data({readText: readText})
   }
-  return lineElement
 }
 
-const getLineElements = (element) => {
-  let splitTexts = element.html().split('<br>\n')
-
-  let blankLineCount = 0
-  return splitTexts.map((text) => {
-    if(/\S/gi.test(text) == false) {
-      blankLineCount++
-    } else {
-      let lineElement = getLineElement(text, blankLineCount, element)
-      blankLineCount = 0
-      return lineElement.prepend(`<div class='controll-button play' data-index='${lineIndex++}'><i class='fa fa-play-circle' aria-hidden='true'></div>`)
-    }
-  }).filter((lineElement) => {
-    return lineElement != undefined
+const setPlayButtonElementsAndSetRubyData = (lineElements) => {
+  lineElements.each((index, lineElement) => {
+    let $lineElement = $(lineElement)
+    setRubyData($lineElement)
+    $lineElement.prepend($(`<div class='controll-button play' data-index='${lineIndex++}'><i class='fa fa-play-circle' aria-hidden='true'></div>`))
   })
 }
 
-const getLinesInfo = (lineElements) => {
-  return lineElements.map((lineElement) => {
-    return {text: checkIncludeRuby(lineElement.html()) ? lineElement.data().readText : lineElement.text(), element: lineElement}
+const getLinesInfo = ($lineElements) => {
+  let linesInfo = []
+  $lineElements.each((index, lineElement) => {
+    let $lineElement = $(lineElement)
+    linesInfo.push({
+      text: checkIncludeRuby($lineElement.html()) ? $lineElement.data().readText : $lineElement.text(),
+      element: $lineElement
+    })
   })
+  return linesInfo
 }
 
 const lineHighlight = (lineElement) => {
@@ -130,32 +125,23 @@ $('head').append(`<style id='novels-reader-style'>
   }
 </style>`)
 
-const title = $('.novel_subtitle')
-const foreword = $('#novel_p')
-const body = $('#novel_honbun')
-const afterword = $('#novel_a')
-
 let lineElements = {}
 let linesInfo = []
 
-if(options.title == 'on' && title.length) {
-  lineElements.title = [title.prepend(`<div class='controll-button play' data-index='${lineIndex++}'><i class='fa fa-play-circle' aria-hidden='true'></i></div>`)]
-  linesInfo = linesInfo.concat(getLinesInfo(lineElements.title))
+const targetElements = {
+  title: $('.novel_subtitle'),
+  foreword: $('#novel_p p'),
+  body: $('#novel_honbun p'),
+  afterword: $('#novel_a p')
 }
-if(options.foreword == 'on' && foreword.length) {
-  lineElements.foreword = getLineElements(foreword)
-  linesInfo = linesInfo.concat(getLinesInfo(lineElements.foreword))
-  foreword.html(lineElements.foreword)
-}
-if(options.body == 'on' && body.length) {
-  lineElements.body = getLineElements(body)
-  linesInfo = linesInfo.concat(getLinesInfo(lineElements.body))
-  body.html(lineElements.body)
-}
-if(options.afterword == 'on' && afterword.length) {
-  lineElements.afterword = getLineElements(afterword)
-  linesInfo = linesInfo.concat(getLinesInfo(lineElements.afterword))
-  afterword.html(lineElements.afterword)
+for(let key in targetElements) {
+  if(options[key] == 'on' && targetElements[key].length) {
+    let filteredElements = targetElements[key].filter((index, element) => {
+      return /\S/gi.test($(element).text())
+    })
+    setPlayButtonElementsAndSetRubyData(filteredElements)
+    linesInfo = linesInfo.concat(getLinesInfo(filteredElements))
+  }
 }
 
 chrome.runtime.sendMessage({method: 'saveDictionary', dictionary: {

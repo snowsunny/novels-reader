@@ -15644,13 +15644,12 @@ var checkIgnoreRubiesTest = function checkIgnoreRubiesTest(ruby) {
   return dictionaries.ignoreRubies && dictionaries.ignoreRubies.raw && RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt);
 };
 
-var getLineElement = function getLineElement(text, blankLineCount, element) {
-  var lineElement = $('<p style=\'margin-top: ' + blankLineCount * element.css('line-height').replace('px', '') + 'px\'>' + text + '</p>');
-  if (checkIncludeRuby(text)) {
-    lineElement.addClass('include-ruby');
+var setRubyData = function setRubyData($lineElement) {
+  if (checkIncludeRuby($lineElement.html())) {
+    $lineElement.addClass('include-ruby');
 
     var divider = '__|novels|reader|ruby|tag|divider|__';
-    var splitRubyTagTexts = text.replace(/<ruby><rb>/gi, divider + '<ruby><rb>').replace(/<\/rp><\/ruby>/gi, '</rp></ruby>' + divider).split(divider);
+    var splitRubyTagTexts = $lineElement.html().replace(/<ruby><rb>/gi, divider + '<ruby><rb>').replace(/<\/rp><\/ruby>/gi, '</rp></ruby>' + divider).split(divider);
     var readText = splitRubyTagTexts.map(function (splitRubyTagText) {
       if (checkIncludeRuby(splitRubyTagText)) {
         var ruby = { rb: $(splitRubyTagText).find('rb').text(), rt: $(splitRubyTagText).find('rt').text() };
@@ -15662,32 +15661,28 @@ var getLineElement = function getLineElement(text, blankLineCount, element) {
         return splitRubyTagText;
       }
     }).join('');
-    lineElement.data({ readText: readText });
+    $lineElement.data({ readText: readText });
   }
-  return lineElement;
 };
 
-var getLineElements = function getLineElements(element) {
-  var splitTexts = element.html().split('<br>\n');
-
-  var blankLineCount = 0;
-  return splitTexts.map(function (text) {
-    if (/\S/gi.test(text) == false) {
-      blankLineCount++;
-    } else {
-      var lineElement = getLineElement(text, blankLineCount, element);
-      blankLineCount = 0;
-      return lineElement.prepend('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'><i class=\'fa fa-play-circle\' aria-hidden=\'true\'></div>');
-    }
-  }).filter(function (lineElement) {
-    return lineElement != undefined;
+var setPlayButtonElementsAndSetRubyData = function setPlayButtonElementsAndSetRubyData(lineElements) {
+  lineElements.each(function (index, lineElement) {
+    var $lineElement = $(lineElement);
+    setRubyData($lineElement);
+    $lineElement.prepend($('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'><i class=\'fa fa-play-circle\' aria-hidden=\'true\'></div>'));
   });
 };
 
-var getLinesInfo = function getLinesInfo(lineElements) {
-  return lineElements.map(function (lineElement) {
-    return { text: checkIncludeRuby(lineElement.html()) ? lineElement.data().readText : lineElement.text(), element: lineElement };
+var getLinesInfo = function getLinesInfo($lineElements) {
+  var linesInfo = [];
+  $lineElements.each(function (index, lineElement) {
+    var $lineElement = $(lineElement);
+    linesInfo.push({
+      text: checkIncludeRuby($lineElement.html()) ? $lineElement.data().readText : $lineElement.text(),
+      element: $lineElement
+    });
   });
+  return linesInfo;
 };
 
 var lineHighlight = function lineHighlight(lineElement) {
@@ -15714,32 +15709,24 @@ if ($('#novel_honbun').length) {
       $('head').append('<link href=\'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\' rel=\'stylesheet\' integrity=\'sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\' crossorigin=\'anonymous\'>');
       $('head').append('<style id=\'novels-reader-style\'>\n  .highlight {\n    color: ' + (options.textColor == undefined ? '#fff' : options.textColor) + ';\n    background-color: ' + (options.backgroundColor == undefined ? '#498fd9' : options.backgroundColor) + ';\n  }\n\n  .controll-button {\n    color: ' + $('#novel_color').css('color') + ';\n    position: absolute;\n    cursor: pointer;\n  }\n  .controll-button:hover {\n    color: #18b7cd;\n  }\n\n  .controll-button .fa {\n    line-height: inherit;\n    font-size: 120%;\n  }\n\n  p.include-ruby .controll-button .fa {\n    margin-top: ' + $('ruby rt').height() + 'px;\n    line-height: ' + $('ruby rb').height() + 'px;\n  }\n\n  .controll-button.play {\n    margin-left: -25px;\n  }\n  .controll-button.stop {\n    position: fixed;\n    top: ' + ($('#novel_header').height() + 15) + 'px;\n    left: 15px;\n    font-size: 30px;\n  }\n</style>');
 
-      var title = $('.novel_subtitle');
-      var foreword = $('#novel_p');
-      var body = $('#novel_honbun');
-      var afterword = $('#novel_a');
-
       var lineElements = {};
       var linesInfo = [];
 
-      if (options.title == 'on' && title.length) {
-        lineElements.title = [title.prepend('<div class=\'controll-button play\' data-index=\'' + lineIndex++ + '\'><i class=\'fa fa-play-circle\' aria-hidden=\'true\'></i></div>')];
-        linesInfo = linesInfo.concat(getLinesInfo(lineElements.title));
-      }
-      if (options.foreword == 'on' && foreword.length) {
-        lineElements.foreword = getLineElements(foreword);
-        linesInfo = linesInfo.concat(getLinesInfo(lineElements.foreword));
-        foreword.html(lineElements.foreword);
-      }
-      if (options.body == 'on' && body.length) {
-        lineElements.body = getLineElements(body);
-        linesInfo = linesInfo.concat(getLinesInfo(lineElements.body));
-        body.html(lineElements.body);
-      }
-      if (options.afterword == 'on' && afterword.length) {
-        lineElements.afterword = getLineElements(afterword);
-        linesInfo = linesInfo.concat(getLinesInfo(lineElements.afterword));
-        afterword.html(lineElements.afterword);
+      var targetElements = {
+        title: $('.novel_subtitle'),
+        foreword: $('#novel_p p'),
+        body: $('#novel_honbun p'),
+        afterword: $('#novel_a p')
+      };
+      for (var key in targetElements) {
+        if (options[key] == 'on' && targetElements[key].length) {
+          var filteredElements = targetElements[key].filter(function (index, element) {
+            return (/\S/gi.test($(element).text())
+            );
+          });
+          setPlayButtonElementsAndSetRubyData(filteredElements);
+          linesInfo = linesInfo.concat(getLinesInfo(filteredElements));
+        }
       }
 
       chrome.runtime.sendMessage({ method: 'saveDictionary', dictionary: {
