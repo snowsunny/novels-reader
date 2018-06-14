@@ -32,6 +32,10 @@ Chromeの右上に表示されている拡張機能のアイコンを右クリ�
 Chromeの右上に表示されている拡張機能のアイコンを右クリックし、オプションページを開きます。<br>
 右側に辞書機能と設定が表示されているので、こちらもお好みで設定してみて下さい。
 
+## 変更履歴
+下記ページをご参照下さい。 :pray:  
+https://github.com/snowsunny/novels-reader/releases
+
 ## お願い
 何か不明点や、欲しい機能、問題の報告等があれば、IssueやPull Requestを作って貰うか、下記のGoogleフォームか、Googleグループからよろしくお願いします！<br>
 (｀･ω･´)b<br>
@@ -41,3 +45,7 @@ https://goo.gl/forms/PUGoOemm3sEXe42f2<br>
 
 ### Googleグループ
 https://groups.google.com/forum/#!forum/novels-reader
+
+### 作者のTwitter
+違う事も呟いてますが、いち早く更新をお知らせしてまーす。  
+https://twitter.com/snowsunny1107
