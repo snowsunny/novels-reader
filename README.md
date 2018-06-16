@@ -1,6 +1,11 @@
 # novels-reader
 novels-readerは「小説家になろう（syosetu.com）」の小説ページに、読み上げ機能を追加するChrome拡張機能です。
 
+## 変更履歴
+最新バージョンは「1.1.0」です。  
+詳しい変更履歴は下記ページをご参照下さい。 :pray:  
+https://github.com/snowsunny/novels-reader/releases
+
 ### 紹介記事 
 [「小説家になろう」の小説を良い感じに朗読してくれるChrome拡張機能作ったよー【充実の辞書機能を搭載！固有名詞と真正面から殴り合える読み上げツールをお探しのあなたへ】 - Qiita](https://qiita.com/snowsunny/items/233f6e2f875d8574e33d)
 
@@ -32,10 +37,6 @@ Chromeの右上に表示されている拡張機能のアイコンを右クリ�
 Chromeの右上に表示されている拡張機能のアイコンを右クリックし、オプションページを開きます。<br>
 右側に辞書機能と設定が表示されているので、こちらもお好みで設定してみて下さい。
 
-## 変更履歴
-下記ページをご参照下さい。 :pray:  
-https://github.com/snowsunny/novels-reader/releases
-
 ## お願い
 何か不明点や、欲しい機能、問題の報告等があれば、IssueやPull Requestを作って貰うか、下記のGoogleフォームか、Googleグループからよろしくお願いします！<br>
 (｀･ω･´)b<br>
@@ -47,5 +48,5 @@ https://goo.gl/forms/PUGoOemm3sEXe42f2<br>
 https://groups.google.com/forum/#!forum/novels-reader
 
 ### 作者のTwitter
-違う事も呟いてますが、いち早く更新をお知らせしてまーす。  
+違う事も呟いてますが、いち早く更新をお知らせしていまーす。  
 https://twitter.com/snowsunny1107
