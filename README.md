@@ -2,7 +2,10 @@
 novels-readerは「小説家になろう（syosetu.com）」の小説ページに、読み上げ機能を追加するChrome拡張機能です。
 
 ## 変更履歴
-最新バージョンは「1.1.0」です。  
+最新バージョンは「__1.1.0__」です。  
+> - 小説ページのDOMの変更に対応
+> - ついでに関連コードを最適化
+
 詳しい変更履歴は下記ページをご参照下さい。 :pray:  
 https://github.com/snowsunny/novels-reader/releases
 
