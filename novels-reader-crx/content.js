@@ -15778,6 +15778,10 @@ if ($('#novel_honbun').length) {
         if (options.pitch != undefined) {
           roudokukaOptions.pitch = Number(options.pitch);
         }
+        console.log(options);
+        if (options.volume != undefined) {
+          roudokukaOptions.volume = Number(options.volume);
+        }
         roudokukaOptions.onend = function (e, lineInfo) {
           lineUnHighlight();
           if (linesInfo[lineInfo.index + 1]) {
