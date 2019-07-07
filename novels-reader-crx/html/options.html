@@ -47,125 +47,145 @@
       </div>
     </section>
     <section class="section">
-      <div class="container">※設定後、ページを更新すると設定が反映されます。
+      <div class="container">
+        <p class="has-text-danger is-size-5" style="font-weight: bold;">※設定後、小説ページに戻りページを再読み込みすると設定が反映されます。</p>
         <div class="columns">
-          <div class="column is-half">
+          <div class="column">
             <form class="options">
-              <div class="title">音声設定</div>
-              <div class="subtitle" style="font-size: 1rem;">※最小値、最大値についてですがOS毎に挙動が違います…音声が正しく再生されない場合はより初期値に近い値を設定してみて下さい。</div>
               <div class="columns">
-                <div class="column">
-                  <div class="field">
-                    <label class="label">速度</label>
-                    <div class="control">
-                      <input class="input" name="rate" type="number" step="0.1" min="0.1" max="10" placeholder="例: 1">
+                <div class="column is-half">
+                  <div class="title">音声設定</div>
+                  <div class="subtitle" style="font-size: 1rem;">※最小値、最大値についてですがOS毎に挙動が違います…音声が正しく再生されない場合はより初期値に近い値を設定してみて下さい。</div>
+                  <div class="columns">
+                    <div class="column">
+                      <div class="field">
+                        <label class="label">速度</label>
+                        <div class="control">
+                          <input class="input" name="rate" type="number" step="0.1" min="0.1" max="10" placeholder="例: 1">
+                        </div>
+                        <p class="help">初期値: 1.0, 最小値: 0.1, 最大値: 10.0</p>
+                      </div>
                     </div>
-                    <p class="help">初期値: 1.0, 最小値: 0.1, 最大値: 10.0</p>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="field">
-                    <label class="label">ピッチ</label>
-                    <div class="control">
-                      <input class="input" name="pitch" type="number" step="0.1" min="0" max="2" placeholder="例: 1">
+                    <div class="column">
+                      <div class="field">
+                        <label class="label">ピッチ</label>
+                        <div class="control">
+                          <input class="input" name="pitch" type="number" step="0.1" min="0" max="2" placeholder="例: 1">
+                        </div>
+                        <p class="help">声の高さを設定出来ます。 初期値: 1.0, 最小値: 0, 最大値: 2.0</p>
+                      </div>
                     </div>
-                    <p class="help">声の高さを設定出来ます。 初期値: 1.0, 最小値: 0, 最大値: 2.0</p>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="field">
-                    <label class="label">音量</label>
-                    <div class="control">
-                      <input class="input" name="volume" type="number" step="0.01" min="0" max="1" placeholder="例: 1">
-                    </div>
-                    <p class="help">声の音量を設定出来ます。 初期値: 1.0, 最小値: 0, 最大値: 1.0</p>
-                  </div>
-                </div>
-              </div>
-              <div class="title">ハイライト設定</div>
-              <div class="columns">
-                <div class="column">
-                  <div class="field">
-                    <label class="label">テキストカラー</label>
-                    <div class="control">
-                      <input class="input" name="textColor" type="text" placeholder="例: #fff">
-                    </div>
-                    <p class="help">初期値: #fff</p>
-                  </div>
-                </div>
-                <div class="column">
-                  <div class="field">
-                    <label class="label">背景カラー</label>
-                    <div class="control">
-                      <input class="input" name="backgroundColor" type="text" placeholder="例: #498fd9">
-                    </div>
-                    <p class="help">初期値: #498fd9</p>
-                  </div>
-                </div>
-              </div>
-              <div class="columns">
-                <div class="column">
-                  <div class="field">
-                    <div class="control">
-                      <label class="checkbox">
-                        <input name="autoScroll" type="checkbox"> 再生箇所に自動でスクロールする
-                      </label>
+                    <div class="column">
+                      <div class="field">
+                        <label class="label">音量</label>
+                        <div class="control">
+                          <input class="input" name="volume" type="number" step="0.01" min="0" max="1" placeholder="例: 1">
+                        </div>
+                        <p class="help">声の音量を設定出来ます。 初期値: 1.0, 最小値: 0, 最大値: 1.0</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="title">読み上げ文章設定</div>
-              <div class="columns">
-                <div class="column">
-                  <div class="field">
-                    <div class="control">
-                      <label class="checkbox">
-                        <input name="title" type="checkbox"> 題名
-                      </label><br>
-                      <label class="checkbox">
-                        <input name="foreword" type="checkbox"> 前書き
-                      </label><br>
-                      <label class="checkbox">
-                        <input name="body" type="checkbox"> 本文
-                      </label><br>
-                      <label class="checkbox">
-                        <input name="afterword" type="checkbox"> 後書き
-                      </label>
+                  <div class="title">ハイライト設定</div>
+                  <div class="columns">
+                    <div class="column">
+                      <div class="field">
+                        <label class="label">テキストカラー</label>
+                        <div class="control">
+                          <input class="input" name="textColor" type="text" placeholder="例: #fff">
+                        </div>
+                        <p class="help">初期値: #fff</p>
+                      </div>
+                    </div>
+                    <div class="column">
+                      <div class="field">
+                        <label class="label">背景カラー</label>
+                        <div class="control">
+                          <input class="input" name="backgroundColor" type="text" placeholder="例: #498fd9">
+                        </div>
+                        <p class="help">初期値: #498fd9</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="columns">
+                    <div class="column">
+                      <div class="field">
+                        <div class="control">
+                          <label class="checkbox">
+                            <input name="autoScroll" type="checkbox"> 再生箇所に自動でスクロールする
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="title">自動再生設定</div>
-              <div class="columns">
-                <div class="column">
-                  <div class="field">
-                    <label class="checkbox">
-                      <input name="autoPlay" type="checkbox"> 自動で再生する
-                    </label><br>
-                    <label class="checkbox">
-                      <input name="autoMoveNext" type="checkbox"> 「次の話」がある場合、自動で移動する
-                    </label>
+                <div class="column is-half">
+                  <div class="title">読み上げ文章設定</div>
+                  <div class="columns">
+                    <div class="column">
+                      <div class="field">
+                        <div class="control">
+                          <label class="checkbox">
+                            <input name="title" type="checkbox"> 題名
+                          </label><br>
+                          <label class="checkbox">
+                            <input name="foreword" type="checkbox"> 前書き
+                          </label><br>
+                          <label class="checkbox">
+                            <input name="body" type="checkbox"> 本文
+                          </label><br>
+                          <label class="checkbox">
+                            <input name="afterword" type="checkbox"> 後書き
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="title">自動再生設定</div>
+                  <div class="columns">
+                    <div class="column">
+                      <div class="field">
+                        <label class="checkbox">
+                          <input name="autoPlay" type="checkbox"> 自動で再生する
+                        </label><br>
+                        <label class="checkbox">
+                          <input name="autoMoveNext" type="checkbox"> 「次の話」がある場合、自動で移動する
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </form>
           </div>
-          <div class="column is-half">
+        </div>
+        <hr>
+        <div class="columns">
+          <div class="column">
             <div class="title">ルビ辞書設定</div>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-half">
             <div class="content">
               <p>対象文字を設定されたルビで読み替える辞書を設定出来ます。「ルビ対象文字::ルビ」のフォーマットで設定して下さい。複数設定する場合は下記の様に改行で区切って下さい。</p>
               <p><b>※ルビの優先度は「無視するルビ ＞ 小説ページのルビ ＞ ユーザー辞書 ＞ 小説別辞書」となっています。</b></p>
               <pre>// ルビ対象文字::ルビ<br>本気::マジ<br>強敵::友<br><br>// 先頭に「//」を付ける事で、その行全てをコメントにします。
 // ルビ対象文字には正規表現を使う事が出来ます。<br>// 下記の例は「*」のみの文を空白で読み替えます。<br>^\*+$::</pre>
             </div>
-            <div class="title sub">ユーザー辞書</div>
+          </div>
+          <div class="column is-half">
+            <div class="title sub" style="margin-top: 0px;">ユーザー辞書</div>
             <textarea class="textarea dictionary" data-id="user"></textarea>
             <p style="margin:10px 0px 10px;"><b>無視するルビ（正規表現）</b></p>
             <div class="content">
               <pre>強調表現等で使わるルビを無視する為の設定を、正規表現で記述出来ます。<br>例：「^・+$」を設定すると「・」のみのルビを無視します。</pre>
               <input class="input dictionary" data-id="userIgnoreRubies">
             </div>
-            <div class="title sub">小説別辞書</div>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="title">小説別辞書</div>
             <form class="options">
               <div class="columns">
                 <div class="column">
