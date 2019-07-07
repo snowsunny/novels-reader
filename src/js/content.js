@@ -189,6 +189,10 @@ if(options.rate != undefined) {
 if(options.pitch != undefined) {
   roudokukaOptions.pitch = Number(options.pitch)
 }
+console.log(options)
+if(options.volume != undefined) {
+  roudokukaOptions.volume = Number(options.volume)
+}
 roudokukaOptions.onend = (e, lineInfo) => {
   lineUnHighlight()
   if(linesInfo[lineInfo.index + 1]) {
