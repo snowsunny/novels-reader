@@ -16,7 +16,7 @@ https://github.com/snowsunny/novels-reader/releases
 ## インストール方法
 1. novels-readerをダウンロード<br>
 gitを使ってクローンするか、↓のリンクからzipファイルをダウンロードして解凍下さい。<br>
-[novels-readerをダウンロード](https://github.com/snowsunny/novels-reader/archive/master.zip)
+[novels-reader v1.2.0をダウンロード](https://github.com/snowsunny/novels-reader/archive/1.2.0.zip)
 
 2. Chromeにインストールする<br>
 初めにChromeの拡張機能の管理ページ（chrome://extensions）を開きます。<br>
