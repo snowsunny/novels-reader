@@ -18,7 +18,7 @@
     "webpack": ">=3.0.0"
   },
   "dependencies": {
-    "jquery": "^3.2.1",
+    "jquery": "^3.4.0",
     "roudokuka": "^0.1.2"
   }
 }
