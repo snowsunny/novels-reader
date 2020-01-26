@@ -38,8 +38,9 @@ export default class PageAnalyzer {
 
   setRubyData($lineElement, dictionaries) {
     if(this.checkIncludeRuby($lineElement.html())) {
-      $lineElement.addClass('include-ruby')
-
+      if($lineElement[0].offsetTop === $lineElement.find('rt')[0].offsetTop) {
+        $lineElement.addClass('fix-play-button-position')
+      }
       const divider = '__|novels|reader|ruby|tag|divider|__'
       const splitRubyTagTexts = $lineElement.html().replace(/<ruby><rb>/gi, `${divider}<ruby><rb>`).replace(/<\/rp><\/ruby>/gi, `</rp></ruby>${divider}`).split(divider)
       const readText = splitRubyTagTexts.map((splitRubyTagText) => {

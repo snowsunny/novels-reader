@@ -20,7 +20,7 @@ export default function headInitializer(options) {
       font-size: 120%;
     }
 
-    p.include-ruby .controll-button .fa {
+    p.fix-play-button-position .controll-button .fa {
       margin-top: ${$('ruby rt').height()}px;
       line-height: ${$('ruby rb').height()}px;
     }
