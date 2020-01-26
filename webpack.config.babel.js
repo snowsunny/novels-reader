@@ -1,6 +1,4 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import UglifyJSWebpackPlugin from 'uglifyjs-webpack-plugin'
-
 import path from 'path'
 import webpack from 'webpack'
 
@@ -21,7 +19,7 @@ module.exports = {
     path: path.join(__dirname, 'novels-reader-crx'),
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -37,7 +35,6 @@ module.exports = {
     ]
   },
   plugins: [
-    // new UglifyJSWebpackPlugin(),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
