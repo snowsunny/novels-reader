@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 177);
+/******/ 	return __webpack_require__(__webpack_require__.s = 176);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1643,33 +1643,6 @@ module.exports = createAssigner;
 
 /***/ }),
 /* 50 */
-/***/ (function(module, exports) {
-
-/**
- * A specialized version of `_.map` for arrays without support for iteratee
- * shorthands.
- *
- * @private
- * @param {Array} [array] The array to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the new mapped array.
- */
-function arrayMap(array, iteratee) {
-  var index = -1,
-      length = array == null ? 0 : array.length,
-      result = Array(length);
-
-  while (++index < length) {
-    result[index] = iteratee(array[index], index, array);
-  }
-  return result;
-}
-
-module.exports = arrayMap;
-
-
-/***/ }),
-/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var createBaseFor = __webpack_require__(129);
@@ -1691,7 +1664,7 @@ module.exports = baseFor;
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -12296,6 +12269,33 @@ return jQuery;
 
 
 /***/ }),
+/* 52 */
+/***/ (function(module, exports) {
+
+/**
+ * A specialized version of `_.map` for arrays without support for iteratee
+ * shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ */
+function arrayMap(array, iteratee) {
+  var index = -1,
+      length = array == null ? 0 : array.length,
+      result = Array(length);
+
+  while (++index < length) {
+    result[index] = iteratee(array[index], index, array);
+  }
+  return result;
+}
+
+module.exports = arrayMap;
+
+
+/***/ }),
 /* 53 */
 /***/ (function(module, exports) {
 
@@ -14583,7 +14583,7 @@ module.exports = toString;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(12),
-    arrayMap = __webpack_require__(50),
+    arrayMap = __webpack_require__(52),
     isArray = __webpack_require__(1),
     isSymbol = __webpack_require__(9);
 
@@ -14842,7 +14842,7 @@ module.exports = createBaseFor;
 
 var Stack = __webpack_require__(18),
     assignMergeValue = __webpack_require__(42),
-    baseFor = __webpack_require__(51),
+    baseFor = __webpack_require__(50),
     baseMergeDeep = __webpack_require__(131),
     isObject = __webpack_require__(2),
     keysIn = __webpack_require__(48),
@@ -15989,7 +15989,7 @@ module.exports = baseEach;
 /* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseFor = __webpack_require__(51),
+var baseFor = __webpack_require__(50),
     keys = __webpack_require__(8);
 
 /**
@@ -16232,14 +16232,13 @@ exports.default = DictionariesManager;
 /* 173 */,
 /* 174 */,
 /* 175 */,
-/* 176 */,
-/* 177 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _each2 = __webpack_require__(178);
+var _each2 = __webpack_require__(177);
 
 var _each3 = _interopRequireDefault(_each2);
 
@@ -16312,22 +16311,22 @@ $(function () {
     om.saveOptions(changedOptions);
   });
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(51)))
+
+/***/ }),
+/* 177 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(178);
+
 
 /***/ }),
 /* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(179);
-
-
-/***/ }),
-/* 179 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var arrayEach = __webpack_require__(180),
+var arrayEach = __webpack_require__(179),
     baseEach = __webpack_require__(158),
-    castFunction = __webpack_require__(181),
+    castFunction = __webpack_require__(180),
     isArray = __webpack_require__(1);
 
 /**
@@ -16369,7 +16368,7 @@ module.exports = forEach;
 
 
 /***/ }),
-/* 180 */
+/* 179 */
 /***/ (function(module, exports) {
 
 /**
@@ -16397,7 +16396,7 @@ module.exports = arrayEach;
 
 
 /***/ }),
-/* 181 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var identity = __webpack_require__(17);

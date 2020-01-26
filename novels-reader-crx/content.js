@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 164);
+/******/ 	return __webpack_require__(__webpack_require__.s = 163);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1643,33 +1643,6 @@ module.exports = createAssigner;
 
 /***/ }),
 /* 50 */
-/***/ (function(module, exports) {
-
-/**
- * A specialized version of `_.map` for arrays without support for iteratee
- * shorthands.
- *
- * @private
- * @param {Array} [array] The array to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the new mapped array.
- */
-function arrayMap(array, iteratee) {
-  var index = -1,
-      length = array == null ? 0 : array.length,
-      result = Array(length);
-
-  while (++index < length) {
-    result[index] = iteratee(array[index], index, array);
-  }
-  return result;
-}
-
-module.exports = arrayMap;
-
-
-/***/ }),
-/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var createBaseFor = __webpack_require__(129);
@@ -1691,7 +1664,7 @@ module.exports = baseFor;
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -12296,6 +12269,33 @@ return jQuery;
 
 
 /***/ }),
+/* 52 */
+/***/ (function(module, exports) {
+
+/**
+ * A specialized version of `_.map` for arrays without support for iteratee
+ * shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ */
+function arrayMap(array, iteratee) {
+  var index = -1,
+      length = array == null ? 0 : array.length,
+      result = Array(length);
+
+  while (++index < length) {
+    result[index] = iteratee(array[index], index, array);
+  }
+  return result;
+}
+
+module.exports = arrayMap;
+
+
+/***/ }),
 /* 53 */
 /***/ (function(module, exports) {
 
@@ -14583,7 +14583,7 @@ module.exports = toString;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(12),
-    arrayMap = __webpack_require__(50),
+    arrayMap = __webpack_require__(52),
     isArray = __webpack_require__(1),
     isSymbol = __webpack_require__(9);
 
@@ -14842,7 +14842,7 @@ module.exports = createBaseFor;
 
 var Stack = __webpack_require__(18),
     assignMergeValue = __webpack_require__(42),
-    baseFor = __webpack_require__(51),
+    baseFor = __webpack_require__(50),
     baseMergeDeep = __webpack_require__(131),
     isObject = __webpack_require__(2),
     keysIn = __webpack_require__(48),
@@ -15989,7 +15989,7 @@ module.exports = baseEach;
 /* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseFor = __webpack_require__(51),
+var baseFor = __webpack_require__(50),
     keys = __webpack_require__(8);
 
 /**
@@ -16051,38 +16051,10 @@ module.exports = createBaseEach;
 /* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseEach = __webpack_require__(158),
-    isArrayLike = __webpack_require__(5);
-
-/**
- * The base implementation of `_.map` without support for iteratee shorthands.
- *
- * @private
- * @param {Array|Object} collection The collection to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the new mapped array.
- */
-function baseMap(collection, iteratee) {
-  var index = -1,
-      result = isArrayLike(collection) ? Array(collection.length) : [];
-
-  baseEach(collection, function(value, key, collection) {
-    result[++index] = iteratee(value, key, collection);
-  });
-  return result;
-}
-
-module.exports = baseMap;
-
-
-/***/ }),
-/* 164 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var _orderBy2 = __webpack_require__(165);
+var _orderBy2 = __webpack_require__(164);
 
 var _orderBy3 = _interopRequireDefault(_orderBy2);
 
@@ -16094,7 +16066,7 @@ var _pageAnalyzer = __webpack_require__(172);
 
 var _pageAnalyzer2 = _interopRequireDefault(_pageAnalyzer);
 
-var _head = __webpack_require__(175);
+var _head = __webpack_require__(174);
 
 var _head2 = _interopRequireDefault(_head);
 
@@ -16236,13 +16208,13 @@ if (analyzer.module.readElements.body.length) {
     });
   });
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(51)))
 
 /***/ }),
-/* 165 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseOrderBy = __webpack_require__(166),
+var baseOrderBy = __webpack_require__(165),
     isArray = __webpack_require__(1);
 
 /**
@@ -16292,12 +16264,12 @@ module.exports = orderBy;
 
 
 /***/ }),
-/* 166 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayMap = __webpack_require__(50),
+var arrayMap = __webpack_require__(52),
     baseIteratee = __webpack_require__(30),
-    baseMap = __webpack_require__(163),
+    baseMap = __webpack_require__(166),
     baseSortBy = __webpack_require__(167),
     baseUnary = __webpack_require__(53),
     compareMultiple = __webpack_require__(168),
@@ -16329,6 +16301,34 @@ function baseOrderBy(collection, iteratees, orders) {
 }
 
 module.exports = baseOrderBy;
+
+
+/***/ }),
+/* 166 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseEach = __webpack_require__(158),
+    isArrayLike = __webpack_require__(5);
+
+/**
+ * The base implementation of `_.map` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ */
+function baseMap(collection, iteratee) {
+  var index = -1,
+      result = isArrayLike(collection) ? Array(collection.length) : [];
+
+  baseEach(collection, function(value, key, collection) {
+    result[++index] = iteratee(value, key, collection);
+  });
+  return result;
+}
+
+module.exports = baseMap;
 
 
 /***/ }),
@@ -16723,8 +16723,9 @@ var PageAnalyzer = function () {
       var _this = this;
 
       if (this.checkIncludeRuby($lineElement.html())) {
-        $lineElement.addClass('include-ruby');
-
+        if ($lineElement[0].offsetTop === $lineElement.find('rt')[0].offsetTop) {
+          $lineElement.addClass('fix-play-button-position');
+        }
         var divider = '__|novels|reader|ruby|tag|divider|__';
         var splitRubyTagTexts = $lineElement.html().replace(/<ruby><rb>/gi, divider + '<ruby><rb>').replace(/<\/rp><\/ruby>/gi, '</rp></ruby>' + divider).split(divider);
         var readText = splitRubyTagTexts.map(function (splitRubyTagText) {
@@ -16758,7 +16759,7 @@ var PageAnalyzer = function () {
 }();
 
 exports.default = PageAnalyzer;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(51)))
 
 /***/ }),
 /* 173 */
@@ -16800,11 +16801,10 @@ var Narou = function Narou() {
 };
 
 exports.default = Narou;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(51)))
 
 /***/ }),
-/* 174 */,
-/* 175 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16816,9 +16816,9 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = headInitializer;
 function headInitializer(options) {
   $('head').append('<link href=\'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\' rel=\'stylesheet\' integrity=\'sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\' crossorigin=\'anonymous\'>');
-  $('head').append('<style id=\'novels-reader-style\'>\n    .highlight {\n      color: ' + (options.textColor == undefined ? '#fff' : options.textColor) + ';\n      background-color: ' + (options.backgroundColor == undefined ? '#498fd9' : options.backgroundColor) + ';\n    }\n\n    .controll-button {\n      color: ' + $('#novel_color').css('color') + ';\n      position: absolute;\n      cursor: pointer;\n    }\n    .controll-button:hover {\n      color: #18b7cd;\n    }\n\n    .controll-button .fa {\n      line-height: inherit;\n      font-size: 120%;\n    }\n\n    p.include-ruby .controll-button .fa {\n      margin-top: ' + $('ruby rt').height() + 'px;\n      line-height: ' + $('ruby rb').height() + 'px;\n    }\n\n    .controll-button.play {\n      margin-left: -25px;\n    }\n    .controll-button.stop {\n      position: fixed;\n      top: ' + ($('#novel_header').height() + 15) + 'px;\n      left: 15px;\n      font-size: 30px;\n    }\n  </style>');
+  $('head').append('<style id=\'novels-reader-style\'>\n    .highlight {\n      color: ' + (options.textColor == undefined ? '#fff' : options.textColor) + ';\n      background-color: ' + (options.backgroundColor == undefined ? '#498fd9' : options.backgroundColor) + ';\n    }\n\n    .controll-button {\n      color: ' + $('#novel_color').css('color') + ';\n      position: absolute;\n      cursor: pointer;\n    }\n    .controll-button:hover {\n      color: #18b7cd;\n    }\n\n    .controll-button .fa {\n      line-height: inherit;\n      font-size: 120%;\n    }\n\n    p.fix-play-button-position .controll-button .fa {\n      margin-top: ' + $('ruby rt').height() + 'px;\n      line-height: ' + $('ruby rb').height() + 'px;\n    }\n\n    .controll-button.play {\n      margin-left: -25px;\n    }\n    .controll-button.stop {\n      position: fixed;\n      top: ' + ($('#novel_header').height() + 15) + 'px;\n      left: 15px;\n      font-size: 30px;\n    }\n  </style>');
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(51)))
 
 /***/ })
 /******/ ]);
