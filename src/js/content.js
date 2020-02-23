@@ -67,8 +67,8 @@ const initializeData = async () => {
 initializeData().then(() => {
   initializeHead(options)
 
-  let userRubies = dictionaries.user ? _orderBy(dictionaries.user.rubies, [function(r) { return r.rb.length; }], ['desc']) : false
-  let novelRubies = dictionaries.novel.rubies.length ? _orderBy(dictionaries.novel.rubies, [function(r) { return r.rb.length; }], ['desc']) : false
+  let userRubies = dictionaries.user ? _orderBy(dictionaries.user.rubies, [r => r.rb.length], ['desc']) : false
+  let novelRubies = dictionaries.novel.rubies.length ? _orderBy(dictionaries.novel.rubies, [r => r.rb.length], ['desc']) : false
   if(userRubies) {
     linesInfo.forEach((lineInfo) => {
       userRubies.forEach((ruby) => {

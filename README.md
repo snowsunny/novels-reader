@@ -54,3 +54,7 @@ https://groups.google.com/forum/#!forum/novels-reader
 ### 作者のTwitter
 違う事も呟いてますが、いち早く更新をお知らせしていまーす。  
 https://twitter.com/snowsunny1107
+
+### 注意書き
+> 「小説家になろう」は株式会社ヒナプロジェクトの登録商標です。
+> 本拡張機能は株式会社ヒナプロジェクトが提供するものではありません。
