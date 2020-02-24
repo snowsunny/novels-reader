@@ -95,13 +95,13 @@ initializeData().then(() => {
   }
 
   let roudokukaOptions = {}
-  if(options.rate != undefined) {
+  if(options.rate != undefined && options.rate != '') {
     roudokukaOptions.rate = Number(options.rate)
   }
-  if(options.pitch != undefined) {
+  if(options.pitch != undefined && options.pitch != '') {
     roudokukaOptions.pitch = Number(options.pitch)
   }
-  if(options.volume != undefined) {
+  if(options.volume != undefined && options.volume != '') {
     roudokukaOptions.volume = Number(options.volume)
   }
   if(options.voiceType != undefined && options.voiceType != -1) {
