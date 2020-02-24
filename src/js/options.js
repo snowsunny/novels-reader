@@ -25,6 +25,7 @@ $(async () => {
   })
 
   let initOptions = om.getInitOptions()
+  $('.hero.is-primary .title').append(initOptions.version)
   _each(initOptions, (value, key) => {
     switch(key) {
       case 'voiceType':
