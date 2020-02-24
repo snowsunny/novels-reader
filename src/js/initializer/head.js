@@ -2,8 +2,8 @@ export default function headInitializer(options) {
   $('head').append(`<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN' crossorigin='anonymous'>`)
   $('head').append(`<style id='novels-reader-style'>
     .highlight {
-      color: ${options.textColor == undefined ? '#fff' : options.textColor};
-      background-color: ${options.backgroundColor == undefined ? '#498fd9' : options.backgroundColor};
+      color: ${options.textColor ? options.textColor : '#fff'};
+      background-color: ${options.backgroundColor ? options.backgroundColor : '#498fd9'};
     }
 
     .controll-button {

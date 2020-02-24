@@ -7,6 +7,7 @@ import initializeHead from 'initializer/head'
 let options = null
 let dictionaries = null
 let linesInfo = []
+let voices = []
 let analyzer = new pageAnalyzer(window.location.hostname)
 
 const getLinesInfo = ($lineElements) => {
@@ -38,6 +39,11 @@ const sendMessage = data => {
 }
 
 const initializeData = async () => {
+  let roudokukaForGetData = new Roudokuka([''])
+  await roudokukaForGetData.onReady().then(() => {
+    voices = roudokukaForGetData.voices
+  })
+
   options = await sendMessage({method: 'getOptions', key: 'options'})
   dictionaries = await sendMessage({
     method: 'saveDictionary',
@@ -97,6 +103,9 @@ initializeData().then(() => {
   }
   if(options.volume != undefined) {
     roudokukaOptions.volume = Number(options.volume)
+  }
+  if(options.voiceType != undefined && options.voiceType != -1) {
+    roudokukaOptions.voice = voices[options.voiceType]
   }
   roudokukaOptions.onend = (e, lineInfo) => {
     lineUnHighlight()

@@ -1,4 +1,5 @@
 import _each from 'lodash/each'
+import Roudokuka from 'roudokuka'
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
 
@@ -13,16 +14,45 @@ const saveDictionary = (element) => {
   }, true)
 }
 
-$(() => {
+$(async () => {
+  let roudokuka = new Roudokuka([''])
+  await roudokuka.onReady().then(() => {
+    roudokuka.voices.forEach((voice, i) => {
+      $('.options select[name=voiceType]').append(
+        `<option value="${i}">${voice.name} / ${voice.lang}</option>`
+      )
+    })
+  })
+
   let initOptions = om.getInitOptions()
   _each(initOptions, (value, key) => {
-    let targetInput = $(`.options input[name=${key}]`)
-    if(targetInput.attr('type') == 'checkbox') {
-      if(value == 'on') {
-        targetInput.prop('checked', true)
-      }
-    } else {
-      targetInput.val(value)
+    switch(key) {
+      case 'voiceType':
+        if(value !== '-1') {
+          $('.options select[name=voiceType] option').each((i, option) => {
+            if($(option).attr('value') == value) {
+              $(option).prop('selected', true)
+            }
+          })
+        }
+        break
+
+      default:
+        let targetForm = $(`.options input[name=${key}]`)
+        if(targetForm.length) {
+          switch(targetForm.attr('type')) {
+            case 'checkbox':
+              if(value == 'on') {
+                targetForm.prop('checked', true)
+              }
+              break
+
+            default:
+              targetForm.val(value)
+              break
+          }
+        }
+        break
     }
   })
 
@@ -47,15 +77,13 @@ $(() => {
     $('#dictionary-modal').removeClass('is-active')
   })
 
-  $('.textarea.dictionary, .input.dictionary').on('change', (e) => {
+  $('.textarea.dictionary, .input.dictionary').on('change keyup', (e) => {
     saveDictionary(e.currentTarget)
   })
 
-  $('.options input').on('change', (e) => {
+  $('.options input, .options select').on('change keyup', (e) => {
     let changedOptions = {}
-    $('.options').serializeArray().filter((option) => {
-      return option.value != ''
-    }).forEach((option) => {
+    $('form.options').serializeArray().forEach((option) => {
       changedOptions[option.name] = option.value
     })
     om.saveOptions(changedOptions)
