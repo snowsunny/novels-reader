@@ -16,3 +16,5 @@ background:
 permissions: ['tabs']
 
 options_page: 'html/options.html'
+
+content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self'"

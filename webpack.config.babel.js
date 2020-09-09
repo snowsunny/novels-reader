@@ -52,6 +52,5 @@ module.exports = {
         extensionPage: 'options'
       }
     })
-  ],
-  watch: true
+  ]
 }
