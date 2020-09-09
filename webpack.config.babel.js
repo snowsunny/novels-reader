@@ -1,6 +1,7 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import ExtensionReloader from 'webpack-extension-reloader'
+import Webpack from 'webpack'
 import path from 'path'
-import webpack from 'webpack'
 
 module.exports = {
   entry: {
@@ -35,7 +36,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.ProvidePlugin({
+    new Webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
     }),
@@ -43,6 +44,13 @@ module.exports = {
       filename: 'html/options.html',
       template: 'src/pug/options.pug',
       inject: false
+    }),
+    new ExtensionReloader({
+      entries: {
+        contentScript: 'content',
+        background: 'background',
+        extensionPage: 'options'
+      }
     })
   ],
   watch: true

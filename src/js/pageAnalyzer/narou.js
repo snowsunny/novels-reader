@@ -1,6 +1,5 @@
 export default class Narou {
   constructor() {
-    this.targetHostname = 'ncode.syosetu.com'
     this.novelId = $('.contents1 .margin_r20').attr('href').replace(/\//g, '')
     this.novelName = $('.contents1 .margin_r20').text()
 

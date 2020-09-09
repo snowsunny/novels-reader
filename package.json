@@ -14,7 +14,8 @@
     "pug-loader": ">=2.3.0",
     "run-sequence": "^2.1.0",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-extension-reloader": "^1.1.4"
   },
   "dependencies": {
     "jquery": "^3.5.0",
