@@ -43,11 +43,11 @@ const initializeData = async () => {
   await roudokukaForGetData.onReady().then(() => {
     voices = roudokukaForGetData.voices
   })
-
   options = await sendMessage({method: 'getOptions', key: 'options'})
   dictionaries = await sendMessage({
     method: 'saveDictionary',
     dictionary: {
+      domain: analyzer.domain,
       id: analyzer.module.novelId,
       name: analyzer.module.novelName
     }

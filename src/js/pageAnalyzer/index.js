@@ -1,11 +1,16 @@
 import _assign from 'lodash/assign'
 import _find from 'lodash/find'
-import narou from 'pageAnalyzer/narou'
+
+import Narou from 'pageAnalyzer/narou'
 
 export default class PageAnalyzer {
-  constructor(hostname) {
-    this.modules = [new narou]
-    this.module = this.getTargetModule(hostname)
+  constructor(domain) {
+    const moduleData = {
+      'ncode.syosetu.com': Narou
+    }
+    this.module = new moduleData[domain]
+
+    this.domain = domain
     this.lineIndex = 0
     this.rubies = []
   }
@@ -16,16 +21,6 @@ export default class PageAnalyzer {
       dictionaryText += `${ruby.rb}::${ruby.rt}\n`
     })
     return dictionaryText.trim()
-  }
-
-  getTargetModule(hostname) {
-    let targetModule = null
-    this.modules.forEach(module => {
-      if(hostname === module.targetHostname) {
-        targetModule = module
-      }
-    })
-    return targetModule
   }
 
   checkIncludeRuby(text) {
