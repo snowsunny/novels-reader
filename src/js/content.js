@@ -2,13 +2,15 @@ import _orderBy from 'lodash/orderBy'
 import Roudokuka from 'roudokuka'
 import pageAnalyzer from 'pageAnalyzer'
 import initializeHead from 'initializer/head'
+import DictionariesManager from 'DictionariesManager'
 
 // global variables
 let options = null
 let dictionaries = null
 let linesInfo = []
 let voices = []
-let analyzer = new pageAnalyzer(window.location.hostname)
+let analyzer = null
+let dm = null
 
 const getLinesInfo = ($lineElements) => {
   let linesInfo = []
@@ -30,21 +32,28 @@ const lineUnHighlight = () => {
   analyzer.module.highlightElements.removeClass('highlight')
 }
 
-const sendMessage = data => {
+const connectPort = chrome.runtime.connect({name: 'novels-reader'})
+const postMessage = data => {
   return new Promise(resolve => {
-    chrome.runtime.sendMessage(data, response => {
+    const callback = response => {
+      connectPort.onMessage.removeListener(callback)
       resolve(response)
-    })
+    }
+    connectPort.onMessage.addListener(callback)
+    connectPort.postMessage(data)
   })
 }
 
 const initializeData = async () => {
-  let roudokukaForGetData = new Roudokuka([''])
-  await roudokukaForGetData.onReady().then(() => {
-    voices = roudokukaForGetData.voices
+  let roudokukaForGetVoicesData = new Roudokuka([''])
+  await roudokukaForGetVoicesData.onReady().then(() => {
+    voices = roudokukaForGetVoicesData.voices
   })
-  options = await sendMessage({method: 'getOptions', key: 'options'})
-  dictionaries = await sendMessage({
+
+  dm = await new DictionariesManager()
+  analyzer = await new pageAnalyzer(window.location.hostname)
+  options = await postMessage({method: 'getOptions', key: 'options'})
+  dictionaries = await postMessage({
     method: 'saveDictionary',
     dictionary: {
       domain: analyzer.domain,
@@ -62,20 +71,19 @@ const initializeData = async () => {
       linesInfo = linesInfo.concat(getLinesInfo(filteredElements))
     }
   }
-  dictionaries = await sendMessage({
+  dictionaries = await postMessage({
     method: 'saveDictionary',
     dictionary: {
       id: analyzer.module.novelId,
-      raw: options.autoSaveDictionary == 'on' ? analyzer.getDictionaryText() : ''
+      raw: options.autoSaveDictionary == 'on' ? analyzer.getDictionaryTextOfCurrentNovelPage() : ''
     }
   })
 }
 initializeData().then(() => {
   initializeHead(options)
 
-  let userRubies = dictionaries.user ? _orderBy(dictionaries.user.rubies, [r => r.rb.length], ['desc']) : false
-  let novelRubies = dictionaries.novel.rubies.length ? _orderBy(dictionaries.novel.rubies, [r => r.rb.length], ['desc']) : false
-  if(userRubies) {
+  let userRubies = dictionaries.user ? _orderBy(dm.getRubies(dictionaries.user.raw), [r => r.rb.length], ['desc']) : false
+  if(userRubies.length) {
     linesInfo.forEach((lineInfo) => {
       userRubies.forEach((ruby) => {
         if(!analyzer.checkIgnoreRubiesTest(ruby, dictionaries)) {
@@ -84,7 +92,10 @@ initializeData().then(() => {
       })
     })
   }
-  if(novelRubies) {
+
+  let novelRubies = dm.getRubies(dictionaries.novel.raw)
+  novelRubies = novelRubies.length ? _orderBy(novelRubies, [r => r.rb.length], ['desc']) : false
+  if(novelRubies.length) {
     linesInfo.forEach((lineInfo) => {
       novelRubies.forEach((ruby) => {
         if(!analyzer.checkIgnoreRubiesTest(ruby, dictionaries)) {
