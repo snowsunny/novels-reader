@@ -24,6 +24,20 @@ const getLinesInfo = ($lineElements) => {
   return linesInfo
 }
 
+const cleanLinesInfoAndRemovePlayButton = (linesInfo) => {
+  return linesInfo.filter(lineInfo => {
+    if(lineInfo.text) {
+      return true
+    } else {
+      lineInfo.element.find('.controll-button, .play').remove()
+      return false
+    }
+  }).map((lineInfo, index) => {
+    lineInfo.element.find('.controll-button, .play').attr('data-index', index)
+    return lineInfo
+  })
+}
+
 const lineHighlight = (lineElement) => {
   lineElement.addClass('highlight')
 }
@@ -91,6 +105,7 @@ initializeData().then(() => {
         }
       })
     })
+    linesInfo = cleanLinesInfoAndRemovePlayButton(linesInfo)
   }
 
   let novelRubies = dm.getRubies(dictionaries.novel.raw)
@@ -103,6 +118,7 @@ initializeData().then(() => {
         }
       })
     })
+    linesInfo = cleanLinesInfoAndRemovePlayButton(linesInfo)
   }
 
   let roudokukaOptions = {}
