@@ -1,6 +1,6 @@
 import _assign from 'lodash/assign'
 import _find from 'lodash/find'
-
+import DictionariesManager from 'DictionariesManager'
 import Narou from 'pageAnalyzer/narou'
 
 export default class PageAnalyzer {
@@ -13,14 +13,16 @@ export default class PageAnalyzer {
     this.domain = domain
     this.lineIndex = 0
     this.rubies = []
+
+    this.dm = null
+    return (new DictionariesManager).then((dm) => {
+      this.dm = dm
+      return this
+    })
   }
 
-  getDictionaryText() {
-    let dictionaryText = ''
-    this.rubies.forEach((ruby) => {
-      dictionaryText += `${ruby.rb}::${ruby.rt}\n`
-    })
-    return dictionaryText.trim()
+  getDictionaryTextOfCurrentNovelPage() {
+    return this.dm.getDictionaryText(this.rubies)
   }
 
   checkIncludeRuby(text) {

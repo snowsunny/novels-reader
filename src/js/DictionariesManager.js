@@ -1,12 +1,17 @@
 import _assign from 'lodash/assign'
 import _find from 'lodash/find'
+import localForage from 'localforage'
 
 export default class DictionariesManager {
   constructor() {
-    this.dictionaries = this.getDictionaries() || []
+    this.dictionaries = null
+    return this.getDictionaries().then((dictionaries) => {
+      this.dictionaries = dictionaries || []
+      return this
+    })
   }
 
-  saveDictionary(newDictionary, forceFlag) {
+  async saveDictionary(newDictionary, forceFlag) {
     let storageDictionary = _find(this.dictionaries, {id: newDictionary.id})
     if(storageDictionary) {
       if(!forceFlag && storageDictionary.raw && newDictionary.raw) {
@@ -15,23 +20,12 @@ export default class DictionariesManager {
           ? storageDictionary.raw + `\n${this.getDictionaryText(newRubies)}`
           : storageDictionary.raw
       }
-      if(newDictionary.raw) {
-        newDictionary.rubies = this.getRubies(newDictionary.raw)
-      } else {
-        if(forceFlag) {
-          newDictionary.rubies = []
-        } else {
-          newDictionary.rubies = this.getRubies(storageDictionary.raw)
-          delete newDictionary.raw
-        }
-      }
     } else {
       newDictionary.raw = newDictionary.raw || ''
-      newDictionary.rubies = this.getRubies(newDictionary.raw)
       this.dictionaries.push(newDictionary)
     }
     _assign(storageDictionary, newDictionary)
-    localStorage.setItem('dictionaries', JSON.stringify(this.dictionaries))
+    await localForage.setItem('dictionaries', this.dictionaries)
     return storageDictionary
   }
 
@@ -39,8 +33,8 @@ export default class DictionariesManager {
     return _find(this.dictionaries, {id: id})
   }
 
-  getDictionaries() {
-    return JSON.parse(localStorage.getItem('dictionaries'))
+  async getDictionaries() {
+    return await localForage.getItem('dictionaries')
   }
 
   getNewRubiesOnly(newDictionary, oldDictionary) {

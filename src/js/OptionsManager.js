@@ -1,8 +1,8 @@
 import _merge from 'lodash/merge'
+import localForage from 'localforage'
 
 export default class OptionsManager {
   constructor() {
-    this.storageOptions = JSON.parse(localStorage.getItem('options'))
     this.defaultOptions = {
       version: chrome.app.getDetails().version,
       autoScroll: "on",
@@ -12,24 +12,44 @@ export default class OptionsManager {
       autoMoveNext: "on",
       autoSaveDictionary: "on"
     }
+    this.storageOptions = null
+    return localForage.getItem('options').then((options) => {
+      this.storageOptions = options
+      return this
+    })
   }
 
-  saveOptions(options) {
-    localStorage.setItem('options', JSON.stringify(
-      _merge(options, {version: this.defaultOptions.version})
-    ))
+  async saveOptions(options) {
+    return await localForage.setItem('options', _merge(options, {version: this.defaultOptions.version}))
   }
 
-  getInitOptions() {
+  async getInitOptions() {
+    // for 1.3.0 or older --------
+    if(!this.storageOptions) {
+      let oldOptions = JSON.parse(localStorage.getItem('options'))
+      if(oldOptions) {
+        this.storageOptions = await localForage.setItem('options', oldOptions)
+      }
+
+      let oldDictionaries = JSON.parse(localStorage.getItem('dictionaries'))
+      if(oldDictionaries) {
+        oldDictionaries = oldDictionaries.map((dictionary) => {
+          delete dictionary.rubies
+          return dictionary
+        })
+        await localForage.setItem('dictionaries', oldDictionaries)
+      }
+      // ここでlocalStorageの中身を削除しても良いが、現状ではそのままとする。
+    }
+    // --------
+
     const checkStorageOptionsIsLatestVersion = () => {
       return this.storageOptions ? this.defaultOptions.version == this.storageOptions.version : false
     }
     if(checkStorageOptionsIsLatestVersion()) {
       return this.storageOptions
     } else {
-      let mergedOptions = _merge({}, this.defaultOptions, this.storageOptions)
-      this.saveOptions(mergedOptions)
-      return mergedOptions
+      return await this.saveOptions(_merge({}, this.defaultOptions, this.storageOptions))
     }
   }
 }

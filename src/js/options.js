@@ -3,18 +3,21 @@ import Roudokuka from 'roudokuka'
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
 
-const om = new OptionsManager()
-const dm = new DictionariesManager()
+let om = null
+let dm = null
 
-const saveDictionary = (element) => {
+const saveDictionary = async (element) => {
   let target = $(element)
-  dm.saveDictionary({
+  await dm.saveDictionary({
     id: target.data().id,
     raw: target.val()
   }, true)
 }
 
 $(async () => {
+  dm = await new DictionariesManager()
+  om = await new OptionsManager()
+
   let roudokuka = new Roudokuka([''])
   await roudokuka.onReady().then(() => {
     roudokuka.voices.forEach((voice, i) => {
@@ -24,7 +27,7 @@ $(async () => {
     })
   })
 
-  let initOptions = om.getInitOptions()
+  let initOptions = await om.getInitOptions()
   $('.hero.is-primary .title').append(initOptions.version)
   _each(initOptions, (value, key) => {
     switch(key) {
@@ -82,11 +85,11 @@ $(async () => {
     saveDictionary(e.currentTarget)
   })
 
-  $('.options input, .options select').on('change keyup', (e) => {
+  $('.options input, .options select').on('change keyup', async (e) => {
     let changedOptions = {}
     $('form.options').serializeArray().forEach((option) => {
       changedOptions[option.name] = option.value
     })
-    om.saveOptions(changedOptions)
+    await om.saveOptions(changedOptions)
   })
 })
