@@ -61,13 +61,14 @@ $(async () => {
   })
 
   let novelsDictionary = $('#novels-dictionary')
-  _each(dm.dictionaries, (dictionary) => {
+  _each((dm.dictionaries).reverse(), (dictionary) => {
     if(dictionary.id == 'user') {
       $('.textarea[data-id=user').val(dictionary.raw)
     } else if(dictionary.id == 'userIgnoreRubies') {
       $('.input[data-id=userIgnoreRubies').val(dictionary.raw)
     } else {
-      let novelButton = $(`<div class='novels-button button is-primary'>${dictionary.name}（${dictionary.id}）</div>`).data('id', dictionary.id).click((e) => {
+      let novelButton = $(`<div class='column is-flex is-3-desktop is-4-tablet'><div class='novel-name-wrap is-flex'><div class='novel-name'>${dictionary.name}（${dictionary.id}）</div></div></div>`)
+      novelButton.find('.novel-name-wrap').data('id', dictionary.id).on('click', (e) => {
         let dictionary = dm.getDictionary($(e.currentTarget).data().id)
         $('#dictionary-modal-label').text(`${dictionary.name}（${dictionary.id}）`)
         $('#dictionary-modal-textarea').attr('data-id', dictionary.id).val(dictionary.raw)
