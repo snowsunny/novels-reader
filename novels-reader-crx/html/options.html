@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>novels-reader options</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.0/css/bulma.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.0/css/bulma.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <style>
       section.section .title {
@@ -17,8 +17,19 @@
       p.mb {
         margin-bottom: 15px;
       }
-      #novels-dictionary .button {
-        margin: 5px;
+      #novels-dictionary .novel-name-wrap {
+        padding: 10px 14px;
+        border-radius: 5px;
+        background-color: #00d1b2;
+        color: white;
+        text-align: center;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+      .message-body {
+        padding: 1em;
       }
     </style>
     <script src="../options.js"></script>
@@ -127,7 +138,7 @@
                       <div class="field">
                         <div class="control">
                           <label class="checkbox">
-                            <input name="autoScroll" type="checkbox"> 再生箇所に自動でスクロールする
+                            <input name="autoScroll" type="checkbox"><b class="ml-2">再生箇所に自動でスクロールする</b>
                           </label>
                         </div>
                       </div>
@@ -208,7 +219,7 @@
                   <div class="field">
                     <div class="control">
                       <label class="checkbox">
-                        <input name="autoSaveDictionary" type="checkbox"> 小説のルビを自動で辞書に登録する
+                        <input name="autoSaveDictionary" type="checkbox"><b class="ml-2">小説のルビを自動で辞書に登録する</b>
                       </label>
                     </div>
                   </div>
@@ -220,7 +231,49 @@
                 <p>下記のボタンをクリックする事で、小説別辞書を編集する事が出来ます。小説別辞書は、この拡張機能を有効にした状態で、各小説ページを開くと自動で作成されます。</p>
               </div>
             </div>
-            <div id="novels-dictionary"></div>
+            <div class="columns is-multiline" id="novels-dictionary"></div>
+          </div>
+        </div>
+        <hr>
+        <div class="columns">
+          <div class="column">
+            <div class="title">各種データのエクスポート（書き出し）とインポート（読み込み）</div>
+            <div class="panel is-info" id="export-panel">
+              <div class="panel-heading">エクスポート</div>
+              <div class="panel-block px-4 py-4">
+                <div class="columns">
+                  <div class="column">
+                    <p class="mb-3">エクスポートするデータにチェックを入れて、「データをクリップボードにコピー」ボタンを押して下さい。<br>データ(JSON形式)がクリップボードにコピーされるので、それをどこかに保存し、インポートしたい側のオプションページでインポートを実行して下さい。</p>
+                    <div class="control">
+                      <label class="checkbox">
+                        <input class="no-option" name="options" type="checkbox"><b>オプション設定（音声設定・ハイライト設定・読み上げ文章設定・自動再生設定）</b>
+                      </label><br>
+                      <label class="checkbox">
+                        <input class="no-option" name="dictionaries" type="checkbox"><b>辞書設定（ユーザー辞書・無視するルビ・小説別辞書）</b>
+                      </label>
+                    </div>
+                    <div class="button is-info mt-4">データをクリップボードにコピー</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel is-warning" id="import-panel">
+              <div class="panel-heading">インポート</div>
+              <div class="panel-block px-4 py-4">
+                <div class="columns">
+                  <div class="column">
+                    <p>下記のテキストエリアにエクスポートしたデータを貼り付けて、「データをインポートする」ボタンを押して下さい。<br>インポート後にオプションページが自動更新されます。</p><b class="has-text-danger">※既存のデータ（既存のオプションや小説の辞書等）がある場合は上書きされるので、ご注意下さい。</b>
+                    <div class="control mt-3">
+                      <label class="checkbox">
+                        <input class="no-option" name="newRubiesOnly" type="checkbox"><b>ユーザー辞書・小説別辞書はデータを残し、既存の辞書に無いルビのみをインポートする</b>
+                      </label>
+                    </div>
+                    <textarea class="textarea mt-4" placeholder="ここにエクスポートしたデータを貼り付けて下さい"></textarea>
+                    <div class="button is-warning mt-4">データをインポートする</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
