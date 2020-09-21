@@ -181,6 +181,7 @@ html
                 br
                 | 例：「^・+$」を設定すると「・」のみのルビを無視します。
               input.input.dictionary(data-id='userIgnoreRubies')
+
         .columns
           .column
             .title 小説別辞書
@@ -197,3 +198,45 @@ html
                 p 下記のボタンをクリックする事で、小説別辞書を編集する事が出来ます。小説別辞書は、この拡張機能を有効にした状態で、各小説ページを開くと自動で作成されます。
 
             #novels-dictionary.columns.is-multiline
+
+        hr
+
+        .columns
+          .column
+            .title 各種データのエクスポート（書き出し）とインポート（読み込み）
+            #export-panel.panel.is-info
+              .panel-heading エクスポート
+              .panel-block.px-4.py-4
+                .columns
+                  .column
+                    p.mb-3
+                      | エクスポートするデータにチェックを入れて、「データをクリップボードにコピー」ボタンを押して下さい。
+                      br
+                      | データ(JSON形式)がクリップボードにコピーされるので、それをどこかに保存し、インポートしたい側のオプションページでインポートを実行して下さい。
+                    .control
+                      label.checkbox
+                        input.no-option(name='options' type='checkbox')
+                        b オプション設定（音声設定・ハイライト設定・読み上げ文章設定・自動再生設定）
+                      br
+                      label.checkbox
+                        input.no-option(name='dictionaries' type='checkbox')
+                        b 辞書設定（ユーザー辞書・無視するルビ・小説別辞書）
+                    .button.is-info.mt-4 データをクリップボードにコピー
+
+            #import-panel.panel.is-warning
+              .panel-heading インポート
+              .panel-block.px-4.py-4
+                .columns
+                  .column
+                    p
+                      | 下記のテキストエリアにエクスポートしたデータを貼り付けて、「データをインポートする」ボタンを押して下さい。
+                      br
+                      | インポート後にオプションページが自動更新されます。
+                    b.has-text-danger ※既存のデータ（既存のオプションや小説の辞書等）がある場合は上書きされるので、ご注意下さい。
+                    .control.mt-3
+                      label.checkbox
+                        input.no-option(name='newRubiesOnly' type='checkbox')
+                        b ユーザー辞書・小説別辞書はデータを残し、既存の辞書に無いルビのみをインポートする
+
+                    textarea.textarea.mt-4(placeholder='ここにエクスポートしたデータを貼り付けて下さい')
+                    .button.is-warning.mt-4 データをインポートする
