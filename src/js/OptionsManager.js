@@ -20,7 +20,7 @@ export default class OptionsManager {
   }
 
   async saveOptions(options) {
-    return await localForage.setItem('options', _merge(options, {version: this.defaultOptions.version}))
+    return this.storageOptions = await localForage.setItem('options', _merge(options, {version: this.defaultOptions.version}))
   }
 
   async getInitOptions() {
