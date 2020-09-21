@@ -12,7 +12,7 @@ export default class DictionariesManager {
   }
 
   async saveDictionary(newDictionary, forceFlag) {
-    let storageDictionary = _find(this.dictionaries, {id: newDictionary.id})
+    let storageDictionary = this.getDictionary(newDictionary.id)
     if(storageDictionary) {
       if(!forceFlag && storageDictionary.raw && newDictionary.raw) {
         let newRubies = this.getNewRubiesOnly(newDictionary, storageDictionary)
