@@ -16,9 +16,6 @@ const saveDictionary = async (element) => {
 }
 
 $(async () => {
-  dm = await new DictionariesManager()
-  om = await new OptionsManager()
-
   let roudokuka = new Roudokuka([''])
   await roudokuka.onReady().then(() => {
     roudokuka.voices.forEach((voice, i) => {
@@ -28,6 +25,7 @@ $(async () => {
     })
   })
 
+  om = await new OptionsManager()
   let initOptions = await om.getInitOptions()
   $('.hero.is-primary .title').append(initOptions.version)
   _each(initOptions, (value, key) => {
@@ -61,6 +59,7 @@ $(async () => {
     }
   })
 
+  dm = await new DictionariesManager()
   let novelsDictionary = $('#novels-dictionary')
   _each([...dm.dictionaries].reverse(), (dictionary) => {
     if(dictionary.id == 'user') {
@@ -119,15 +118,17 @@ $(async () => {
     }
     if(importData.dictionaries) {
       reloadFlag = true
-      importData.dictionaries.forEach(async (dictionary) => {
+      let importingData = []
+      importData.dictionaries.forEach((dictionary) => {
         if(dictionary.id === 'userIgnoreRubies') {
-          await dm.saveDictionary(dictionary, true)
+          importingData.push(dm.saveDictionary(dictionary, true))
         } else if($('#import-panel input[name="newRubiesOnly"]').prop('checked')) {
-          await dm.saveDictionary(dictionary)
+          importingData.push(dm.saveDictionary(dictionary))
         } else {
-          await dm.saveDictionary(dictionary, true)
+          importingData.push(dm.saveDictionary(dictionary, true))
         }
       })
+      await Promise.all(importingData)
     }
     if(reloadFlag) {
       location.reload()
