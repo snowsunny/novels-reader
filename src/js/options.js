@@ -1,4 +1,5 @@
 import _each from 'lodash/each'
+import Clipboard from 'clipboard'
 import Roudokuka from 'roudokuka'
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
@@ -15,9 +16,6 @@ const saveDictionary = async (element) => {
 }
 
 $(async () => {
-  dm = await new DictionariesManager()
-  om = await new OptionsManager()
-
   let roudokuka = new Roudokuka([''])
   await roudokuka.onReady().then(() => {
     roudokuka.voices.forEach((voice, i) => {
@@ -27,6 +25,7 @@ $(async () => {
     })
   })
 
+  om = await new OptionsManager()
   let initOptions = await om.getInitOptions()
   $('.hero.is-primary .title').append(initOptions.version)
   _each(initOptions, (value, key) => {
@@ -60,14 +59,16 @@ $(async () => {
     }
   })
 
+  dm = await new DictionariesManager()
   let novelsDictionary = $('#novels-dictionary')
-  _each(dm.dictionaries, (dictionary) => {
+  _each([...dm.dictionaries].reverse(), (dictionary) => {
     if(dictionary.id == 'user') {
       $('.textarea[data-id=user').val(dictionary.raw)
     } else if(dictionary.id == 'userIgnoreRubies') {
       $('.input[data-id=userIgnoreRubies').val(dictionary.raw)
     } else {
-      let novelButton = $(`<div class='novels-button button is-primary'>${dictionary.name}（${dictionary.id}）</div>`).data('id', dictionary.id).click((e) => {
+      let novelButton = $(`<div class='column is-flex is-3-desktop is-4-tablet'><div class='novel-name-wrap is-flex'><div class='novel-name'>${dictionary.name}（${dictionary.id}）</div></div></div>`)
+      novelButton.find('.novel-name-wrap').data('id', dictionary.id).on('click', (e) => {
         let dictionary = dm.getDictionary($(e.currentTarget).data().id)
         $('#dictionary-modal-label').text(`${dictionary.name}（${dictionary.id}）`)
         $('#dictionary-modal-textarea').attr('data-id', dictionary.id).val(dictionary.raw)
@@ -91,5 +92,46 @@ $(async () => {
       changedOptions[option.name] = option.value
     })
     await om.saveOptions(changedOptions)
+  })
+
+  // export & import --------
+  $('#export-panel .button').on('click', async (e) => {
+    let exportData = {}
+    if($('#export-panel input[name="options"]').prop('checked')) {
+      exportData.options = await om.getInitOptions()
+    }
+    if($('#export-panel input[name="dictionaries"]').prop('checked')) {
+      exportData.dictionaries = await dm.getDictionaries()
+    }
+    await navigator.clipboard.writeText(JSON.stringify(exportData))
+  })
+
+  $('#import-panel .button').on('click', async (e) => {
+    let reloadFlag = false
+    let importData = $('#import-panel textarea').val()
+    if(importData) {
+      importData = JSON.parse(importData)
+    }
+    if(importData.options) {
+      reloadFlag = true
+      await om.saveOptions(importData.options)
+    }
+    if(importData.dictionaries) {
+      reloadFlag = true
+      let importingData = []
+      importData.dictionaries.forEach((dictionary) => {
+        if(dictionary.id === 'userIgnoreRubies') {
+          importingData.push(dm.saveDictionary(dictionary, true))
+        } else if($('#import-panel input[name="newRubiesOnly"]').prop('checked')) {
+          importingData.push(dm.saveDictionary(dictionary))
+        } else {
+          importingData.push(dm.saveDictionary(dictionary, true))
+        }
+      })
+      await Promise.all(importingData)
+    }
+    if(reloadFlag) {
+      location.reload()
+    }
   })
 })

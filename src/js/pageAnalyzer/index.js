@@ -1,4 +1,3 @@
-import _assign from 'lodash/assign'
 import _find from 'lodash/find'
 import DictionariesManager from 'DictionariesManager'
 import Narou from 'pageAnalyzer/narou'
