@@ -12,7 +12,7 @@ export default class DictionariesManager {
   }
 
   async saveDictionary(newDictionary, forceFlag) {
-    let storageDictionary = this.getDictionary(newDictionary.id)
+    let storageDictionary = this.getDictionary({id: newDictionary.id, domain: newDictionary.domain})
     if(storageDictionary) {
       if(!forceFlag && storageDictionary.raw && newDictionary.raw) {
         let newRubies = this.getNewRubiesOnly(newDictionary, storageDictionary)
@@ -29,8 +29,9 @@ export default class DictionariesManager {
     return storageDictionary
   }
 
-  getDictionary(id) {
-    return _find(this.dictionaries, {id: id})
+  getDictionary(findOption) {
+    // standard findOption: {id: 'xxx', domain: 'xxx'}
+    return _find(this.dictionaries, findOption)
   }
 
   async getDictionaries() {

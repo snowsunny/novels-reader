@@ -66,12 +66,12 @@ const initializeData = async () => {
 
   dm = await new DictionariesManager()
   analyzer = await new pageAnalyzer(window.location.hostname)
+  let findDictionaryOption = {id: analyzer.module.novelId, domain: analyzer.domain}
   options = await postMessage({method: 'getOptions', key: 'options'})
   dictionaries = await postMessage({
     method: 'saveDictionary',
     dictionary: {
-      domain: analyzer.domain,
-      id: analyzer.module.novelId,
+      ...findDictionaryOption,
       name: analyzer.module.novelName
     }
   })
@@ -88,7 +88,7 @@ const initializeData = async () => {
   dictionaries = await postMessage({
     method: 'saveDictionary',
     dictionary: {
-      id: analyzer.module.novelId,
+      ...findDictionaryOption,
       raw: options.autoSaveDictionary == 'on' ? analyzer.getDictionaryTextOfCurrentNovelPage() : ''
     }
   })
