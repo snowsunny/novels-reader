@@ -15,14 +15,13 @@
     "webpack-extension-reloader": "^1.1.4"
   },
   "dependencies": {
-    "clipboard": "^2.0.6",
     "jquery": "^3.5.0",
     "localforage": "^1.9.0",
     "lodash": "^4.17.19",
     "roudokuka": "^0.1.2"
   },
   "scripts": {
-    "build": "gulp ; webpack --mode production",
-    "dev": "gulp ; webpack --mode development -w"
+    "build": "gulp; webpack --mode production",
+    "dev": "gulp; webpack --mode development -w"
   }
 }

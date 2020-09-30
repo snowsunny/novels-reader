@@ -1,5 +1,4 @@
 import _each from 'lodash/each'
-import Clipboard from 'clipboard'
 import Roudokuka from 'roudokuka'
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
