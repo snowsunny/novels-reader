@@ -34,6 +34,8 @@ export default class OptionsManager {
       let oldDictionaries = JSON.parse(localStorage.getItem('dictionaries'))
       if(oldDictionaries) {
         oldDictionaries = oldDictionaries.map((dictionary) => {
+          dictionary.id === 'user' || dictionary.id === 'userIgnoreRubies' ?
+            dictionary.domain = 'novels-reader' : dictionary.domain = 'ncode.syosetu.com'
           delete dictionary.rubies
           return dictionary
         })

@@ -1,5 +1,4 @@
 import _each from 'lodash/each'
-import Clipboard from 'clipboard'
 import Roudokuka from 'roudokuka'
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
@@ -7,11 +6,11 @@ import DictionariesManager from 'DictionariesManager'
 let om = null
 let dm = null
 
-const saveDictionary = async (element) => {
-  let target = $(element)
+const saveDictionaryForOptionPage = async (element) => {
+  let $target = $(element)
   await dm.saveDictionary({
-    id: target.data().id,
-    raw: target.val()
+    ...$target.data(),
+    raw: $target.val()
   }, true)
 }
 
@@ -68,10 +67,10 @@ $(async () => {
       $('.input[data-id=userIgnoreRubies').val(dictionary.raw)
     } else {
       let novelButton = $(`<div class='column is-flex is-3-desktop is-4-tablet'><div class='novel-name-wrap is-flex'><div class='novel-name'>${dictionary.name}（${dictionary.id}）</div></div></div>`)
-      novelButton.find('.novel-name-wrap').data('id', dictionary.id).on('click', (e) => {
-        let dictionary = dm.getDictionary($(e.currentTarget).data().id)
+      novelButton.find('.novel-name-wrap').data({id: dictionary.id, domain: dictionary.domain}).on('click', (e) => {
+        let dictionary = dm.getDictionary($(e.currentTarget).data())
         $('#dictionary-modal-label').text(`${dictionary.name}（${dictionary.id}）`)
-        $('#dictionary-modal-textarea').attr('data-id', dictionary.id).val(dictionary.raw)
+        $('#dictionary-modal-textarea').data({id: dictionary.id, domain: dictionary.domain}).val(dictionary.raw)
         $('#dictionary-modal').addClass('is-active')
       })
       novelsDictionary.append(novelButton)
@@ -83,7 +82,7 @@ $(async () => {
   })
 
   $('.textarea.dictionary, .input.dictionary').on('change keyup', (e) => {
-    saveDictionary(e.currentTarget)
+    saveDictionaryForOptionPage(e.currentTarget)
   })
 
   $('.options input, .options select').on('change keyup', async (e) => {

@@ -45,9 +45,7 @@ export default class PageAnalyzer {
           if(!_find(this.rubies, ruby) && !this.checkIgnoreRubiesTest(ruby, dictionaries)) {
             this.rubies.push(ruby)
           }
-          return this.checkIgnoreRubiesTest(ruby, dictionaries)
-            ? ruby.rb
-            : ruby.rt
+          return this.checkIgnoreRubiesTest(ruby, dictionaries) ? ruby.rb : ruby.rt
         } else {
           return splitRubyTagText
         }

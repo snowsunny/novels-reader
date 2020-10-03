@@ -172,7 +172,7 @@ html
                 | ^\*+$::
           .column.is-half
             .title.sub(style='margin-top: 0px') ユーザー辞書
-            textarea.textarea.dictionary(data-id='user')
+            textarea.textarea.dictionary(data-id='user' data-domain='novels-reader')
             p(style='margin:10px 0px 10px')
               b 無視するルビ（正規表現）
             .content
@@ -180,7 +180,7 @@ html
                 | 強調表現等で使わるルビを無視する為の設定を、正規表現で記述出来ます。
                 br
                 | 例：「^・+$」を設定すると「・」のみのルビを無視します。
-              input.input.dictionary(data-id='userIgnoreRubies')
+              input.input.dictionary(data-id='userIgnoreRubies' data-domain='novels-reader')
 
         .columns
           .column
