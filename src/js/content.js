@@ -8,20 +8,20 @@ import DictionariesManager from 'DictionariesManager'
 let options = null
 let dictionaries = null
 let linesInfo = []
-let voices = []
+let voices = null
 let analyzer = null
 let dm = null
 
 const getLinesInfo = ($lineElements) => {
-  let linesInfo = []
+  let data = []
   $lineElements.each((index, lineElement) => {
     let $lineElement = $(lineElement)
-    linesInfo.push({
+    data.push({
       text: analyzer.checkIncludeRuby($lineElement.html()) ? $lineElement.data().readText : $lineElement.text(),
       element: $lineElement
     })
   })
-  return linesInfo
+  return data
 }
 
 const cleanLinesInfoAndRemovePlayButton = (linesInfo) => {
@@ -65,8 +65,10 @@ const initializeData = async () => {
   })
 
   dm = await new DictionariesManager()
+
   analyzer = await new pageAnalyzer(window.location.hostname)
   let findDictionaryOption = {id: analyzer.module.novelId, domain: analyzer.domain}
+
   options = await postMessage({method: 'getOptions', key: 'options'})
   dictionaries = await postMessage({
     method: 'saveDictionary',
