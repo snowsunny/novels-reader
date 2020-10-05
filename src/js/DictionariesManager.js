@@ -1,4 +1,5 @@
 import _assign from 'lodash/assign'
+import _merge from 'lodash/merge'
 import _find from 'lodash/find'
 import localForage from 'localforage'
 
@@ -14,11 +15,16 @@ export default class DictionariesManager {
   async saveDictionary(newDictionary, forceFlag) {
     let storageDictionary = this.getDictionary({id: newDictionary.id, domain: newDictionary.domain})
     if(storageDictionary) {
-      if(!forceFlag && storageDictionary.raw && newDictionary.raw) {
-        let newRubies = this.getNewRubiesOnly(newDictionary, storageDictionary)
-        newDictionary.raw = newRubies.length
-          ? storageDictionary.raw + `\n${this.getDictionaryText(newRubies)}`
-          : storageDictionary.raw
+      if(!forceFlag) {
+        if(newDictionary.raw) {
+          let newline = storageDictionary.raw ? '\n' : ''
+          let newRubies = this.getNewRubiesOnly(newDictionary, storageDictionary)
+          newDictionary.raw = newRubies.length ?
+            storageDictionary.raw + newline + this.getDictionaryText(newRubies) :
+            storageDictionary.raw
+        } else {
+          newDictionary.raw = storageDictionary.raw
+        }
       }
     } else {
       newDictionary.raw = newDictionary.raw || ''
