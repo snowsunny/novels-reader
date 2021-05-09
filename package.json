@@ -17,7 +17,7 @@
   "dependencies": {
     "jquery": "^3.5.0",
     "localforage": "^1.9.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "roudokuka": "^0.1.2"
   },
   "scripts": {
