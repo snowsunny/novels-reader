@@ -1,5 +1,6 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ExtensionReloader from 'webpack-extension-reloader'
+import { VueLoaderPlugin } from 'vue-loader'
+import PugPlugin from 'pug-plugin'
 import Webpack from 'webpack'
 import path from 'path'
 
@@ -7,7 +8,8 @@ module.exports = {
   entry: {
     'content': './src/js/content.js',
     'background': './src/js/background.js',
-    'options': './src/js/options.js'
+    'options': './src/js/options.js',
+    'html/options': './src/pug/options.pug'
   },
   resolve: {
     modules: [
@@ -28,10 +30,29 @@ module.exports = {
       },
       {
         test: /\.pug$/,
-        loader: 'pug-loader',
-        options: {
-          pretty: true
-        }
+        oneOf: [
+          {
+            resourceQuery: /^\?vue/u,
+            loader: PugPlugin.loader,
+            options: {
+              method: 'html',
+            },
+          },
+          {
+            loader: PugPlugin.loader,
+            options: {
+              method: 'compile',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
+      {
+        test: /\.sass$/,
+        use: ['css-loader', 'sass-loader']
       }
     ]
   },
@@ -40,16 +61,18 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery'
     }),
-    new HtmlWebpackPlugin({
-      filename: 'html/options.html',
-      template: 'src/pug/options.pug',
-      inject: false
-    }),
     new ExtensionReloader({
       entries: {
         contentScript: 'content',
         background: 'background',
-        extensionPage: 'options'
+        extensionPage: ['options', 'html/options']
+      }
+    }),
+    new VueLoaderPlugin(),
+    new PugPlugin({
+      pretty: true,
+      extractCss: {
+        filename: 'css/[name].css'
       }
     })
   ]

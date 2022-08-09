@@ -4,8 +4,14 @@ html
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1")
     title novels-reader options
-    link(href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.0/css/bulma.min.css' rel='stylesheet')
-    link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN' crossorigin='anonymous')
+
+    script(src="https://cdn.tailwindcss.com")
+
+    link(href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" rel="stylesheet")
+    link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous")
+    link(rel="stylesheet" href="https://unpkg.com/flowbite@1.5.1/dist/flowbite.min.css")
+
+    link(href=require('../sass/options.sass') rel='stylesheet')
     style.
       section.section .title {
         margin-top: 35px;
@@ -51,6 +57,8 @@ html
             | novels-reader -&nbsp;
           h2.subtitle
             | web page reader for syosetu.com
+
+    #app
 
     section.section
       .container
@@ -243,3 +251,5 @@ html
 
                     textarea.textarea.mt-4(placeholder='ここにエクスポートしたデータを貼り付けて下さい')
                     .button.is-warning.mt-4 データをインポートする
+
+    script(src="https://unpkg.com/flowbite@1.5.1/dist/flowbite.js")

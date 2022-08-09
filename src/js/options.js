@@ -3,6 +3,11 @@ import Roudokuka from 'roudokuka'
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
 
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from 'components/options.vue'
+const app = createApp(App).use(createPinia())
+
 let om = null
 let dm = null
 
@@ -15,6 +20,8 @@ const saveDictionaryForOptionPage = async (element) => {
 }
 
 $(async () => {
+  app.mount('#app')
+
   let roudokuka = new Roudokuka([''])
   await roudokuka.onReady().then(() => {
     roudokuka.voices.forEach((voice, i) => {
