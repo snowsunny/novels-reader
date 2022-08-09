@@ -2,10 +2,13 @@ manifest_version: 2
 name: 'novels-reader'
 version: '1.5.0'
 
-description: 'Webpage reader for http://syosetu.com'
+description: 'Webpage reader for *.syosetu.com and kakuyomu.jp'
 
 content_scripts: [
-  matches: ['http://ncode.syosetu.com/*', 'https://ncode.syosetu.com/*']
+  matches: [
+    'http://ncode.syosetu.com/*', 'https://ncode.syosetu.com/*', 'http://novel18.syosetu.com/*', 'https://novel18.syosetu.com/*'
+    'https://kakuyomu.jp/*'
+  ]
   run_at: 'document_end'
   js: ['content.js']
 ]

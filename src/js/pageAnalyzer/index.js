@@ -1,11 +1,13 @@
 import _find from 'lodash/find'
 import DictionariesManager from 'DictionariesManager'
 import Narou from 'pageAnalyzer/narou'
+import Kakuyomu from 'pageAnalyzer/kakuyomu'
 
 export default class PageAnalyzer {
   constructor(domain) {
     const moduleData = {
-      'ncode.syosetu.com': Narou
+      'ncode.syosetu.com': Narou,
+      'kakuyomu.jp': Kakuyomu
     }
     this.module = new moduleData[domain]
 
