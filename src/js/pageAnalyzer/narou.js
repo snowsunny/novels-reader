@@ -1,7 +1,7 @@
 export default class Narou {
   constructor() {
-    this.novelId = $('.contents1 .margin_r20').attr('href').replace(/\//g, '')
-    this.novelName = $('.contents1 .margin_r20').text()
+    this.novelId = window.location.href.split('/')[3]
+    this.novelName = $('.contents1 [class*="margin"]').text()
 
     const selectorArray = ['.novel_subtitle', '#novel_p p', '#novel_honbun p', '#novel_a p']
     this.readElements = {

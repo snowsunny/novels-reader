@@ -7,6 +7,7 @@ export default class PageAnalyzer {
   constructor(domain) {
     const moduleData = {
       'ncode.syosetu.com': Narou,
+      'novel18.syosetu.com': Narou,
       'kakuyomu.jp': Kakuyomu
     }
     this.module = new moduleData[domain]

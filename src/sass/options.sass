@@ -2,5 +2,19 @@
 @tailwind components
 @tailwind utilities
 
-#app
-  // background-color: gray
+@mixin domain-color($color)
+  background-color: $color
+  i
+    color: white
+  &.and-hover
+    &:hover
+      background-color: darken($color, 10%)
+
+.ncode\.syosetu\.com
+  @include domain-color(#18b7cd)
+
+.novel18\.syosetu\.com
+  @include domain-color(#d270a5)
+
+.kakuyomu\.jp
+  @include domain-color(#2792ca)

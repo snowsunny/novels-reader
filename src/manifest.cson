@@ -6,7 +6,8 @@ description: 'Webpage reader for *.syosetu.com and kakuyomu.jp'
 
 content_scripts: [
   matches: [
-    'http://ncode.syosetu.com/*', 'https://ncode.syosetu.com/*', 'http://novel18.syosetu.com/*', 'https://novel18.syosetu.com/*'
+    'http://ncode.syosetu.com/*', 'https://ncode.syosetu.com/*',
+    'http://novel18.syosetu.com/*', 'https://novel18.syosetu.com/*',
     'https://kakuyomu.jp/*'
   ]
   run_at: 'document_end'
