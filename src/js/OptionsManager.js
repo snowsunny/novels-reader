@@ -24,27 +24,6 @@ export default class OptionsManager {
   }
 
   async getInitOptions() {
-    // for 1.3.0 or older --------
-    if(!this.storageOptions) {
-      let oldOptions = JSON.parse(localStorage.getItem('options'))
-      if(oldOptions) {
-        this.storageOptions = await localForage.setItem('options', oldOptions)
-      }
-
-      let oldDictionaries = JSON.parse(localStorage.getItem('dictionaries'))
-      if(oldDictionaries) {
-        oldDictionaries = oldDictionaries.map((dictionary) => {
-          dictionary.id === 'user' || dictionary.id === 'userIgnoreRubies' ?
-            dictionary.domain = 'novels-reader' : dictionary.domain = 'ncode.syosetu.com'
-          delete dictionary.rubies
-          return dictionary
-        })
-        await localForage.setItem('dictionaries', oldDictionaries)
-      }
-      // ここでlocalStorageの中身を削除しても良いが、現状ではそのままとする。
-    }
-    // --------
-
     const checkStorageOptionsIsLatestVersion = () => {
       return this.storageOptions ? this.defaultOptions.version == this.storageOptions.version : false
     }
