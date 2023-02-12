@@ -10,7 +10,9 @@
         "https://ncode.syosetu.com/*/*",
         "http://novel18.syosetu.com/*/*",
         "https://novel18.syosetu.com/*/*",
-        "https://kakuyomu.jp/works/*"
+        "https://kakuyomu.jp/works/*",
+        "file:///*",
+        "*://*/storage/*"
       ],
       "run_at": "document_end",
       "js": [

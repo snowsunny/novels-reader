@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
 
-const manager = {
+const managers = {
   opt: null,
   dic: null
 }
@@ -28,17 +28,20 @@ export default defineStore('shared', {
   },
   actions: {
     async init() {
-      manager.opt = await new OptionsManager()
-      this.options = await manager.opt.storageOptions
+      managers.opt = await new OptionsManager()
+      this.options = await managers.opt.storageOptions
 
-      manager.dic = await new DictionariesManager()
-      this.dictionaries = manager.dic.dictionaries
+      managers.dic = await new DictionariesManager()
+      this.dictionaries = managers.dic.dictionaries
+    },
+    async saveOptions() {
+      await managers.opt.saveOptions(this.options)
     },
     async saveDictionary() {
-      await manager.dic.saveDictionary(this.SN)
+      await managers.dic.saveDictionary(this.SN)
     },
     async forceSaveDictionary() {
-      await manager.dic.saveDictionary(this.SN, true)
+      await managers.dic.saveDictionary(this.SN, true)
     }
   }
 })

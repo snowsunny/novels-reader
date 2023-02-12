@@ -4,6 +4,8 @@ import pageAnalyzer from 'pageAnalyzer'
 import initializeHead from 'initializer/head'
 import DictionariesManager from 'DictionariesManager'
 
+console.log(222)
+
 // global variables
 let options = null
 let dictionaries = null
@@ -59,6 +61,7 @@ const postMessage = data => {
 }
 
 const initializeData = async () => {
+  console.log(111)
   let roudokukaForGetVoicesData = new Roudokuka([''])
   await roudokukaForGetVoicesData.onReady().then(() => {
     voices = roudokukaForGetVoicesData.voices
@@ -66,7 +69,11 @@ const initializeData = async () => {
 
   dm = await new DictionariesManager()
 
-  analyzer = await new pageAnalyzer(window.location.hostname)
+  if(/file:\/\/|content:\/\//.test(window.location.href)) {
+    analyzer = await new pageAnalyzer('localFile')
+  } else {
+    analyzer = await new pageAnalyzer(window.location.hostname)
+  }
   let findDictionaryOption = {id: analyzer.module.novelId, domain: analyzer.domain}
 
   options = await postMessage({method: 'getOptions', key: 'options'})

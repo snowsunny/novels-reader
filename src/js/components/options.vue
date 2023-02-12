@@ -1,9 +1,10 @@
 <template lang="pug">
 div(class="header")
   div(class="container mx-auto p-4 md:px-0")
-    div(class="text-white text-2xl font-semibold") novels-reader -&nbsp;
+    div(class="text-white text-2xl font-semibold") novels-reader -&nbsp;{{sharedStore.options.version}}
     div(class="text-white") Web page reader for [ncode.syosetu.com, novel18.syosetu.com, kakuyomu.jp]
 div(class="container mx-auto p-4 md:px-0")
+  | {{sharedStore.options}}
   div(class="grid md:grid-cols-2 gap-5")
     div(class="")
       div(class="text-lg font-semibold") 音声設定
@@ -19,6 +20,7 @@ div(class="container mx-auto p-4 md:px-0")
               | 初期値: 1.0, 最小値: 0.1, 最大値: 10.0
               div(class="tooltip-arrow" data-popper-arrow)
           input(
+            :value="sharedStore.options.rate" @input="sharedStore.$patch({options: {rate: $event.target.value}})"
             name="rate" type="number" step="0.01" min="0.1" max="10" placeholder="1"
             class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           )
@@ -32,6 +34,7 @@ div(class="container mx-auto p-4 md:px-0")
               | 初期値: 1.0, 最小値: 0, 最大値: 2.0
               div(class="tooltip-arrow" data-popper-arrow)
           input(
+            v-model="sharedStore.options.pitch"
             name="pitch" type="number" step="0.01" min="0" max="2" placeholder="1"
             class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           )
@@ -45,6 +48,7 @@ div(class="container mx-auto p-4 md:px-0")
               | 初期値: 1.0, 最小値: 0, 最大値: 1.0
               div(class="tooltip-arrow" data-popper-arrow)
           input(
+            v-model="sharedStore.options.volume"
             name="volume" type="number" step="0.01" min="0" max="1" placeholder="1"
             class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           )
@@ -67,26 +71,26 @@ div(class="container mx-auto p-4 md:px-0")
       div(class="mt-5 mb-2 text-lg font-semibold") 自動再生設定
       div(class="flex items-center mb-1")
         input(id="autoPlay" name="autoPlay" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-        label(for="autoPlay" class="ml-2 text-gray-900") 自動で再生を始める
+        label(for="autoPlay" class="ml-2 text-gray-900 font-semibold") 自動で再生を始める
       div(class="flex items-center")
         input(id="autoMoveNext" name="autoMoveNext" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-        label(for="autoMoveNext" class="ml-2 text-gray-900") 次話がある場合、自動で移動する
+        label(for="autoMoveNext" class="ml-2 text-gray-900 font-semibold") 次話がある場合、自動で移動する
 
     div(class="")
       div(class="text-lg font-semibold") 読み上げ文章設定
       p(class="text-sm mb-3") 小説ページの読み上げ箇所の設定です。
       div(class="flex items-center mb-1")
         input(id="title" name="title" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-        label(for="title" class="ml-2 text-gray-900") 題名
+        label(for="title" class="ml-2 text-gray-900 font-semibold") 題名
       div(class="flex items-center mb-1")
         input(id="foreword" name="foreword" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-        label(for="foreword" class="ml-2 text-gray-900") 前書き
+        label(for="foreword" class="ml-2 text-gray-900 font-semibold") 前書き
       div(class="flex items-center mb-1")
         input(id="body" name="body" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-        label(for="body" class="ml-2 text-gray-900") 本文
+        label(for="body" class="ml-2 text-gray-900 font-semibold") 本文
       div(class="flex items-center mb-1")
         input(id="afterword" name="afterword" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-        label(for="afterword" class="ml-2 text-gray-900") 後書き
+        label(for="afterword" class="ml-2 text-gray-900 font-semibold") 後書き
 
       div(class="mt-5 text-lg font-semibold") ハイライト設定
       p(class="text-sm mb-3") 再生中の段落ハイライトカラー等の設定です。
@@ -116,7 +120,7 @@ div(class="container mx-auto p-4 md:px-0")
       div(class="grid gap-4")
         div(class="flex items-center")
           input(id="autoScroll" name="autoScroll" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-          label(for="autoScroll" class="ml-2 text-gray-900") 再生箇所に自動でスクロールする
+          label(for="autoScroll" class="ml-2 text-gray-900 font-semibold") 再生箇所に自動でスクロールする
 
   div(class="mt-5")
     div(class="text-lg font-semibold") ルビ辞書設定について
@@ -145,7 +149,7 @@ div(class="container mx-auto p-4 md:px-0")
 
     p(class="mt-2 text-sm") ※正規表現についてより詳しく知りたい方は下記リンクを参考にしてみて下さい。
     div(class="flex mb-2")
-      i(class="mr-2 fa-solid fa-link text-sm")
+      //- i(class="mr-2 fa-solid fa-link text-sm")
       a(
         class="hover:underline text-sm"
         href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Regular_Expressions"
@@ -167,8 +171,8 @@ div(class="container mx-auto p-4 md:px-0")
     | 下記のボタンをクリックする事で、小説別辞書を編集する事が出来ます。小説別辞書は、この拡張機能を有効にした状態で、各小説ページを開くと自動で作成されます。小説ページのルビを自動で辞書に登録する設定も出来ます。
   div(class="flex items-center")
     input(id="autoSaveDictionary" name="autoSaveDictionary" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-    label(for="autoSaveDictionary" class="ml-2 text-gray-900") 小説のルビを自動で辞書に登録する
-  div(class="grid md:grid-cols-4 gap-4 mt-3")
+    label(for="autoSaveDictionary" class="ml-2 text-gray-900 font-semibold") 小説のルビを自動で辞書に登録する
+  div(class="grid md:grid-cols-4 gap-3 mt-3")
     div(
       v-for="dic, i in sharedStore.dictionaries"
       :class="`${dic.domain} and-hover flex flex-col justify-center cursor-pointer items-center text-white focus:ring-4 font-medium rounded-lg text-sm p-3.5`"
@@ -178,27 +182,26 @@ div(class="container mx-auto p-4 md:px-0")
 
   #novelModal(
     v-if="sharedStore.SN"
-    class="flex justify-center items-center bg-slate-900/50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
+    class="flex justify-center items-center overflow-y-auto overflow-x-hidden fixed inset-0"
     tabindex="-1"
     aria-hidden="true"
   )
-    div(class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 w-full h-full" @click="sharedStore.selectedNovelIndex = null")
-    div(class="relative p-4 w-full max-w-2xl h-full md:h-auto z-10")
+    div(class="bg-slate-900/50 overflow-x-hidden fixed inset-0 z-10" @click="sharedStore.selectedNovelIndex = null")
+    div(class="relative p-4 w-full max-w-2xl md:h-auto z-20")
       div(class="flex flex-col bg-white rounded-lg shadow")
         div(:class="`${sharedStore.SN.domain} rounded-t-lg p-4 flex justify-between`")
           div(:class="flex")
             p(class="text-white font-semibold") {{sharedStore.SN.name}}
             i(class="mr-2 fa-solid fa-link text-sm")
             a(
-              class="text-white hover:text-white hover:underline"
+              class="text-white hover:text-white hover:underline break-all"
               :href="sharedStore.SNLink"
               target="_blank" rel="noopener noreferrer"
             )
               | {{sharedStore.SNLink}}
           i(class="ml-2 fa-solid fa-circle-xmark text-xl cursor-pointer" @click="sharedStore.selectedNovelIndex = null")
         div(class="p-4")
-          textarea(:value="sharedStore.SN.raw" @input="sharedStore.SN.raw = $event.target.value; sharedStore.forceSaveDictionary()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-96 p-2.5 mb-3")
-          p {{sharedStore.SN}}
+          textarea(:value="sharedStore.SN.raw" @input="sharedStore.SN.raw = $event.target.value; sharedStore.forceSaveDictionary()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-96 p-2.5")
 
   div(class="text-lg font-semibold mt-5 mb-2") 各種データのエクスポート（書き出し）とインポート（読み込み）
   div(class="rounded-lg shadow-lg")
@@ -210,10 +213,10 @@ div(class="container mx-auto p-4 md:px-0")
 
       div(class="mt-3 mb-1 flex items-center")
         input(id="options" name="options" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-        label(for="options" class="ml-2 text-gray-900") オプション設定（音声設定・ハイライト設定・読み上げ文章設定・自動再生設定）
+        label(for="options" class="ml-2 text-gray-900 font-semibold") オプション設定（音声設定・ハイライト設定・読み上げ文章設定・自動再生設定）
       div(class="flex items-center")
         input(id="dictionaries" name="dictionaries" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-        label(for="dictionaries" class="ml-2 text-gray-900") 辞書設定（ユーザー辞書・無視するルビ・小説別辞書）
+        label(for="dictionaries" class="ml-2 text-gray-900 font-semibold") 辞書設定（ユーザー辞書・無視するルビ・小説別辞書）
       button(type="button" class="text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:ring-sky-200 font-semibold rounded-lg text-sm px-5 py-2.5 mr-2 mt-3") データをクリップボードにコピー
   div(class="rounded-lg shadow-lg mt-4")
     div(class="rounded-t-lg p-4 bg-orange-400 text-white font-semibold") インポート
@@ -228,7 +231,7 @@ div(class="container mx-auto p-4 md:px-0")
 
       div(class="mt-3 mb-1 flex items-center")
         input(id="newRubiesOnly" name="newRubiesOnly" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
-        label(for="newRubiesOnly" class="ml-2 text-gray-900") ユーザー辞書・小説別辞書はデータを残し、既存の辞書に無いルビのみをインポートする
+        label(for="newRubiesOnly" class="ml-2 text-gray-900 font-semibold") ユーザー辞書・小説別辞書はデータを残し、既存の辞書に無いルビのみをインポートする
       textarea(placeholder="ここにエクスポートしたデータを貼り付けて下さい。" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-64 p-2.5 mt-3")
       button(type="button" class="text-white bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:ring-orange-200 font-semibold rounded-lg text-sm px-5 py-2.5 mr-2 mt-4") データをインポートする
 </template>
@@ -237,7 +240,6 @@ div(class="container mx-auto p-4 md:px-0")
 import { onMounted } from 'vue'
 // import { Button } from 'flowbite-vue'
 import useSharedStore from '../stores/shared'
-import useOptionsStore from '../stores/options'
 
 export default {
   // components: {
@@ -245,7 +247,13 @@ export default {
   // },
   setup() {
     const sharedStore = useSharedStore()
-    const optionsStore = useOptionsStore()
+    sharedStore.$subscribe((mutation, state) => {
+      console.log(2, mutation, mutation.payload, state)
+      if(mutation.payload?.options) {
+        console.log(333)
+      }
+      // TODO: optionを受け取って保存する。ってかオプションと辞書をこのタイミングで毎回保存でも良いかな？ Storeをopt,dicで分けた方が良い？
+    })
 
     window.addEventListener('focus', async () => {
       console.log('foucs page')
@@ -253,6 +261,7 @@ export default {
     })
     onMounted(async () => {
       await sharedStore.init()
+      console.log(1,sharedStore)
 
       // ここでflowbiteを読み込む様にすると最初のModalは出る様になるけど、その後上手く表示出来ない…まぁ全部Vueで管理した方が良いかって感じ。
       // flowbite-vueに期待。既にModalはあるけどソース見てもまだちゃんと使えないみたい… https://github.com/themesberg/flowbite-vue/tree/main/src/components
@@ -273,7 +282,7 @@ export default {
     })
 
     return {
-      sharedStore, optionsStore
+      sharedStore
     }
   }
 }
