@@ -66,7 +66,7 @@ const initializeData = async () => {
 
   dm = await new DictionariesManager()
 
-  if(/file:\/\/|content:\/\//.test(window.location.href)) {
+  if(/file:\/\/|pages-for-novels-reader/.test(window.location.href)) {
     analyzer = await new pageAnalyzer('localFile')
   } else {
     analyzer = await new pageAnalyzer(window.location.hostname)
@@ -147,20 +147,20 @@ initializeData().then(() => {
     if(linesInfo[lineInfo.index + 1]) {
       let nextLineElement = linesInfo[lineInfo.index + 1].element
       lineHighlight(nextLineElement)
-      if(options.autoScroll == 'on') {
+      if(options.highlight.autoScroll) {
         $('body').scrollTop(nextLineElement.offset().top - window.innerHeight / 2 + nextLineElement.height() / 2)
       }
     }
   }
   roudokukaOptions.onLibrettoEnd = () => {
-    if(options.autoMoveNext == 'on') {
+    if(options.autoMoveNext) {
       analyzer.module.goToNext()
     }
   }
 
   let roudokuka = new Roudokuka(linesInfo, roudokukaOptions)
   roudokuka.onReady().then(() => {
-    if(options.autoPlay == 'on') {
+    if(options.autoPlay) {
       lineHighlight(linesInfo[0].element)
       roudokuka.start()
     }

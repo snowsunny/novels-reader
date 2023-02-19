@@ -9,7 +9,7 @@ content_scripts: [
     'http://ncode.syosetu.com/*/*', 'https://ncode.syosetu.com/*/*',
     'http://novel18.syosetu.com/*/*', 'https://novel18.syosetu.com/*/*',
     'https://kakuyomu.jp/works/*',
-    'file:///*', '*://*/pages-for-novels-reader' # ローカルファイル用
+    'file:///*', '*://*/*pages-for-novels-reader*' # ローカルファイル用
   ]
   run_at: 'document_end'
   js: ['content.js']
