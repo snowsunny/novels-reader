@@ -1,16 +1,31 @@
 import _merge from 'lodash/merge'
+import _clone from 'lodash/clone'
 import localForage from 'localforage'
 
 export default class OptionsManager {
   constructor() {
     this.defaultOptions = {
       version: chrome.app.getDetails().version,
-      autoScroll: "on",
-      title: "on",
-      body: "on",
-      autoPlay: "on",
-      autoMoveNext: "on",
-      autoSaveDictionary: "on"
+      readSections: {
+        title: true,
+        foreword: true,
+        body: true,
+        afterword: true
+      },
+      voice: {
+        rate: 1,
+        pitch: 1,
+        volume: 1,
+        index: -1
+      },
+      highlight: {
+        textColor: '#fff',
+        backgroundColor: '#498fd9',
+        autoScroll: true
+      },
+      autoPlay: true,
+      autoMoveNext: true,
+      autoSaveDictionary: true
     }
     this.storageOptions = null
     return localForage.getItem('options').then((options) => {
@@ -20,12 +35,12 @@ export default class OptionsManager {
   }
 
   async saveOptions(options) {
-    return this.storageOptions = await localForage.setItem('options', _merge(options, {version: this.defaultOptions.version}))
+    return this.storageOptions = await localForage.setItem('options', JSON.parse(JSON.stringify(options)))
   }
 
-  async getInitOptions() {
+  async getInitializedData() {
     const checkStorageOptionsIsLatestVersion = () => {
-      return this.storageOptions ? this.defaultOptions.version == this.storageOptions.version : false
+      return this.storageOptions ? this.defaultOptions.version === this.storageOptions.version : false
     }
     if(checkStorageOptionsIsLatestVersion()) {
       return this.storageOptions

@@ -2,7 +2,7 @@
 div(class="header")
   div(class="container mx-auto p-4 md:px-0")
     div(class="text-white text-2xl font-semibold") novels-reader -&nbsp;{{sharedStore.options.version}}
-    div(class="text-white") Web page reader for [ncode.syosetu.com, novel18.syosetu.com, kakuyomu.jp]
+    div(class="text-white") Web page reader for [ncode.syosetu.com, novel18.syosetu.com, kakuyomu.jp] and local html
 div(class="container mx-auto p-4 md:px-0")
   | {{sharedStore.options}}
   div(class="grid md:grid-cols-2 gap-5")
@@ -20,7 +20,7 @@ div(class="container mx-auto p-4 md:px-0")
               | 初期値: 1.0, 最小値: 0.1, 最大値: 10.0
               div(class="tooltip-arrow" data-popper-arrow)
           input(
-            :value="sharedStore.options.rate" @input="sharedStore.$patch({options: {rate: $event.target.value}})"
+            v-model="sharedStore.options.voice.rate"
             name="rate" type="number" step="0.01" min="0.1" max="10" placeholder="1"
             class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           )
@@ -34,7 +34,7 @@ div(class="container mx-auto p-4 md:px-0")
               | 初期値: 1.0, 最小値: 0, 最大値: 2.0
               div(class="tooltip-arrow" data-popper-arrow)
           input(
-            v-model="sharedStore.options.pitch"
+            v-model="sharedStore.options.voice.pitch"
             name="pitch" type="number" step="0.01" min="0" max="2" placeholder="1"
             class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           )
@@ -48,7 +48,7 @@ div(class="container mx-auto p-4 md:px-0")
               | 初期値: 1.0, 最小値: 0, 最大値: 1.0
               div(class="tooltip-arrow" data-popper-arrow)
           input(
-            v-model="sharedStore.options.volume"
+            v-model="sharedStore.options.voice.volume"
             name="volume" type="number" step="0.01" min="0" max="1" placeholder="1"
             class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           )
@@ -63,33 +63,35 @@ div(class="container mx-auto p-4 md:px-0")
               | ※選択肢の「/」以降は対応言語です。
               div(class="tooltip-arrow" data-popper-arrow)
           select(
+            v-model='sharedStore.options.voice.index'
             name="voiceType"
             class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           )
             option(value="-1") 初期設定を使用する
+            option(v-for='voice, i in sharedStore.availableVoices' :value='i') {{ voice.name }}
 
       div(class="mt-5 mb-2 text-lg font-semibold") 自動再生設定
       div(class="flex items-center mb-1")
-        input(id="autoPlay" name="autoPlay" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
+        input(v-model='sharedStore.options.autoPlay' id="autoPlay" name="autoPlay" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
         label(for="autoPlay" class="ml-2 text-gray-900 font-semibold") 自動で再生を始める
       div(class="flex items-center")
-        input(id="autoMoveNext" name="autoMoveNext" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
+        input(v-model='sharedStore.options.autoMoveNext' id="autoMoveNext" name="autoMoveNext" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
         label(for="autoMoveNext" class="ml-2 text-gray-900 font-semibold") 次話がある場合、自動で移動する
 
     div(class="")
       div(class="text-lg font-semibold") 読み上げ文章設定
       p(class="text-sm mb-3") 小説ページの読み上げ箇所の設定です。
       div(class="flex items-center mb-1")
-        input(id="title" name="title" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
+        input(v-model='sharedStore.options.readSections.title' id="title" name="title" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
         label(for="title" class="ml-2 text-gray-900 font-semibold") 題名
       div(class="flex items-center mb-1")
-        input(id="foreword" name="foreword" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
+        input(v-model='sharedStore.options.readSections.foreword' id="foreword" name="foreword" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
         label(for="foreword" class="ml-2 text-gray-900 font-semibold") 前書き
       div(class="flex items-center mb-1")
-        input(id="body" name="body" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
+        input(v-model='sharedStore.options.readSections.body' id="body" name="body" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
         label(for="body" class="ml-2 text-gray-900 font-semibold") 本文
       div(class="flex items-center mb-1")
-        input(id="afterword" name="afterword" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
+        input(v-model='sharedStore.options.readSections.afterword' id="afterword" name="afterword" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
         label(for="afterword" class="ml-2 text-gray-900 font-semibold") 後書き
 
       div(class="mt-5 text-lg font-semibold") ハイライト設定
@@ -103,7 +105,7 @@ div(class="container mx-auto p-4 md:px-0")
               | 初期値: #fff
               div(class="tooltip-arrow" data-popper-arrow)
           input(
-            name="textColor" type="text" placeholder="#fff"
+            v-model='sharedStore.options.highlight.textColor' name="textColor" type="text" placeholder="#fff"
             class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           )
         div(class="")
@@ -114,12 +116,12 @@ div(class="container mx-auto p-4 md:px-0")
               | 初期値: #498fd9
               div(class="tooltip-arrow" data-popper-arrow)
           input(
-            name="backgroundColor" type="text" placeholder="#498fd9"
+            v-model='sharedStore.options.highlight.backgroundColor' name="backgroundColor" type="text" placeholder="#498fd9"
             class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           )
       div(class="grid gap-4")
         div(class="flex items-center")
-          input(id="autoScroll" name="autoScroll" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
+          input(v-model='sharedStore.options.autoScroll' id="autoScroll" name="autoScroll" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
           label(for="autoScroll" class="ml-2 text-gray-900 font-semibold") 再生箇所に自動でスクロールする
 
   div(class="mt-5")
@@ -170,7 +172,7 @@ div(class="container mx-auto p-4 md:px-0")
   p(class="text-sm mb-2")
     | 下記のボタンをクリックする事で、小説別辞書を編集する事が出来ます。小説別辞書は、この拡張機能を有効にした状態で、各小説ページを開くと自動で作成されます。小説ページのルビを自動で辞書に登録する設定も出来ます。
   div(class="flex items-center")
-    input(id="autoSaveDictionary" name="autoSaveDictionary" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
+    input(v-model='sharedStore.options.autoSaveDictionary' id="autoSaveDictionary" name="autoSaveDictionary" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
     label(for="autoSaveDictionary" class="ml-2 text-gray-900 font-semibold") 小説のルビを自動で辞書に登録する
   div(class="grid md:grid-cols-4 gap-3 mt-3")
     div(
@@ -248,37 +250,26 @@ export default {
   setup() {
     const sharedStore = useSharedStore()
     sharedStore.$subscribe((mutation, state) => {
-      console.log(2, mutation, mutation.payload, state)
-      if(mutation.payload?.options) {
-        console.log(333)
-      }
-      // TODO: optionを受け取って保存する。ってかオプションと辞書をこのタイミングで毎回保存でも良いかな？ Storeをopt,dicで分けた方が良い？
+      // CHECK: オプションと辞書をこのタイミングで毎回保存でも良いかな？ Storeをopt,dicで分けた方が良い？
+      sharedStore.saveOptions()
     })
 
     window.addEventListener('focus', async () => {
       console.log('foucs page')
       await sharedStore.init()
     })
-    onMounted(async () => {
-      await sharedStore.init()
-      console.log(1,sharedStore)
 
+    onMounted(async () => {
       // ここでflowbiteを読み込む様にすると最初のModalは出る様になるけど、その後上手く表示出来ない…まぁ全部Vueで管理した方が良いかって感じ。
       // flowbite-vueに期待。既にModalはあるけどソース見てもまだちゃんと使えないみたい… https://github.com/themesberg/flowbite-vue/tree/main/src/components
       await import('flowbite')
+      document.querySelectorAll('[data-tooltip-target]').forEach(triggerEl => {
+        const targetEl = document.getElementById(triggerEl.getAttribute('data-tooltip-target'))
+        const triggerType = triggerEl.getAttribute('data-tooltip-trigger');
+        const placement = triggerEl.getAttribute('data-tooltip-placement');
 
-      // function initTooltip() {
-      //   document.querySelectorAll('[data-tooltip-target]').forEach(triggerEl => {
-      //     const targetEl = document.getElementById(triggerEl.getAttribute('data-tooltip-target'))
-      //     const triggerType = triggerEl.getAttribute('data-tooltip-trigger');
-      //     const placement = triggerEl.getAttribute('data-tooltip-placement');
-
-      //     new Tooltip(targetEl, triggerEl, {
-      //       placement: placement ? placement : Default.placement,
-      //       triggerType: triggerType ? triggerType : Default.triggerType
-      //     })
-      //   })
-      // }
+        new Tooltip(targetEl, triggerEl)
+      })
     })
 
     return {

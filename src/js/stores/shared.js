@@ -1,16 +1,19 @@
 import { defineStore } from 'pinia'
 import OptionsManager from 'OptionsManager'
 import DictionariesManager from 'DictionariesManager'
+import Roudokuka from 'roudokuka'
+import _clone from 'lodash/clone'
 
 const managers = {
   opt: null,
-  dic: null
+  dic: null,
 }
 
 export default defineStore('shared', {
   state: () => ({
     options: {},
     dictionaries: {},
+    availableVoices: null,
     selectedNovelIndex: null
   }),
   getters: {
@@ -29,19 +32,24 @@ export default defineStore('shared', {
   actions: {
     async init() {
       managers.opt = await new OptionsManager()
-      this.options = await managers.opt.storageOptions
+      this.options = await managers.opt.getInitializedData()
 
       managers.dic = await new DictionariesManager()
       this.dictionaries = managers.dic.dictionaries
+
+      const roudokuka = new Roudokuka([''])
+      await roudokuka.onReady()
+      this.availableVoices = roudokuka.voices
+      console.log(roudokuka.voices)
     },
     async saveOptions() {
-      await managers.opt.saveOptions(this.options)
+      await managers.opt.saveOptions(_clone(this.options))
     },
     async saveDictionary() {
-      await managers.dic.saveDictionary(this.SN)
+      await managers.dic.saveDictionary(_clone(this.SN))
     },
     async forceSaveDictionary() {
-      await managers.dic.saveDictionary(this.SN, true)
+      await managers.dic.saveDictionary(_clone(this.SN), true)
     }
   }
 })

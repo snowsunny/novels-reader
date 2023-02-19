@@ -6,7 +6,7 @@ import localForage from 'localforage'
 export default class DictionariesManager {
   constructor() {
     this.dictionaries = null
-    return this.getDictionaries().then((dictionaries) => {
+    return localForage.getItem('dictionaries').then((dictionaries) => {
       this.dictionaries = dictionaries || []
       return this
     })
@@ -31,17 +31,13 @@ export default class DictionariesManager {
       this.dictionaries.push(newDictionary)
     }
     _assign(storageDictionary, newDictionary)
-    await localForage.setItem('dictionaries', this.dictionaries)
+    await localForage.setItem('dictionaries', JSON.parse(JSON.stringify(this.dictionaries)))
     return storageDictionary
   }
 
   getDictionary(findOption) {
     // standard findOption: {id: 'xxx', domain: 'xxx'}
     return _find(this.dictionaries, findOption)
-  }
-
-  async getDictionaries() {
-    return await localForage.getItem('dictionaries')
   }
 
   getNewRubiesOnly(newDictionary, oldDictionary) {

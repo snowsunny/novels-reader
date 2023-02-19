@@ -3,9 +3,7 @@ import Roudokuka from 'roudokuka'
 import pageAnalyzer from 'pageAnalyzer'
 import initializeHead from 'initializer/head'
 import DictionariesManager from 'DictionariesManager'
-
-console.log(222)
-
+console.log(111)
 // global variables
 let options = null
 let dictionaries = null
@@ -61,7 +59,6 @@ const postMessage = data => {
 }
 
 const initializeData = async () => {
-  console.log(111)
   let roudokukaForGetVoicesData = new Roudokuka([''])
   await roudokukaForGetVoicesData.onReady().then(() => {
     voices = roudokukaForGetVoicesData.voices
@@ -76,7 +73,9 @@ const initializeData = async () => {
   }
   let findDictionaryOption = {id: analyzer.module.novelId, domain: analyzer.domain}
 
+  console.log(222)
   options = await postMessage({method: 'getOptions', key: 'options'})
+  console.log(333,options)
   dictionaries = await postMessage({
     method: 'saveDictionary',
     dictionary: {
@@ -86,7 +85,7 @@ const initializeData = async () => {
   })
 
   for(let key in analyzer.module.readElements) {
-    if(options[key] == 'on' && analyzer.module.readElements[key].length) {
+    if(options.readSections[key] && analyzer.module.readElements[key].length) {
       let filteredElements = analyzer.module.readElements[key].filter((index, element) => {
         return /\S/gi.test($(element).text())
       })
@@ -98,7 +97,7 @@ const initializeData = async () => {
     method: 'saveDictionary',
     dictionary: {
       ...findDictionaryOption,
-      raw: options.autoSaveDictionary == 'on' ? analyzer.getDictionaryTextOfCurrentNovelPage() : ''
+      raw: options.autoSaveDictionary ? analyzer.getDictionaryTextOfCurrentNovelPage() : ''
     }
   })
 }
@@ -131,17 +130,17 @@ initializeData().then(() => {
   }
 
   let roudokukaOptions = {}
-  if(options.rate != undefined && options.rate != '') {
-    roudokukaOptions.rate = Number(options.rate)
+  if(options.voice.rate != undefined && options.voice.rate != '') {
+    roudokukaOptions.rate = Number(options.voice.rate)
   }
-  if(options.pitch != undefined && options.pitch != '') {
-    roudokukaOptions.pitch = Number(options.pitch)
+  if(options.voice.pitch != undefined && options.voice.pitch != '') {
+    roudokukaOptions.pitch = Number(options.voice.pitch)
   }
-  if(options.volume != undefined && options.volume != '') {
-    roudokukaOptions.volume = Number(options.volume)
+  if(options.voice.volume != undefined && options.voice.volume != '') {
+    roudokukaOptions.volume = Number(options.voice.volume)
   }
-  if(options.voiceType != undefined && options.voiceType != -1) {
-    roudokukaOptions.voice = voices[options.voiceType]
+  if(options.voice.index != undefined && options.voice.index != -1) {
+    roudokukaOptions.voice = voices[options.voice.index]
   }
   roudokukaOptions.onend = (e, lineInfo) => {
     lineUnHighlight()
@@ -149,7 +148,7 @@ initializeData().then(() => {
       let nextLineElement = linesInfo[lineInfo.index + 1].element
       lineHighlight(nextLineElement)
       if(options.autoScroll == 'on') {
-        $('html').scrollTop(nextLineElement.offset().top - $(window).height() / 2 + nextLineElement.height() / 2)
+        $('body').scrollTop(nextLineElement.offset().top - window.innerHeight / 2 + nextLineElement.height() / 2)
       }
     }
   }
