@@ -9,7 +9,7 @@ content_scripts: [
     'http://ncode.syosetu.com/*/*', 'https://ncode.syosetu.com/*/*',
     'http://novel18.syosetu.com/*/*', 'https://novel18.syosetu.com/*/*',
     'https://kakuyomu.jp/works/*',
-    'file:///*', '*://*/storage/*' # local files: pc and android. FIXME: Android用のやつだけど、何故か「content://」を指定するとマニフェストエラーが出るので「パスにstorageがあれば」の指定にして、analyzerの初期化の所で確認する様にしている…
+    'file:///*', '*://*/pages-for-novels-reader' # ローカルファイル用
   ]
   run_at: 'document_end'
   js: ['content.js']

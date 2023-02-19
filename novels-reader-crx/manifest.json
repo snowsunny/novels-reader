@@ -12,7 +12,7 @@
         "https://novel18.syosetu.com/*/*",
         "https://kakuyomu.jp/works/*",
         "file:///*",
-        "*://*/storage/*"
+        "*://*/pages-for-novels-reader"
       ],
       "run_at": "document_end",
       "js": [
