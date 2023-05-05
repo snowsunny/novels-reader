@@ -68,7 +68,7 @@ div(class="container mx-auto p-4 md:px-0")
             class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           )
             option(value="-1") 初期設定を使用する
-            option(v-for='voice, i in sharedStore.availableVoices' :value='i') {{ voice.name }}
+            option(v-for='voice, i in sharedStore.availableVoices' :value='i') {{ voice.name }}: {{ voice.lang }}
 
       div(class="mt-5 mb-2 text-lg font-semibold") 自動再生設定
       div(class="flex items-center mb-1")
@@ -153,7 +153,7 @@ div(class="container mx-auto p-4 md:px-0")
     div(class="flex mb-2")
       //- i(class="mr-2 fa-solid fa-link text-sm")
       a(
-        class="hover:underline text-sm"
+        class="hover:underline text-sm text-blue-600 visited:text-purple-600"
         href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Regular_Expressions"
         target="_blank" rel="noopener noreferrer"
       ) 正規表現 - JavaScript | MDN
