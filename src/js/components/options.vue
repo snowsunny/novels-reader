@@ -124,12 +124,12 @@ div(class="container mx-auto p-4 max-w-screen-lg")
           input(v-model="sharedStore.options.autoScroll" id="autoScroll" name="autoScroll" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500")
           label(for="autoScroll" class="ml-2 text-gray-900 font-semibold") 再生箇所に自動でスクロールする
 
-  div(class="mt-16")
-    div(class="text-lg font-semibold") ルビ辞書設定について
+  div(class="mt-20")
+    div(class="text-xl font-semibold") ルビ辞書設定について
     p(class="text-sm") 対象文字を設定されたルビで読み替える辞書を設定出来ます。「ルビ対象文字::ルビ」のフォーマットで設定して下さい。複数設定する場合は下記の様に改行で区切って下さい。
     p(class="text-sm font-bold mb-8") ※ルビの優先度は「無視するルビ ＞ 小説ページのルビ ＞ ユーザー辞書 ＞ 小説別辞書」となっています。
 
-    div(class="font-semibold mb-2") ユーザー辞書
+    div(class="text-lg font-semibold mt-10 mb-2") ユーザー辞書
     pre(class="bg-gray-200 rounded-lg text-sm p-3 w-full overflow-x-auto")
       | // ユーザー辞書サンプル --------
       | // 先頭に「//」を付ける事で、その行全てをコメントにする事が出来ます。
@@ -170,7 +170,7 @@ div(class="container mx-auto p-4 max-w-screen-lg")
       class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
     )
 
-  div(class="text-lg font-semibold mt-8 mb-2") 小説別辞書
+  div(class="text-lg font-semibold mt-10 mb-2") 小説別辞書
   p(class="text-sm mb-2")
     | 下記のボタンをクリックする事で、小説別辞書を編集する事が出来ます。小説別辞書は、この拡張機能を有効にした状態で、各小説ページを開くと自動で作成されます。小説ページのルビを自動で辞書に登録する設定も出来ます。
   div(class="flex items-center")
@@ -210,7 +210,7 @@ div(class="container mx-auto p-4 max-w-screen-lg")
         div(class="p-4")
           textarea(:value="sharedStore.SN.raw" @input="sharedStore.SN.raw = $event.target.value; sharedStore.forceSaveDictionary()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-96 p-2.5")
 
-  div(class="text-lg font-semibold mt-16 mb-2") 各種データのエクスポート（書き出し）とインポート（読み込み）
+  div(class="text-xl font-semibold mt-20 mb-2") 各種データのエクスポート（書き出し）とインポート（読み込み）
   div(class="rounded-lg shadow-lg")
     div(class="rounded-t-lg p-4 bg-sky-500 text-white font-semibold") エクスポート
     div(class="p-4")

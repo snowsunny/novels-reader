@@ -1,7 +1,8 @@
 export default class Narou {
   constructor() {
+    // TODO: 短編対応
     this.novelId = window.location.href.split('/')[3]
-    this.novelName = $('.contents1 [class*="margin"]').text()
+    this.novelName = $('.contents1 [class*="margin"]').text() || $('#novel_contents .novel_title').text()
 
     const selectorArray = ['.novel_subtitle', '#novel_p p', '#novel_honbun p', '#novel_a p']
     this.readElements = {
