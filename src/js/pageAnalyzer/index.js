@@ -43,11 +43,11 @@ export default class PageAnalyzer {
     return text
   }
 
-  checkIgnoreRubiesTest(ruby, dictionaries) {
-    return dictionaries.ignoreRubies && dictionaries.ignoreRubies.raw && RegExp(dictionaries.ignoreRubies.raw, 'gi').test(ruby.rt)
+  checkIgnoreRubiesTest(ruby, dataForRubies) {
+    return dataForRubies.user.ignoreRubies && RegExp(dataForRubies.user.ignoreRubies, 'gi').test(ruby.rt)
   }
 
-  setReadTextData($lineElement, dictionaries) {
+  setReadTextData($lineElement, dataForRubies) {
     let readText = null
     if(this.checkIncludeRuby($lineElement.html())) {
       const divider = '__|novels|reader|ruby|tag|divider|__'
@@ -57,10 +57,10 @@ export default class PageAnalyzer {
         if(this.checkIncludeRuby(splitRubyTagText)) {
           const ruby = {rb: $(splitRubyTagText).find('rb').text(), rt: $(splitRubyTagText).find('rt').text()}
           ruby.text = $(splitRubyTagText).text().replace(ruby.rt, '')
-          if(!_find(this.rubies, ruby) && !this.checkIgnoreRubiesTest(ruby, dictionaries)) {
+          if(!_find(this.rubies, ruby) && !this.checkIgnoreRubiesTest(ruby, dataForRubies)) {
             this.rubies.push(ruby)
           }
-          return this.checkIgnoreRubiesTest(ruby, dictionaries)
+          return this.checkIgnoreRubiesTest(ruby, dataForRubies)
             ? ruby.rb ? ruby.rb : ruby.text
             : ruby.rt
         } else {
@@ -77,10 +77,10 @@ export default class PageAnalyzer {
     }
   }
 
-  setPlayButtonElementsAndSetRubyData(lineElements, dictionaries) {
+  setPlayButtonElementsAndSetRubyData(lineElements, dataForRubies) {
     lineElements.each((index, lineElement) => {
       let $lineElement = $(lineElement)
-      this.setReadTextData($lineElement, dictionaries)
+      this.setReadTextData($lineElement, dataForRubies)
       $lineElement.prepend($(`<div class='controll-button play' data-index='${this.lineIndex++}'><i class='fa fa-play-circle' aria-hidden='true'></div>`))
     })
   }

@@ -1,5 +1,5 @@
 import _merge from 'lodash/merge'
-import _clone from 'lodash/clone'
+import _clone from 'lodash/cloneDeep'
 import localForage from 'localforage'
 
 export default class OptionsManager {
@@ -16,7 +16,7 @@ export default class OptionsManager {
         rate: 1,
         pitch: 1,
         volume: 1,
-        index: -1
+        typeIndex: -1
       },
       highlight: {
         textColor: '#fff',
@@ -35,7 +35,7 @@ export default class OptionsManager {
   }
 
   async saveOptions(options) {
-    return this.storageOptions = await localForage.setItem('options', JSON.parse(JSON.stringify(options)))
+    return this.storageOptions = await localForage.setItem('options', _clone(options))
   }
 
   async getInitializedData() {

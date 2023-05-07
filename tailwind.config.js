@@ -6,7 +6,6 @@ module.exports = {
     // "./node_modules/flowbite/**/*.js" // options.vueに書いたのと同じ理由でコメントアウト
   ],
   theme: {
-    extend: {},
   },
   plugins: [
     require('flowbite/plugin')

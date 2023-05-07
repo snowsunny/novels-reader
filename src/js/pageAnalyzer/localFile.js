@@ -1,7 +1,7 @@
 export default class LocalFile {
   constructor() {
-    this.novelId = document.querySelector('title').text
-    this.novelName = this.novelId
+    this.novelId = location.href
+    this.novelName = document.querySelector('title').text
 
     const selectorArray = ['p']
     this.readElements = {
