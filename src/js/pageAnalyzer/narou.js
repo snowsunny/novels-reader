@@ -14,11 +14,6 @@ export default class Narou {
   }
 
   goToNext() {
-    $($('.novel_bn')[0]).children().each((index, element) => {
-      element = $(element)
-      if(/>>/.test(element.text())) {
-        window.location.href = element.prop('href')
-      }
-    })
+    window.location.href = $('a.novelview_pager-next').prop('href')
   }
 }
