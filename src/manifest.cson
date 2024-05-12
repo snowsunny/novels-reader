@@ -1,6 +1,6 @@
 manifest_version: 2
 name: 'novels-reader'
-version: '2.0.0'
+version: '2.0.1'
 
 description: 'Web page reader for [ncode.syosetu.com, novel18.syosetu.com, kakuyomu.jp]'
 

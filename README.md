@@ -5,7 +5,7 @@ novels-readerは「小説家になろう（syosetu.com）」の小説ページ�
 [「小説家になろう」の小説を良い感じに朗読してくれるChrome拡張機能作ったよー【充実の辞書機能を搭載！固有名詞と真正面から殴り合える読み上げツールをお探しのあなたへ】 - Qiita](https://qiita.com/snowsunny/items/233f6e2f875d8574e33d)
 
 ## 変更履歴
-最新バージョンは「__1.4.2__」です。  
+最新バージョンは「__1.4.3__」です。  
 
 詳しい変更履歴は下記ページをご参照下さい。 :pray:  
 https://github.com/snowsunny/novels-reader/releases
@@ -13,7 +13,7 @@ https://github.com/snowsunny/novels-reader/releases
 ## インストール方法
 1. novels-readerをダウンロード<br>
 gitを使ってクローンするか、↓のリンクからzipファイルをダウンロードして解凍下さい。<br>
-[novels-reader-1.4.2.zipをダウンロード](https://github.com/snowsunny/novels-reader/releases/download/1.4.2/novels-reader-1.4.2.zip)
+[novels-reader-1.4.3.zipをダウンロード](https://github.com/snowsunny/novels-reader/releases/download/1.4.3/novels-reader-1.4.3.zip)
 
 2. Chromeにインストールする<br>
 初めにChromeの拡張機能の管理ページ（chrome://extensions）を開きます。<br>
@@ -22,8 +22,7 @@ gitを使ってクローンするか、↓のリンクからzipファイルを�
 アイコンが追加され、何も問題が出なければインストール作業は終了です。
 
 ## 更新方法
-既にnovels-readerをインストールしている方は、古いバージョンの物が入っている「novels-reader-crx」フォルダーの中身を、最新バージョンの中身と入れ替えれば、オプションや辞書データをそのままで拡張機能の更新が行えます。  
-入れ替えたのに更新出来ない場合は拡張機能の管理画面で、拡張機能の更新を試してみて下さい。 :pray:
+既にnovels-readerをインストールしている方は、古いバージョンの物が入っている「novels-reader-crx」フォルダーの中身を、最新バージョンの中身と入れ替えて更新ボタンを押してください。オプションや辞書データをそのままで拡張機能の更新が行える筈です。  
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/10658/68b9d8cb-e6d3-7178-26ae-6a1cd6eb6acc.png)
 
 ## 使い方
