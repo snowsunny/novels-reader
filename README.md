@@ -12,13 +12,13 @@ https://github.com/snowsunny/novels-reader/releases
 
 ## インストール方法
 1. novels-readerをダウンロード<br>
-gitを使ってクローンするか、↓のリンクからzipファイルをダウンロードして解凍下さい。<br>
-[novels-reader-1.4.3.zipをダウンロード](https://github.com/snowsunny/novels-reader/releases/download/1.4.3/novels-reader-1.4.3.zip)
+gitを使ってクローンするか、↓のリンクからzipファイルをダウンロードして下さい。<br>
+[novels-reader-2.0.2.zipをダウンロード](https://github.com/snowsunny/novels-reader/releases/download/2.0.2/novels-reader-2.0.2.zip)
 
 2. Chromeにインストールする<br>
 初めにChromeの拡張機能の管理ページ（chrome://extensions）を開きます。<br>
 右上に表示されている「デベロッパーモード」にチェックが付いていない場合は、それを付けてデベロッパーモードを有効にして下さい。<br>
-「１」でクローン、または解凍したフォルダー内に「novels-reader-crx」と言う名前フォルダーがあるので、それをChromeの拡張機能管理ページにドラッグ アンド ドロップして下さい。<br>
+「１」でクローンした場合は「novels-reader-crx」フォルダを、zipをダウンロードした場合はzipファイルを、Chromeの拡張機能管理ページで「パッケージ化されていない拡張機能を読み込む」をクリックして選択して下さい。<br>
 アイコンが追加され、何も問題が出なければインストール作業は終了です。
 
 ## 更新方法
