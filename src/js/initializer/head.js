@@ -2,12 +2,12 @@ export default function headInitializer(options) {
   $('head').append(`<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN' crossorigin='anonymous'>`)
   $('head').append(`<style id='novels-reader-style'>
     .highlight {
-      color: ${options.textColor ? options.textColor : '#fff'};
-      background-color: ${options.backgroundColor ? options.backgroundColor : '#498fd9'};
+      color: ${options.highlight.textColor ? options.highlight.textColor : '#fff'} !important;
+      background-color: ${options.highlight.backgroundColor ? options.highlight.backgroundColor : '#498fd9'} !important;
     }
 
     .controll-button {
-      color: ${$('#novel_color').css('color')};
+      color: gray;
       position: absolute;
       cursor: pointer;
     }
@@ -30,7 +30,7 @@ export default function headInitializer(options) {
     }
     .controll-button.stop {
       position: fixed;
-      top: ${$('#novel_header').height() + 15}px;
+      top: 80px;
       left: 15px;
       font-size: 30px;
     }

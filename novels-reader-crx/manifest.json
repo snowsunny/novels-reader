@@ -1,13 +1,18 @@
 {
   "manifest_version": 2,
   "name": "novels-reader",
-  "version": "1.4.3",
-  "description": "Webpage reader for http://syosetu.com",
+  "version": "2.0.2",
+  "description": "Web page reader for [ncode.syosetu.com, novel18.syosetu.com, kakuyomu.jp]",
   "content_scripts": [
     {
       "matches": [
-        "http://ncode.syosetu.com/*",
-        "https://ncode.syosetu.com/*"
+        "http://ncode.syosetu.com/*/*",
+        "https://ncode.syosetu.com/*/*",
+        "http://novel18.syosetu.com/*/*",
+        "https://novel18.syosetu.com/*/*",
+        "https://kakuyomu.jp/works/*",
+        "file:///*",
+        "*://*/*pages-for-novels-reader*"
       ],
       "run_at": "document_end",
       "js": [
@@ -24,5 +29,5 @@
     "tabs"
   ],
   "options_page": "html/options.html",
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com; object-src 'self'"
 }

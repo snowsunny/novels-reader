@@ -6,7 +6,7 @@ import DictionariesManager from 'DictionariesManager'
 
 // global variables
 let options = null
-let dictionaries = null
+let dataForRubies = null
 let linesInfo = []
 let voices = null
 let analyzer = null
@@ -66,11 +66,15 @@ const initializeData = async () => {
 
   dm = await new DictionariesManager()
 
-  analyzer = await new pageAnalyzer(window.location.hostname)
+  if(/file:\/\/|pages-for-novels-reader/.test(window.location.href)) {
+    analyzer = await new pageAnalyzer('localFile')
+  } else {
+    analyzer = await new pageAnalyzer(window.location.hostname)
+  }
   let findDictionaryOption = {id: analyzer.module.novelId, domain: analyzer.domain}
 
   options = await postMessage({method: 'getOptions', key: 'options'})
-  dictionaries = await postMessage({
+  dataForRubies = await postMessage({
     method: 'saveDictionary',
     dictionary: {
       ...findDictionaryOption,
@@ -79,30 +83,30 @@ const initializeData = async () => {
   })
 
   for(let key in analyzer.module.readElements) {
-    if(options[key] == 'on' && analyzer.module.readElements[key].length) {
+    if(options.readSections[key] && analyzer.module.readElements[key].length) {
       let filteredElements = analyzer.module.readElements[key].filter((index, element) => {
         return /\S/gi.test($(element).text())
       })
-      analyzer.setPlayButtonElementsAndSetRubyData(filteredElements, dictionaries)
+      analyzer.setPlayButtonElementsAndSetRubyData(filteredElements, dataForRubies)
       linesInfo = linesInfo.concat(getLinesInfo(filteredElements))
     }
   }
-  dictionaries = await postMessage({
+  dataForRubies = await postMessage({
     method: 'saveDictionary',
     dictionary: {
       ...findDictionaryOption,
-      raw: options.autoSaveDictionary == 'on' ? analyzer.getDictionaryTextOfCurrentNovelPage() : ''
+      raw: options.autoSaveDictionary ? analyzer.getDictionaryTextOfCurrentNovelPage() : ''
     }
   })
 }
 initializeData().then(() => {
   initializeHead(options)
 
-  let userRubies = dictionaries.user ? _orderBy(dm.getRubies(dictionaries.user.raw), [r => r.rb.length], ['desc']) : false
+  let userRubies = dataForRubies.user?.dictionary ? _orderBy(dm.getRubies(dataForRubies.user.dictionary), [r => r.rb.length], ['desc']) : false
   if(userRubies.length) {
     linesInfo.forEach((lineInfo) => {
       userRubies.forEach((ruby) => {
-        if(!analyzer.checkIgnoreRubiesTest(ruby, dictionaries)) {
+        if(!analyzer.checkIgnoreRubiesTest(ruby, dataForRubies)) {
           lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
         }
       })
@@ -110,12 +114,12 @@ initializeData().then(() => {
     linesInfo = cleanLinesInfoAndRemovePlayButton(linesInfo)
   }
 
-  let novelRubies = dm.getRubies(dictionaries.novel.raw)
-  novelRubies = novelRubies.length ? _orderBy(novelRubies, [r => r.rb.length], ['desc']) : false
+  let novelRubies = dm.getRubies(dataForRubies.currentNovelDictionary.raw)
+  novelRubies = novelRubies.length ? _orderBy(novelRubies, [r => r.rb.length], ['desc']) : false
   if(novelRubies.length) {
     linesInfo.forEach((lineInfo) => {
       novelRubies.forEach((ruby) => {
-        if(!analyzer.checkIgnoreRubiesTest(ruby, dictionaries)) {
+        if(!analyzer.checkIgnoreRubiesTest(ruby, dataForRubies)) {
           lineInfo.text = lineInfo.text.trim().replace(RegExp(ruby.rb, 'gi'), ruby.rt)
         }
       })
@@ -124,37 +128,37 @@ initializeData().then(() => {
   }
 
   let roudokukaOptions = {}
-  if(options.rate != undefined && options.rate != '') {
-    roudokukaOptions.rate = Number(options.rate)
+  if(options.voice.rate != undefined && options.voice.rate != '') {
+    roudokukaOptions.rate = Number(options.voice.rate)
   }
-  if(options.pitch != undefined && options.pitch != '') {
-    roudokukaOptions.pitch = Number(options.pitch)
+  if(options.voice.pitch != undefined && options.voice.pitch != '') {
+    roudokukaOptions.pitch = Number(options.voice.pitch)
   }
-  if(options.volume != undefined && options.volume != '') {
-    roudokukaOptions.volume = Number(options.volume)
+  if(options.voice.volume != undefined && options.voice.volume != '') {
+    roudokukaOptions.volume = Number(options.voice.volume)
   }
-  if(options.voiceType != undefined && options.voiceType != -1) {
-    roudokukaOptions.voice = voices[options.voiceType]
+  if(options.voice.typeIndex != undefined && options.voice.typeIndex != -1) {
+    roudokukaOptions.voice = voices[options.voice.typeIndex]
   }
   roudokukaOptions.onend = (e, lineInfo) => {
     lineUnHighlight()
     if(linesInfo[lineInfo.index + 1]) {
       let nextLineElement = linesInfo[lineInfo.index + 1].element
       lineHighlight(nextLineElement)
-      if(options.autoScroll == 'on') {
-        $('html').scrollTop(nextLineElement.offset().top - $(window).height() / 2 + nextLineElement.height() / 2)
+      if(options.highlight.autoScroll) {
+        $('html, body').scrollTop(nextLineElement.offset().top - window.innerHeight / 2 + nextLineElement.height() / 2)
       }
     }
   }
   roudokukaOptions.onLibrettoEnd = () => {
-    if(options.autoMoveNext == 'on') {
+    if(options.autoMoveNext) {
       analyzer.module.goToNext()
     }
   }
 
   let roudokuka = new Roudokuka(linesInfo, roudokukaOptions)
   roudokuka.onReady().then(() => {
-    if(options.autoPlay == 'on') {
+    if(options.autoPlay) {
       lineHighlight(linesInfo[0].element)
       roudokuka.start()
     }

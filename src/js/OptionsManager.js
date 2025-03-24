@@ -1,16 +1,31 @@
 import _merge from 'lodash/merge'
+import _clone from 'lodash/cloneDeep'
 import localForage from 'localforage'
 
 export default class OptionsManager {
   constructor() {
     this.defaultOptions = {
       version: chrome.app.getDetails().version,
-      autoScroll: "on",
-      title: "on",
-      body: "on",
-      autoPlay: "on",
-      autoMoveNext: "on",
-      autoSaveDictionary: "on"
+      readSections: {
+        title: true,
+        foreword: true,
+        body: true,
+        afterword: true
+      },
+      voice: {
+        rate: 1,
+        pitch: 1,
+        volume: 1,
+        typeIndex: -1
+      },
+      highlight: {
+        textColor: '#fff',
+        backgroundColor: '#498fd9',
+        autoScroll: true
+      },
+      autoPlay: true,
+      autoMoveNext: true,
+      autoSaveDictionary: true
     }
     this.storageOptions = null
     return localForage.getItem('options').then((options) => {
@@ -20,37 +35,17 @@ export default class OptionsManager {
   }
 
   async saveOptions(options) {
-    return this.storageOptions = await localForage.setItem('options', _merge(options, {version: this.defaultOptions.version}))
+    return this.storageOptions = await localForage.setItem('options', _clone(options))
   }
 
-  async getInitOptions() {
-    // for 1.3.0 or older --------
-    if(!this.storageOptions) {
-      let oldOptions = JSON.parse(localStorage.getItem('options'))
-      if(oldOptions) {
-        this.storageOptions = await localForage.setItem('options', oldOptions)
-      }
-
-      let oldDictionaries = JSON.parse(localStorage.getItem('dictionaries'))
-      if(oldDictionaries) {
-        oldDictionaries = oldDictionaries.map((dictionary) => {
-          dictionary.id === 'user' || dictionary.id === 'userIgnoreRubies' ?
-            dictionary.domain = 'novels-reader' : dictionary.domain = 'ncode.syosetu.com'
-          delete dictionary.rubies
-          return dictionary
-        })
-        await localForage.setItem('dictionaries', oldDictionaries)
-      }
-      // ここでlocalStorageの中身を削除しても良いが、現状ではそのままとする。
-    }
-    // --------
-
+  async getInitializedData() {
     const checkStorageOptionsIsLatestVersion = () => {
-      return this.storageOptions ? this.defaultOptions.version == this.storageOptions.version : false
+      return this.storageOptions ? this.defaultOptions.version === this.storageOptions.version : false
     }
     if(checkStorageOptionsIsLatestVersion()) {
       return this.storageOptions
     } else {
+      this.storageOptions.version = this.defaultOptions.version
       return await this.saveOptions(_merge({}, this.defaultOptions, this.storageOptions))
     }
   }
