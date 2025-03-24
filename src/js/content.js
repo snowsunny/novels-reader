@@ -104,7 +104,7 @@ const initializeData = async () => {
 initializeData().then(() => {
   initializeHead(options)
 
-  let userRubies = dataForRubies.user ? _orderBy(dm.getRubies(dataForRubies.user.dictionary), [r => r.rb.length], ['desc']) : false
+  let userRubies = dataForRubies.user?.dictionary ? _orderBy(dm.getRubies(dataForRubies.user.dictionary), [r => r.rb.length], ['desc']) : false
   if(userRubies.length) {
     linesInfo.forEach((lineInfo) => {
       userRubies.forEach((ruby) => {
@@ -148,7 +148,7 @@ initializeData().then(() => {
       let nextLineElement = linesInfo[lineInfo.index + 1].element
       lineHighlight(nextLineElement)
       if(options.highlight.autoScroll) {
-        $('body').scrollTop(nextLineElement.offset().top - window.innerHeight / 2 + nextLineElement.height() / 2)
+        $('html, body').scrollTop(nextLineElement.offset().top - window.innerHeight / 2 + nextLineElement.height() / 2)
       }
     }
   }

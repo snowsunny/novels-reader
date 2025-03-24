@@ -2,9 +2,11 @@ export default class Narou {
   constructor() {
     // TODO: 短編対応
     this.novelId = window.location.href.split('/')[3]
-    this.novelName = $('.contents1 [class*="margin"]').text() || $('#novel_contents .novel_title').text()
 
-    const selectorArray = ['.novel_subtitle', '#novel_p p', '#novel_honbun p', '#novel_a p']
+    // 本文ページか作品トップページでのタイトル取得
+    this.novelName = $('.c-announce:not([class*=" "]) a:first-child').text() || $('.p-novel__title').text()
+
+    const selectorArray = ['.p-novel__title--rensai', '.p-novel__text--preface p', '.p-novel__text:not(.p-novel__text--preface, .p-novel__text--afterword) p', '.p-novel__text--afterword p']
     this.readElements = {
       title: $(selectorArray[0]),
       foreword: $(selectorArray[1]),
@@ -15,6 +17,6 @@ export default class Narou {
   }
 
   goToNext() {
-    window.location.href = $('a.novelview_pager-next').prop('href')
+    window.location.href = $('a.c-pager__item--next').prop('href')
   }
 }
