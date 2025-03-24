@@ -28,7 +28,7 @@
     "lodash": "^4.17.19",
     "pinia": "^2.0.17",
     "postcss": "^8.4.16",
-    "roudokuka": "^0.1.2",
+    "roudokuka": "^0.1.7",
     "tailwindcss": "^3.1.8",
     "vue": "^3.2.37"
   },

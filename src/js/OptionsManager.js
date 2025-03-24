@@ -45,6 +45,7 @@ export default class OptionsManager {
     if(checkStorageOptionsIsLatestVersion()) {
       return this.storageOptions
     } else {
+      this.storageOptions.version = this.defaultOptions.version
       return await this.saveOptions(_merge({}, this.defaultOptions, this.storageOptions))
     }
   }

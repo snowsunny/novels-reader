@@ -5037,10 +5037,10 @@ rollup@^3.21.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
-roudokuka@^0.1.2:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/roudokuka/-/roudokuka-0.1.5.tgz#6bd33745c7036b7f73fa0c86d7b7ab9081c48301"
-  integrity sha512-1hUl1NIkJSI4ESymAJKnD+Gp4djQvjEwenGrVu4sfUqTca2jOcZArVzX6Q9qdvxzI+l28fEmXyd2lRwUEYSLTA==
+roudokuka@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/roudokuka/-/roudokuka-0.1.7.tgz#206abad7913ad5c171648017c3151fe3ea5022b8"
+  integrity sha512-sw0akgSQRcuhIcd1+ddD387NFvQi0+RTX/Vp1OZ73KrX9jOCP+ZRitcOs3G0Q7B67hCY0V0Uuy/NWLRDj3VnMg==
 
 run-parallel@^1.1.9:
   version "1.2.0"

@@ -73,9 +73,7 @@ const initializeData = async () => {
   }
   let findDictionaryOption = {id: analyzer.module.novelId, domain: analyzer.domain}
 
-
   options = await postMessage({method: 'getOptions', key: 'options'})
-
   dataForRubies = await postMessage({
     method: 'saveDictionary',
     dictionary: {
